@@ -1,0 +1,12 @@
+{
+  "plugins": ["typescript"],
+  "categories": {
+    "correctness": "error",
+    "perf": "warn"
+  },
+  "rules": {
+    "no-console": "warn",
+    "@typescript-eslint/no-unused-vars": "error"
+  },
+  "ignore": ["dist/", "node_modules/"]
+}
