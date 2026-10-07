@@ -3,6 +3,9 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
+import { notFound } from "./middlewares/notFound.js";
+import { errorHandler } from "./middlewares/errorHanlder.js";
+import { AppError } from "./utils/AppError.js";
 
 //* Instance
 const app = express();
@@ -16,5 +19,9 @@ app.use(cookieParser());
 app.use(helmet());
 
 //* Routes
+
+//* Error Handling Middlewares
+app.use(notFound);
+app.use(errorHandler);
 
 export default app;
