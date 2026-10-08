@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import User from "../user/userModel.js";
 import { AppError } from "../../utils/AppError.js";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import {
   accessCookieOptions,
   createAccessToken,
@@ -11,6 +12,7 @@ import {
   refreshTokenExpiresAt,
   verifyRefreshToken,
 } from "../../utils/tokens.js";
+import { sendResetPasswordLink } from "../../utils/sendMail.js";
 
 export const register = async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
@@ -121,4 +123,35 @@ export const refresh = async (req: Request, res: Response) => {
   await user.save();
 
   res.status(200).json({ success: true, message: "Token refreshed" });
+};
+
+export const forgotPassword = async (req: Request, res: Response) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ email }).select(
+    "+resetPasswordToken +resetPasswordTokenExpiresAt"
+  );
+  if (!user) {
+    throw new AppError("User not found", 404);
+  }
+
+  const rawResetToken = crypto.randomBytes(32).toString("hex");
+  user.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(rawResetToken)
+    .digest("hex");
+
+  user.resetPasswordTokenExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
+  await user.save();
+
+  const resetLink = `${process.env.FRONTEND_URL}/reset-password/${rawResetToken}`;
+  try {
+    await sendResetPasswordLink(user.email, resetLink);
+  } catch (error) {
+    console.log(`Failed to send  email: ${error}`);
+  }
+
+  res
+    .status(200)
+    .json({ success: true, message: "Password reset link sent to your email" });
 };
