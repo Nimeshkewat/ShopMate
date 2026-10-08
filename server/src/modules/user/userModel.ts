@@ -9,9 +9,9 @@ interface IUser extends Document {
   avatarPublicId: string;
   role: "User" | "Admin";
   resetPasswordToken: string;
-  resetPasswordTokenExpiresAt: Date;
+  resetPasswordTokenExpiresAt?: Date | undefined;
   refreshTokenHash: string;
-  refreshTokenExpiresAt: Date;
+  refreshTokenExpiresAt?: Date | undefined;
 }
 
 const userSchema = new mongoose.Schema<IUser>(

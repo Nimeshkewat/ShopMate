@@ -12,7 +12,10 @@ import {
   refreshTokenExpiresAt,
   verifyRefreshToken,
 } from "../../utils/tokens.js";
-import { sendResetPasswordLink } from "../../utils/sendMail.js";
+import {
+  sendResetPasswordLink,
+  sendResetPasswordSuccess,
+} from "../../utils/sendMail.js";
 
 export const register = async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
@@ -154,4 +157,45 @@ export const forgotPassword = async (req: Request, res: Response) => {
   res
     .status(200)
     .json({ success: true, message: "Password reset link sent to your email" });
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+  const { token } = req.params;
+  const { newPassword } = req.body;
+
+  if (!token || typeof token !== "string") {
+    throw new AppError("Invalid or missing reset token", 400);
+  }
+
+  const resetPasswordTokenHash = crypto
+    .createHash("sha256")
+    .update(token)
+    .digest("hex");
+
+  const user = await User.findOne({
+    resetPasswordToken: resetPasswordTokenHash,
+    resetPasswordTokenExpiresAt: { $gt: Date.now() },
+  }).select(
+    "+resetPasswordToken +resetPasswordTokenExpiresAt +password +email +username"
+  );
+
+  if (!user) {
+    throw new AppError("User not found", 404);
+  }
+
+  const hadhedPassword = await bcrypt.hash(newPassword, 10);
+  user.password = hadhedPassword;
+  user.resetPasswordToken = "";
+  user.resetPasswordTokenExpiresAt = undefined;
+  await user.save();
+
+  try {
+    await sendResetPasswordSuccess(user.email, user.username);
+  } catch (error) {
+    console.log(`Failed to send email: ${error}`);
+  }
+
+  res
+    .status(200)
+    .json({ success: true, message: "Password Reset Successfully" });
 };
