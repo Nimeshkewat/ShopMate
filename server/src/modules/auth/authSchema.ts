@@ -12,3 +12,11 @@ export const registerSchema = z.object({
     .nonempty("password is required")
     .min(8, "Password must be at least 8 characters"),
 });
+
+export const loginSchema = z.object({
+  email: z.email().nonempty("email is required"),
+  password: z
+    .string()
+    .nonempty("password is required")
+    .min(8, "Password must be at least 8 characters"),
+});
