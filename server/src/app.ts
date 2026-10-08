@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import { notFound } from "./middlewares/notFound.js";
 import { errorHandler } from "./middlewares/errorHanlder.js";
-import { AppError } from "./utils/AppError.js";
+import authRouter from "./modules/auth/authRoutes.js";
 
 //* Instance
 const app = express();
@@ -19,6 +19,7 @@ app.use(cookieParser());
 app.use(helmet());
 
 //* Routes
+app.use("/api/v1/auth", authRouter);
 
 //* Error Handling Middlewares
 app.use(notFound);
