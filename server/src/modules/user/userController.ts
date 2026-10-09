@@ -3,6 +3,7 @@ import User from "./userModel.js";
 import { AppError } from "../../utils/AppError.js";
 import uploadToCloudinary from "../../utils/uploadToCloudinary.js";
 import { v2 as cloudinary } from "cloudinary";
+import bcrypt from "bcryptjs";
 
 export const profile = async (req: Request, res: Response) => {
   const { userId } = req.user;
@@ -47,4 +48,45 @@ export const updateProfile = async (req: Request, res: Response) => {
   await user.save();
 
   res.status(200).json({ success: true, message: "Profile Updated", user });
+};
+
+export const updatePassword = async (req: Request, res: Response) => {
+  const { userId } = req.user;
+  const { oldPassword, newPassword, confirmPassword } = req.body;
+
+  if (!oldPassword) {
+    throw new AppError("Old password is required", 400);
+  }
+  if (!newPassword || newPassword.length < 8) {
+    throw new AppError(
+      "New password is required and must be at least 8 characters long",
+      400
+    );
+  }
+  if (oldPassword === newPassword) {
+    throw new AppError(
+      "New password cannot be the same as the old password",
+      400
+    );
+  }
+  if (newPassword !== confirmPassword) {
+    throw new AppError("New password and confirm password do not match", 400);
+  }
+
+  const user = await User.findById(userId).select("+password");
+  if (!user) {
+    throw new AppError("User not found", 404);
+  }
+
+  const isMatch = await bcrypt.compare(oldPassword, user.password);
+  if (!isMatch) {
+    throw new AppError("Old Password is incorrect", 400);
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  user.password = hashedPassword;
+  await user.save();
+  res
+    .status(200)
+    .json({ success: true, message: "Password Updated successfully" });
 };
