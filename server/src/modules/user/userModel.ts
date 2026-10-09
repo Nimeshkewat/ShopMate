@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema<IUser>(
     email: { type: String, required: true, unique: true, lowercase: true },
     password: { type: String, required: true, select: false },
     avatar: { type: String, default: "" },
-    avatarPublicId: { type: String, default: "" },
+    avatarPublicId: { type: String, default: "", select: false },
     role: { type: String, enum: ["User", "Admin"], default: "User" },
     resetPasswordToken: { type: String, select: false },
     resetPasswordTokenExpiresAt: { type: Date, select: false },

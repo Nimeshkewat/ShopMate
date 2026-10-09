@@ -6,6 +6,7 @@ import helmet from "helmet";
 import { notFound } from "./middlewares/notFound.js";
 import { errorHandler } from "./middlewares/errorHanlder.js";
 import authRouter from "./modules/auth/authRoutes.js";
+import userRouter from "./modules/user/userRoutes.js";
 
 //* Instance
 const app = express();
@@ -20,6 +21,7 @@ app.use(helmet());
 
 //* Routes
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/users", userRouter);
 
 //* Error Handling Middlewares
 app.use(notFound);
