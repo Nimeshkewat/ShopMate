@@ -12,7 +12,7 @@ interface IProduct extends Document {
   description: string;
   price: number;
   category: string;
-  ratings: number;
+  rating: number;
   images: IProductImage[];
   stock: number;
 }
@@ -34,7 +34,7 @@ const productSchema = new mongoose.Schema<IProduct>(
     description: { type: String, required: true, trim: true, maxLength: 200 },
     price: { type: Number, required: true, min: 0 },
     category: { type: String, required: true, maxLength: 50 },
-    ratings: { type: Number, min: 0, default: 0 },
+    rating: { type: Number, min: 0, default: 0 },
     stock: { type: Number, required: true, min: 0, default: 0 },
 
     images: [

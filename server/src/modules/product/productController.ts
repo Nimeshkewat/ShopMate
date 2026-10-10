@@ -2,6 +2,12 @@ import type { Request, Response } from "express";
 import { AppError } from "../../utils/AppError.js";
 import uploadToCloudinary from "../../utils/uploadToCloudinary.js";
 import Product from "./productModel.js";
+import {
+  buildPaginationMeta,
+  getPaginationParams,
+} from "../../utils/paginate.js";
+import mongoose from "mongoose";
+import { v2 as cloudinary } from "cloudinary";
 
 export const createProduct = async (req: Request, res: Response) => {
   const { userId } = req.user;
@@ -39,4 +45,42 @@ export const createProduct = async (req: Request, res: Response) => {
     message: "Product created successfully",
     newProduct,
   });
+};
+
+export const fetchAllProducts = async (req: Request, res: Response) => {
+  const { search, category, price, rating } = req.query;
+
+  const { page, limit, skip } = getPaginationParams(req.query);
+  const query: Record<string, any> = {};
+
+  if (search && typeof search === "string") {
+    query.name = { $regex: search.trim(), $options: "i" };
+  }
+
+  if (category && typeof category === "string") {
+    query.category = category;
+  }
+
+  if (price && typeof price === "string") {
+    const [min, max] = price.split("-").map(Number);
+    if (!isNaN(min!) && !isNaN(max!)) {
+      query.price = { $gte: min, $lte: max };
+    }
+  }
+
+  if (rating) {
+    query.rating = { $gte: Number(rating) };
+  }
+
+  const [products, total] = await Promise.all([
+    Product.find(query).limit(limit).skip(skip).sort().lean(),
+    Product.countDocuments(query),
+  ]);
+
+  if (!products.length) {
+    res.status(200).json({ success: true, products: [] });
+  }
+  const pagination = buildPaginationMeta(total, limit, page);
+
+  res.status(200).json({ success: true, products, pagination });
 };
