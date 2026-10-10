@@ -85,6 +85,22 @@ export const fetchAllProducts = async (req: Request, res: Response) => {
   res.status(200).json({ success: true, products, pagination });
 };
 
+export const fetchProductDetails = async (req: Request, res: Response) => {
+  const { userId } = req.user;
+  const { id: productId } = req.params;
+
+  if (typeof productId !== "string" || !mongoose.isValidObjectId(productId)) {
+    throw new AppError("Invalid Product Id", 400);
+  }
+
+  const product = await Product.findOne({ _id: productId, userId });
+  if (!product) {
+    throw new AppError("Product not found", 404);
+  }
+
+  res.status(200).json({ success: true, product });
+};
+
 export const updateProduct = async (req: Request, res: Response) => {
   const { userId } = req.user;
   const { id: productId } = req.params;

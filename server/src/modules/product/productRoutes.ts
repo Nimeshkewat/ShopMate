@@ -8,6 +8,7 @@ import {
   createProduct,
   deleteProduct,
   fetchAllProducts,
+  fetchProductDetails,
   updateProduct,
 } from "./productController.js";
 
@@ -35,5 +36,6 @@ router.delete("/:id", isAuthenticated, isAdmin, deleteProduct);
 
 //* Public Routes
 router.get("/", fetchAllProducts);
+router.get("/:id", fetchProductDetails);
 
 export default router;
