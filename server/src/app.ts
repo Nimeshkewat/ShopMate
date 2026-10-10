@@ -7,6 +7,7 @@ import { notFound } from "./middlewares/notFound.js";
 import { errorHandler } from "./middlewares/errorHanlder.js";
 import authRouter from "./modules/auth/authRoutes.js";
 import userRouter from "./modules/user/userRoutes.js";
+import productRouter from "./modules/product/productRoutes.js";
 
 //* Instance
 const app = express();
@@ -22,6 +23,7 @@ app.use(helmet());
 //* Routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/products", productRouter);
 
 //* Error Handling Middlewares
 app.use(notFound);
