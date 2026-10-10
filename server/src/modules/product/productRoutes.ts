@@ -4,10 +4,15 @@ import isAdmin from "../../middlewares/admin.js";
 import validate from "../../middlewares/validate.js";
 import { productValidationSchema } from "./productSchema.js";
 import upload from "../../middlewares/multer.js";
-import { createProduct, fetchAllProducts } from "./productController.js";
+import {
+  createProduct,
+  fetchAllProducts,
+  updateProduct,
+} from "./productController.js";
 
 const router = express.Router();
 
+//* Admin Routes
 router.post(
   "/",
   isAuthenticated,
@@ -16,6 +21,15 @@ router.post(
   validate(productValidationSchema),
   createProduct
 );
+router.patch(
+  "/",
+  isAuthenticated,
+  isAdmin,
+  validate(productValidationSchema),
+  updateProduct
+);
+
+//* Public Routes
 router.get("/", fetchAllProducts);
 
 export default router;
