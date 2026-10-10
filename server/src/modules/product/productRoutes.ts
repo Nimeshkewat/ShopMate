@@ -6,6 +6,7 @@ import { productValidationSchema } from "./productSchema.js";
 import upload from "../../middlewares/multer.js";
 import {
   createProduct,
+  deleteProduct,
   fetchAllProducts,
   updateProduct,
 } from "./productController.js";
@@ -21,13 +22,16 @@ router.post(
   validate(productValidationSchema),
   createProduct
 );
+
 router.patch(
-  "/",
+  "/:id",
   isAuthenticated,
   isAdmin,
   validate(productValidationSchema),
   updateProduct
 );
+
+router.delete("/:id", isAuthenticated, isAdmin, deleteProduct);
 
 //* Public Routes
 router.get("/", fetchAllProducts);

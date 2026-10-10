@@ -110,3 +110,32 @@ export const updateProduct = async (req: Request, res: Response) => {
     .status(200)
     .json({ success: true, message: "Product Updated Successfully", product });
 };
+
+export const deleteProduct = async (req: Request, res: Response) => {
+  const { userId } = req.user;
+  const { id: productId } = req.params;
+
+  if (typeof productId !== "string" || !mongoose.isValidObjectId(productId)) {
+    throw new AppError("Invalid Product Id", 400);
+  }
+
+  const product = await Product.findOneAndDelete({ _id: productId, userId });
+  if (!product) {
+    throw new AppError("Product not found", 404);
+  }
+
+  if (product.images && product.images.length > 0) {
+    const deletedPromises = product.images.map((image) =>
+      cloudinary.uploader
+        .destroy(image.public_id)
+        .catch((error) =>
+          console.log(`Failed to delete product image: ${error}`)
+        )
+    );
+
+    await Promise.all(deletedPromises);
+  }
+  res
+    .status(200)
+    .json({ success: true, message: "Product Deleted Successfully" });
+};
