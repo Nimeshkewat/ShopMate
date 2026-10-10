@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const registerSchema = z.object({
+export const registerValidationSchema = z.object({
   username: z.string().nonempty("username is required"),
   email: z
     .email("Invalid email address")

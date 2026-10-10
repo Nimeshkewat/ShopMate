@@ -19,7 +19,7 @@ const isAuthenticated = async (
     throw new AppError("Invalid token", 401);
   }
 
-  if (decoded.type !== "refresh") {
+  if (decoded.type !== "access") {
     throw new AppError("Invalid token", 401);
   }
 
