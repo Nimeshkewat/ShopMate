@@ -1,8 +1,6 @@
-import type { Request, Response } from "express";
 import { GoogleGenAI, Type } from "@google/genai";
 import { type IProduct } from "../modules/product/productModel.js";
 
-// Initialize the Gemini AI client
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
 const getAIRecommendation = async (
@@ -52,7 +50,6 @@ const getAIRecommendation = async (
               createdAt: { type: Type.STRING },
               updatedAt: { type: Type.STRING },
             },
-            // Enforce key properties to ensure structural integrity
             required: ["_id", "name", "price", "category", "images"],
           },
         },
@@ -71,7 +68,6 @@ const getAIRecommendation = async (
     };
   } catch (error) {
     console.error("Gemini Filter Error:", error);
-    // Safe degradation: Return database regex matches if AI evaluation errors out
     return {
       success: false,
       products: filteredProducts,
