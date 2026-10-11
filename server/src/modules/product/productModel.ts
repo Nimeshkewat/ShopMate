@@ -7,7 +7,7 @@ interface IProductImage {
 }
 
 export interface IProduct extends Document {
-  userId: mongoose.Types.ObjectId;
+  sellerId: mongoose.Types.ObjectId;
   name: string;
   description: string;
   price: number;
@@ -19,7 +19,7 @@ export interface IProduct extends Document {
 
 const productSchema = new mongoose.Schema<IProduct>(
   {
-    userId: {
+    sellerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,

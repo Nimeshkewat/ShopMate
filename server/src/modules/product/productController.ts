@@ -11,7 +11,7 @@ import { v2 as cloudinary } from "cloudinary";
 import getAIRecommendation from "../../utils/aiRecommendation.js";
 
 export const createProduct = async (req: Request, res: Response) => {
-  const { userId } = req.user;
+  const { id: sellerId } = req.user;
   const { name, description, price, category, stock } = req.body;
 
   if (!req.files || !Array.isArray(req.files) || req.files.length === 0) {
@@ -32,7 +32,7 @@ export const createProduct = async (req: Request, res: Response) => {
   }));
 
   const newProduct = await Product.create({
-    userId,
+    sellerId,
     name,
     description,
     price: Number(price),
@@ -87,14 +87,14 @@ export const fetchAllProducts = async (req: Request, res: Response) => {
 };
 
 export const fetchProductDetails = async (req: Request, res: Response) => {
-  const { userId } = req.user;
+  const { id: sellerId } = req.user;
   const { id: productId } = req.params;
 
   if (typeof productId !== "string" || !mongoose.isValidObjectId(productId)) {
     throw new AppError("Invalid Product Id", 400);
   }
 
-  const product = await Product.findOne({ _id: productId, userId });
+  const product = await Product.findOne({ _id: productId, sellerId });
   if (!product) {
     throw new AppError("Product not found", 404);
   }
@@ -103,7 +103,7 @@ export const fetchProductDetails = async (req: Request, res: Response) => {
 };
 
 export const updateProduct = async (req: Request, res: Response) => {
-  const { userId } = req.user;
+  const { id: sellerId } = req.user;
   const { id: productId } = req.params;
   const { name, description, price, stock, category } = req.body;
 
@@ -111,7 +111,7 @@ export const updateProduct = async (req: Request, res: Response) => {
     throw new AppError("Invalid Product Id", 400);
   }
 
-  const product = await Product.findOne({ _id: productId, userId });
+  const product = await Product.findOne({ _id: productId, sellerId });
   if (!product) {
     throw new AppError("Product not found", 404);
   }
@@ -129,14 +129,14 @@ export const updateProduct = async (req: Request, res: Response) => {
 };
 
 export const deleteProduct = async (req: Request, res: Response) => {
-  const { userId } = req.user;
+  const { id: sellerId } = req.user;
   const { id: productId } = req.params;
 
   if (typeof productId !== "string" || !mongoose.isValidObjectId(productId)) {
     throw new AppError("Invalid Product Id", 400);
   }
 
-  const product = await Product.findOneAndDelete({ _id: productId, userId });
+  const product = await Product.findOneAndDelete({ _id: productId, sellerId });
   if (!product) {
     throw new AppError("Product not found", 404);
   }
