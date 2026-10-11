@@ -7,6 +7,7 @@ import upload from "../../middlewares/multer.js";
 import {
   createProduct,
   deleteProduct,
+  fetchAiFilteredProducts,
   fetchAllProducts,
   fetchProductDetails,
   updateProduct,
@@ -36,6 +37,7 @@ router.delete("/:id", isAuthenticated, isAdmin, deleteProduct);
 
 //* Public Routes
 router.get("/", fetchAllProducts);
+router.post("/ai-search", fetchAiFilteredProducts);
 router.get("/:id", fetchProductDetails);
 
 export default router;

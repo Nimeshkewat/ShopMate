@@ -8,6 +8,7 @@ import {
 } from "../../utils/paginate.js";
 import mongoose from "mongoose";
 import { v2 as cloudinary } from "cloudinary";
+import getAIRecommendation from "../../utils/aiRecommendation.js";
 
 export const createProduct = async (req: Request, res: Response) => {
   const { userId } = req.user;
@@ -154,4 +155,35 @@ export const deleteProduct = async (req: Request, res: Response) => {
   res
     .status(200)
     .json({ success: true, message: "Product Deleted Successfully" });
+};
+
+export const fetchAiFilteredProducts = async (req: Request, res: Response) => {
+  const { prompt } = req.body;
+  if (!prompt) {
+    throw new AppError("Provide a valid prompt", 400);
+  }
+
+  const filteredProducts = await Product.find({}).limit(50).lean();
+  if (!filteredProducts.length) {
+    return res.status(200).json({
+      success: true,
+      message: "No Products found in the database.",
+      products: [],
+    });
+  }
+
+  const { success, products } = await getAIRecommendation(
+    req,
+    res,
+    prompt,
+    filteredProducts as any
+  );
+
+  res.status(200).json({
+    success,
+    message: products.length
+      ? "AI Filtered Products"
+      : "No products matched your preference.",
+    products,
+  });
 };

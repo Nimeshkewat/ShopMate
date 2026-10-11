@@ -6,7 +6,7 @@ interface IProductImage {
   url: string;
 }
 
-interface IProduct extends Document {
+export interface IProduct extends Document {
   userId: mongoose.Types.ObjectId;
   name: string;
   description: string;
