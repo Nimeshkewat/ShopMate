@@ -24,7 +24,7 @@ const isAuthenticated = async (
   }
 
   req.user = {
-    userId: decoded.userId,
+    id: decoded.userId,
     role: decoded.role,
   };
   next();

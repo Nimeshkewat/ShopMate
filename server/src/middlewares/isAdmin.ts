@@ -3,7 +3,7 @@ import { AppError } from "../utils/AppError.js";
 
 const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
   const { role } = req.user;
-  if (role !== "Admin") {
+  if (role !== "admin") {
     throw new AppError(
       "Forbidden, You are not allowed to access this resource",
       403
