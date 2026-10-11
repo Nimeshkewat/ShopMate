@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema<IUser>(
         taxId: { type: String, trim: true },
         isApproved: { type: Boolean, default: false },
         payoutBankDetails: {
-          accountNumber: { type: String, select: false }, // Keep sensitive financial details private
+          accountNumber: { type: String, select: false },
           ifscCode: { type: String, select: false },
           bankName: { type: String },
         },

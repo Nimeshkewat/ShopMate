@@ -102,7 +102,7 @@ export const upgradeToSeller = async (req: Request, res: Response) => {
     {
       $set: {
         role: "seller",
-        vendorDetails: {
+        sellerDetails: {
           shopName,
           businessPhone,
           taxId,

@@ -7,12 +7,19 @@ import {
   upgradeToSeller,
 } from "./userController.js";
 import upload from "../../middlewares/multer.js";
+import validate from "../../middlewares/validate.js";
+import { sellerValidationSchema } from "./userSchema.js";
 
 const router = express.Router();
 
 router.get("/", isAuthenticated, profile);
 router.patch("/", isAuthenticated, upload.single("avatar"), updateProfile);
 router.patch("/update-password", isAuthenticated, updatePassword);
-router.patch("/become-seller", isAuthenticated, upgradeToSeller);
+router.patch(
+  "/become-seller",
+  isAuthenticated,
+  validate(sellerValidationSchema),
+  upgradeToSeller
+);
 
 export default router;
