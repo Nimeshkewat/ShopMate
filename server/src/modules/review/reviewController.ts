@@ -53,3 +53,44 @@ export const fetchAllReviews = async (req: Request, res: Response) => {
 
   res.status(200).json({ success: true, reviews });
 };
+
+export const updateReview = async (req: Request, res: Response) => {
+  const { userId } = req.user;
+  const { rating, comment } = req.body;
+
+  const { id: reviewId } = req.params;
+  if (typeof reviewId !== "string" || !mongoose.isValidObjectId(reviewId)) {
+    throw new AppError("Invalid Product Id", 400);
+  }
+
+  const review = await Review.findOne({ userId, _id: reviewId });
+  if (!review) {
+    throw new AppError("Review not found", 404);
+  }
+
+  review.rating = rating || review.rating;
+  review.comment = comment || review.comment;
+  await review.save();
+
+  res
+    .status(200)
+    .json({ success: true, message: "Review Updated Successfully", review });
+};
+
+export const deleteReview = async (req: Request, res: Response) => {
+  const { userId } = req.user;
+
+  const { id: reviewId } = req.params;
+  if (typeof reviewId !== "string" || !mongoose.isValidObjectId(reviewId)) {
+    throw new AppError("Invalid Product Id", 400);
+  }
+
+  const review = await Review.findOneAndDelete({ userId, _id: reviewId });
+  if (!review) {
+    throw new AppError("Review not found", 404);
+  }
+
+  res
+    .status(200)
+    .json({ success: true, message: "Review Deleted Successfully" });
+};
