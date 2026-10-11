@@ -40,5 +40,16 @@ export const createReview = async (req: Request, res: Response) => {
 
   res
     .status(201)
-    .json({ success: true, message: "Review Addedd Successfully", review });
+    .json({ success: true, message: "Review Added Successfully", review });
+};
+
+export const fetchAllReviews = async (req: Request, res: Response) => {
+  const { userId } = req.user;
+
+  const reviews = await Review.find({ userId }).lean();
+  if (!reviews.length) {
+    res.status(200).json({ success: true, reviews: [] });
+  }
+
+  res.status(200).json({ success: true, reviews });
 };
