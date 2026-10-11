@@ -8,6 +8,7 @@ import { errorHandler } from "./middlewares/errorHanlder.js";
 import authRouter from "./modules/auth/authRoutes.js";
 import userRouter from "./modules/user/userRoutes.js";
 import productRouter from "./modules/product/productRoutes.js";
+import reviewRouter from "./modules/review/reviewRoutes.js";
 
 //* Instance
 const app = express();
@@ -24,6 +25,7 @@ app.use(helmet());
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/products", productRouter);
+app.use("/api/v1/reviews", reviewRouter);
 
 //* Error Handling Middlewares
 app.use(notFound);
