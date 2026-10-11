@@ -3,14 +3,23 @@ import { AppError } from "../../utils/AppError.js";
 import mongoose from "mongoose";
 import Review from "./reviewModel.js";
 import Order from "../order/orderModel.js";
+import Product from "../product/productModel.js";
 
 export const createReview = async (req: Request, res: Response) => {
-  const { userId } = req.user;
+  const { id: userId } = req.user;
   const { rating, comment } = req.body;
 
   const { id: productId } = req.params;
   if (typeof productId !== "string" || !mongoose.isValidObjectId(productId)) {
     throw new AppError("Invalid Product Id", 400);
+  }
+
+  const product = await Product.findById(productId);
+  if (!product) {
+    throw new AppError("Product not found", 404);
+  }
+  if (product?.sellerId.toString() === userId) {
+    throw new AppError("You cannot review your own product", 400);
   }
 
   const alreadyReviewed = await Review.findOne({ userId, productId });
@@ -44,7 +53,7 @@ export const createReview = async (req: Request, res: Response) => {
 };
 
 export const fetchAllReviews = async (req: Request, res: Response) => {
-  const { userId } = req.user;
+  const { id: userId } = req.user;
 
   const reviews = await Review.find({ userId }).lean();
   if (!reviews.length) {
@@ -55,7 +64,7 @@ export const fetchAllReviews = async (req: Request, res: Response) => {
 };
 
 export const updateReview = async (req: Request, res: Response) => {
-  const { userId } = req.user;
+  const { id: userId } = req.user;
   const { rating, comment } = req.body;
 
   const { id: reviewId } = req.params;
@@ -78,7 +87,7 @@ export const updateReview = async (req: Request, res: Response) => {
 };
 
 export const deleteReview = async (req: Request, res: Response) => {
-  const { userId } = req.user;
+  const { id: userId } = req.user;
 
   const { id: reviewId } = req.params;
   if (typeof reviewId !== "string" || !mongoose.isValidObjectId(reviewId)) {

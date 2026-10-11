@@ -5,12 +5,11 @@ import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import {
   accessCookieOptions,
-  createAccessToken,
-  createRefreshToken,
   refreshCookieOptions,
   hashRefreshToken,
   refreshTokenExpiresAt,
   verifyRefreshToken,
+  setAuthCookies,
 } from "../../utils/tokens.js";
 import {
   sendResetPasswordLink,
@@ -35,17 +34,6 @@ export const register = async (req: Request, res: Response) => {
   res
     .status(201)
     .json({ success: true, message: "Account Created Successfully" });
-};
-
-const setAuthCookies = (res: Response, userId: string, role: string) => {
-  const accessToken = createAccessToken(userId, role);
-  const refreshToken = createRefreshToken(userId, role);
-
-  res
-    .cookie("accessToken", accessToken, accessCookieOptions())
-    .cookie("refreshToken", refreshToken, refreshCookieOptions());
-
-  return hashRefreshToken(refreshToken);
 };
 
 export const login = async (req: Request, res: Response) => {

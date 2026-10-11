@@ -52,3 +52,14 @@ export const refreshCookieOptions = (): CookieOptions => ({
   maxAge: REFRESH_TOKEN_DAYS * 24 * 60 * 60 * 1000,
   path: "/api/v1/auth/refresh",
 });
+
+export const setAuthCookies = (res: Response, userId: string, role: string) => {
+  const accessToken = createAccessToken(userId, role);
+  const refreshToken = createRefreshToken(userId, role);
+
+  res
+    .cookie("accessToken", accessToken, accessCookieOptions())
+    .cookie("refreshToken", refreshToken, refreshCookieOptions());
+
+  return hashRefreshToken(refreshToken);
+};
