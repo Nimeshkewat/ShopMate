@@ -173,8 +173,6 @@ export const fetchAiFilteredProducts = async (req: Request, res: Response) => {
   }
 
   const { success, products } = await getAIRecommendation(
-    req,
-    res,
     prompt,
     filteredProducts as any
   );

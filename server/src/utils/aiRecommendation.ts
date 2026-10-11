@@ -6,8 +6,6 @@ import { type IProduct } from "../modules/product/productModel.js";
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
 const getAIRecommendation = async (
-  req: Request,
-  res: Response,
   prompt: string,
   filteredProducts: IProduct[]
 ): Promise<{ success: boolean; products: IProduct[] }> => {
