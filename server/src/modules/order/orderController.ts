@@ -1,0 +1,87 @@
+import type { Request, Response } from "express";
+import mongoose from "mongoose";
+import { AppError } from "../../utils/AppError.js";
+import Shipping from "../shipping/shippingModel.js";
+import Cart from "../cart/cartModel.js";
+import Product from "../product/productModel.js";
+import Order from "./orderModel.js";
+import Payment from "../payment/paymentModel.js";
+
+export const createOrder = async (req: Request, res: Response) => {
+  const { id: userId } = req.user;
+  const { shippingInfoId, paymentType } = req.body;
+
+  if (
+    !mongoose.isValidObjectId(shippingInfoId) ||
+    !["Online", "CashOnDelivery"].includes(paymentType)
+  ) {
+    throw new AppError("Invalid shipping id or payment type", 400);
+  }
+
+  const [shipping, cart] = await Promise.all([
+    Shipping.findOne({ userId }),
+    Cart.findOne({ userId }),
+  ]);
+
+  if (!shipping) throw new AppError("Shipping info not found", 404);
+  if (!cart) throw new AppError("Cart not found", 404);
+
+  const products = await Product.find({
+    _id: { $in: cart.items.map((i) => i.productId) },
+  });
+  const productMap = new Map(products.map((p) => [p._id.toString(), p]));
+
+  const orderItems = cart.items.map((i) => {
+    const p = productMap.get(i.productId.toString());
+    if (!p) throw new AppError(`Product is no longer available`, 400);
+    return {
+      productId: p._id,
+      sellerId: p.sellerId,
+      name: p.name,
+      quantity: i.quantity,
+      price: p.price,
+    };
+  });
+
+  const price = orderItems.reduce((sum, i) => sum + i.price * i.quantity, 0);
+  const tax = Math.round(price * 0.18);
+  const shippingPrice = price > 500 ? 0 : 50;
+  const totalPrice = price + tax + shippingPrice;
+
+  const order = await mongoose.connection.transaction(async (session) => {
+    for (const i of orderItems) {
+      const { modifiedCount } = await Product.updateOne(
+        { _id: i.productId, stock: { $gte: i.quantity } },
+        { $inc: { stock: -i.quantity } },
+        { session }
+      );
+      if (!modifiedCount)
+        throw new AppError(`Insufficient stock for ${i.name}`, 400);
+    }
+
+    const [created] = await Order.create(
+      [
+        {
+          userId,
+          shippingInfoId,
+          orderItems,
+          price,
+          tax,
+          shippingPrice,
+          totalPrice,
+        },
+      ],
+      { session }
+    );
+    if (!created) throw new AppError("Failed to create an order", 400);
+
+    await Payment.create(
+      [{ orderId: created._id, paymentType, amount: totalPrice }],
+      { session }
+    );
+    await Cart.deleteOne({ _id: cart._id }, { session });
+    return created;
+  });
+
+  res.status(201).json({ success: true, message: "Order placed", order });
+};
