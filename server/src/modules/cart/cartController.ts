@@ -9,8 +9,10 @@ export const addToCart = async (req: Request, res: Response) => {
   const { id: productId } = req.params;
   const { quantity } = req.body;
 
+  let qty = Number(quantity);
   if (
-    !quantity ||
+    !qty ||
+    qty <= 0 ||
     typeof productId !== "string" ||
     !mongoose.isValidObjectId(productId)
   ) {
@@ -22,7 +24,10 @@ export const addToCart = async (req: Request, res: Response) => {
     throw new AppError("Product item not found", 404);
   }
 
-  let qty = Number(quantity);
+  if (qty > product.stock) {
+    throw new AppError(`Only (${product.stock}) items available in stock`, 400);
+  }
+
   let cart = await Cart.findOne({ userId });
 
   if (!cart) {
@@ -49,6 +54,12 @@ export const addToCart = async (req: Request, res: Response) => {
   );
 
   if (existingItem) {
+    if (existingItem.quantity + qty > product.stock) {
+      throw new AppError(
+        `Cannot add more items. Total exceeds available stock (${product.stock}).`,
+        400
+      );
+    }
     existingItem.quantity += qty;
   } else {
     cart.items.push({
