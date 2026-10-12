@@ -132,3 +132,16 @@ export const deleteCartItem = async (req: Request, res: Response) => {
   await cart.save();
   res.status(200).json({ success: true, message: "Cart item removed" });
 };
+
+export const clearCart = async (req: Request, res: Response) => {
+  const { id: userId } = req.user;
+
+  const cart = await Cart.findOne({ userId });
+  if (!cart) {
+    throw new AppError("Cart not found", 404);
+  }
+
+  cart.items = [];
+  await cart.save();
+  res.status(200).json({ success: true, message: "Cart cleared" });
+};
