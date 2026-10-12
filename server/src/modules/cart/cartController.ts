@@ -85,3 +85,32 @@ export const fetchCart = async (req: Request, res: Response) => {
 
   res.status(200).json({ success: true, cart });
 };
+
+export const upadteCart = async (req: Request, res: Response) => {
+  const { id: userId } = req.user;
+  const { id: productId } = req.params;
+  const { quantity } = req.body;
+
+  if (typeof productId !== "string" || !mongoose.isValidObjectId(productId)) {
+    throw new AppError("Invaliad cart id", 400);
+  }
+  const qty = Number(quantity);
+  if (!qty || qty < 0) {
+    throw new AppError("Invalid quantity", 400);
+  }
+
+  const cart = await Cart.findOne({ userId });
+  if (!cart) {
+    throw new AppError("Cart not found", 404);
+  }
+
+  const item = cart.items.find((item) => item.productId.equals(productId));
+  if (!item) {
+    throw new AppError("Item not found in cart", 404);
+  }
+
+  item.quantity = qty;
+  await cart.save();
+
+  res.status(200).json({ success: true, message: "Cart item updated", cart });
+};
