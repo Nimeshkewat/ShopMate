@@ -86,7 +86,7 @@ export const fetchCart = async (req: Request, res: Response) => {
   res.status(200).json({ success: true, cart });
 };
 
-export const upadteCart = async (req: Request, res: Response) => {
+export const updateCartQuantity = async (req: Request, res: Response) => {
   const { id: userId } = req.user;
   const { id: productId } = req.params;
   const { quantity } = req.body;
@@ -113,4 +113,22 @@ export const upadteCart = async (req: Request, res: Response) => {
   await cart.save();
 
   res.status(200).json({ success: true, message: "Cart item updated", cart });
+};
+
+export const deleteCartItem = async (req: Request, res: Response) => {
+  const { id: userId } = req.user;
+  const { id: productId } = req.params;
+
+  if (typeof productId !== "string" || !mongoose.isValidObjectId(productId)) {
+    throw new AppError("Invaliad cart id", 400);
+  }
+
+  const cart = await Cart.findOne({ userId });
+  if (!cart) {
+    throw new AppError("Cart not found", 404);
+  }
+
+  cart.items = cart.items.filter((item) => !item.productId.equals(productId));
+  await cart.save();
+  res.status(200).json({ success: true, message: "Cart item removed" });
 };
