@@ -1,4 +1,4 @@
-import type { CookieOptions } from "express";
+import type { CookieOptions, Response } from "express";
 import jwt, { type JwtPayload } from "jsonwebtoken";
 import crypto from "node:crypto";
 
