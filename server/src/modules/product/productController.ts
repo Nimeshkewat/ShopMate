@@ -5,6 +5,7 @@ import Product from "./productModel.js";
 import {
   buildPaginationMeta,
   getPaginationParams,
+  paginationSchema,
 } from "../../utils/paginate.js";
 import mongoose from "mongoose";
 import { v2 as cloudinary } from "cloudinary";
@@ -49,9 +50,14 @@ export const createProduct = async (req: Request, res: Response) => {
 };
 
 export const fetchAllProducts = async (req: Request, res: Response) => {
-  const { search, category, price, rating } = req.query;
+  const { search, category, price, rating, page, limit } = req.query;
 
-  const { page, limit, skip } = getPaginationParams(req.query);
+  const result = paginationSchema.safeParse({ page, limit });
+  if (!result.success) {
+    throw new AppError("Invalid pagination parameters", 400);
+  }
+
+  const { page: p, limit: l, skip } = getPaginationParams(result.data);
   const query: Record<string, any> = {};
 
   if (search && typeof search === "string") {
@@ -74,14 +80,14 @@ export const fetchAllProducts = async (req: Request, res: Response) => {
   }
 
   const [products, total] = await Promise.all([
-    Product.find(query).limit(limit).skip(skip).sort().lean(),
+    Product.find(query).limit(l).skip(skip).sort().lean(),
     Product.countDocuments(query),
   ]);
 
   if (!products.length) {
-    res.status(200).json({ success: true, products: [] });
+    return res.status(200).json({ success: true, products: [] });
   }
-  const pagination = buildPaginationMeta(total, limit, page);
+  const pagination = buildPaginationMeta(total, l, p);
 
   res.status(200).json({ success: true, products, pagination });
 };
