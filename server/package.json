@@ -11,6 +11,7 @@
     "lint:fix": "oxlint . --fix",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
+    "typecheck": "tsc --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -41,6 +42,7 @@
     "mongoose": "^9.11.1",
     "multer": "^2.4.0",
     "nodemailer": "^10.0.16",
+    "razorpay": "^2.9.8",
     "zod": "^4.6.5"
   }
 }
