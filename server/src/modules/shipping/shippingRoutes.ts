@@ -1,6 +1,6 @@
 import express from "express";
 import isAuthenticated from "../../middlewares/auth.js";
-import { addShippingInfo } from "./shippingController.js";
+import { addShippingInfo, fetchShippingInfo } from "./shippingController.js";
 import validate from "../../middlewares/validate.js";
 import { shippingValidationSchema } from "./shippingSchema.js";
 
@@ -12,5 +12,6 @@ router.post(
   validate(shippingValidationSchema),
   addShippingInfo
 );
+router.get("/:id", isAuthenticated, fetchShippingInfo);
 
 export default router;
