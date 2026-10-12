@@ -91,7 +91,7 @@ export const createOrder = async (req: Request, res: Response) => {
   res.status(201).json({ success: true, message: "Order placed", order });
 };
 
-export const getMyOrders = async (req: Request, res: Response) => {
+export const fetchOrders = async (req: Request, res: Response) => {
   const { id: userId } = req.user;
   const { page, limit } = req.query;
 
@@ -110,4 +110,19 @@ export const getMyOrders = async (req: Request, res: Response) => {
   const pagination = buildPaginationMeta(total, l, p);
 
   res.status(200).json({ success: true, orders, pagination });
+};
+
+export const fetchOrderDetail = async (req: Request, res: Response) => {
+  const { id: userId } = req.user;
+  const { id: orderId } = req.params;
+
+  if (typeof orderId !== "string") {
+    throw new AppError("Invalid order id", 400);
+  }
+
+  const order = await Order.findOne({ userId, _id: orderId });
+  if (!order) {
+    throw new AppError("Order not found", 404);
+  }
+  res.status(200).json({ success: true, order });
 };
