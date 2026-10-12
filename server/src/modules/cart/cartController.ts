@@ -36,9 +36,7 @@ export const addToCart = async (req: Request, res: Response) => {
       items: [
         {
           productId,
-          name: product.name,
           price: product.price,
-          image: product.images[0]?.url || "",
           quantity: qty,
         },
       ],
@@ -64,13 +62,26 @@ export const addToCart = async (req: Request, res: Response) => {
   } else {
     cart.items.push({
       productId: product._id,
-      name: product.name,
       price: product.price,
-      image: product.images[0]?.url || "",
       quantity: qty,
     });
   }
 
   await cart.save();
   res.status(200).json({ success: true, message: "Item added to cart", cart });
+};
+
+export const fetchCart = async (req: Request, res: Response) => {
+  const { id: userId } = req.user;
+
+  const cart = await Cart.findOne({ userId }).populate({
+    path: "productId",
+    select: "name images stock price",
+  });
+
+  if (!cart) {
+    throw new AppError("Cart not found", 404);
+  }
+
+  res.status(200).json({ success: true, cart });
 };

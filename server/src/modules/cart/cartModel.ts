@@ -3,8 +3,6 @@ import mongoose from "mongoose";
 
 interface ICartItem {
   productId: mongoose.Types.ObjectId;
-  name: string;
-  image: string;
   price: number;
   quantity: number;
 }
@@ -30,8 +28,6 @@ const cartSchema = new mongoose.Schema<ICart>(
           ref: "Product",
           required: true,
         },
-        name: { type: String, required: true, trim: true },
-        image: { type: String, default: "" },
         price: { type: Number, required: true, min: 0 },
         quantity: { type: Number, required: true, min: 1 },
       },
