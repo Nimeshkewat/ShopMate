@@ -126,3 +126,40 @@ export const fetchOrderDetail = async (req: Request, res: Response) => {
   }
   res.status(200).json({ success: true, order });
 };
+
+export const cancelorder = async (req: Request, res: Response) => {
+  const { id: userId } = req.user;
+  const { id: orderId } = req.params;
+
+  if (typeof orderId !== "string") {
+    throw new AppError("Invalid order id", 400);
+  }
+
+  const order = await mongoose.connection.transaction(async (session) => {
+    const o = await Order.findOneAndUpdate(
+      {
+        _id: orderId,
+        userId,
+        orderStatus: "Processing",
+      },
+      { orderStatus: "Cancelled" },
+      { returnDocument: "after", session }
+    );
+    if (!o) {
+      throw new AppError("Order not found or can no longer be cancelled", 400);
+    }
+
+    await Product.bulkWrite(
+      o.orderItems.map((i) => ({
+        updateOne: {
+          filter: { _id: i.productId },
+          update: { $inc: { stock: i.quantity } },
+        },
+      })),
+      { session }
+    );
+    return o;
+  });
+
+  res.status(200).json({ success: true, message: "Order cancelled", order });
+};
