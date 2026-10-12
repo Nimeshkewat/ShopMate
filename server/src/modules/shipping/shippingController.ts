@@ -57,3 +57,31 @@ export const fetchAllShippingInfo = async (req: Request, res: Response) => {
 
   res.status(200).json({ success: true, shipping });
 };
+
+export const updateShippingInfo = async (req: Request, res: Response) => {
+  const { id: userId } = req.user;
+  const { fullname, state, city, country, address, phone, pincode } = req.body;
+
+  const { id: shippingId } = req.params;
+  if (typeof shippingId !== "string" || !mongoose.isValidObjectId(shippingId)) {
+    throw new AppError("Invalid shipping info id", 404);
+  }
+
+  const shipping = await Shipping.findOne({ userId, _id: shippingId });
+  if (!shipping) {
+    throw new AppError("Shipping info not found", 404);
+  }
+
+  shipping.fullname = fullname || shipping.fullname;
+  shipping.state = state || shipping.state;
+  shipping.country = country || shipping.country;
+  shipping.city = city || shipping.city;
+  shipping.address = address || shipping.address;
+  shipping.phone = phone || shipping.phone;
+  shipping.pincode = pincode || shipping.pincode;
+  await shipping.save();
+
+  res
+    .status(200)
+    .json({ success: true, message: "Shipping info updated", shipping });
+};
