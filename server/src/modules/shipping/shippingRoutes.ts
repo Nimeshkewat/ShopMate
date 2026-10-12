@@ -2,6 +2,7 @@ import express from "express";
 import isAuthenticated from "../../middlewares/auth.js";
 import {
   addShippingInfo,
+  deleteShippingInfo,
   fetchAllShippingInfo,
   fetchShippingInfo,
   updateShippingInfo,
@@ -25,5 +26,6 @@ router.put(
   validate(shippingValidationSchema),
   updateShippingInfo
 );
+router.delete("/", isAuthenticated, deleteShippingInfo);
 
 export default router;

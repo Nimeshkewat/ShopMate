@@ -85,3 +85,19 @@ export const updateShippingInfo = async (req: Request, res: Response) => {
     .status(200)
     .json({ success: true, message: "Shipping info updated", shipping });
 };
+
+export const deleteShippingInfo = async (req: Request, res: Response) => {
+  const { id: userId } = req.user;
+
+  const { id: shippingId } = req.params;
+  if (typeof shippingId !== "string" || !mongoose.isValidObjectId(shippingId)) {
+    throw new AppError("Invalid shipping info id", 404);
+  }
+
+  const shipping = await Shipping.findOneAndDelete({ userId, _id: shippingId });
+  if (!shipping) {
+    throw new AppError("Shipping info not found", 404);
+  }
+
+  res.status(200).json({ success: true, message: "Shipping info removed" });
+};
