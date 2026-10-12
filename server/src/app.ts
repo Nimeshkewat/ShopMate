@@ -10,6 +10,7 @@ import userRouter from "./modules/user/userRoutes.js";
 import productRouter from "./modules/product/productRoutes.js";
 import reviewRouter from "./modules/review/reviewRoutes.js";
 import cartRouter from "./modules/cart/cartRoutes.js";
+import shippingRouter from "./modules/shipping/shippingRoutes.js";
 
 //* Instance
 const app = express();
@@ -28,6 +29,7 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/reviews", reviewRouter);
 app.use("/api/v1/cart", cartRouter);
+app.use("/api/v1/shipping", shippingRouter);
 
 //* Error Handling Middlewares
 app.use(notFound);
