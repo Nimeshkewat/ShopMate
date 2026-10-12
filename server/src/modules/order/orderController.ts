@@ -6,6 +6,11 @@ import Cart from "../cart/cartModel.js";
 import Product from "../product/productModel.js";
 import Order from "./orderModel.js";
 import Payment from "../payment/paymentModel.js";
+import {
+  buildPaginationMeta,
+  getPaginationParams,
+  paginationSchema,
+} from "../../utils/paginate.js";
 
 export const createOrder = async (req: Request, res: Response) => {
   const { id: userId } = req.user;
@@ -84,4 +89,25 @@ export const createOrder = async (req: Request, res: Response) => {
   });
 
   res.status(201).json({ success: true, message: "Order placed", order });
+};
+
+export const getMyOrders = async (req: Request, res: Response) => {
+  const { id: userId } = req.user;
+  const { page, limit } = req.query;
+
+  const result = paginationSchema.safeParse({ page, limit });
+  if (!result.success) {
+    throw new AppError("Invalid pagination parameters", 400);
+  }
+
+  const { page: p, limit: l, skip } = getPaginationParams(result.data);
+  const orders = await Order.find({ userId })
+    .limit(l)
+    .skip(skip)
+    .sort({ createdAt: -1 });
+
+  const total = await Order.countDocuments();
+  const pagination = buildPaginationMeta(total, l, p);
+
+  res.status(200).json({ success: true, orders, pagination });
 };

@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export const getPaginationParams = (
   query: {
     page?: number;
@@ -28,3 +30,8 @@ export const buildPaginationMeta = (
     hasNextPage: page < totalPages,
   };
 };
+
+export const paginationSchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(50).default(4),
+});
