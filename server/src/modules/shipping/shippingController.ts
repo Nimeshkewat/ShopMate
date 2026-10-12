@@ -46,3 +46,14 @@ export const fetchShippingInfo = async (req: Request, res: Response) => {
 
   res.status(200).json({ success: true, shipping });
 };
+
+export const fetchAllShippingInfo = async (req: Request, res: Response) => {
+  const { id: userId } = req.user;
+
+  const shipping = await Shipping.find({ userId });
+  if (!shipping.length) {
+    res.status(200).json({ success: true, shipping: [] });
+  }
+
+  res.status(200).json({ success: true, shipping });
+};
