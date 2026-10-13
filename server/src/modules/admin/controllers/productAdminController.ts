@@ -20,7 +20,12 @@ export const getAllProduct = async (req: Request, res: Response) => {
 
   const { page: p, limit: l, skip } = getPaginationParams(result.data);
   const [products, total] = await Promise.all([
-    Product.find({}).sort({ createdAt: -1 }).limit(l).skip(skip).lean(),
+    Product.find({})
+      .populate("sellerId", "username email role")
+      .sort({ createdAt: -1 })
+      .limit(l)
+      .skip(skip)
+      .lean(),
     Product.countDocuments(),
   ]);
 
