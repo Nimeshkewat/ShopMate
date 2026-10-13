@@ -163,6 +163,29 @@ export const deleteProduct = async (req: Request, res: Response) => {
     .json({ success: true, message: "Product Deleted Successfully" });
 };
 
+export const fetchSellerProducts = async (req: Request, res: Response) => {
+  const { id: sellerId } = req.user;
+  const { page, limit } = req.query;
+
+  const result = paginationSchema.safeParse({ page, limit });
+  if (!result.success) {
+    throw new AppError("Invalid pagination parameters", 400);
+  }
+
+  const { page: p, limit: l, skip } = getPaginationParams(result.data);
+  const [products, total] = await Promise.all([
+    Product.find({ sellerId })
+      .limit(l)
+      .skip(skip)
+      .sort({ createdAt: -1 })
+      .lean(),
+    Product.countDocuments({ sellerId }),
+  ]);
+
+  const pagination = buildPaginationMeta(total, l, p);
+  res.status(200).json({ success: true, products, pagination });
+};
+
 export const fetchAiFilteredProducts = async (req: Request, res: Response) => {
   const { prompt } = req.body;
   if (!prompt) {

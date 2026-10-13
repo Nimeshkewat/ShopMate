@@ -9,6 +9,7 @@ import {
   fetchAiFilteredProducts,
   fetchAllProducts,
   fetchProductDetails,
+  fetchSellerProducts,
   updateProduct,
 } from "./productController.js";
 import isSeller from "../../middlewares/seller.js";
@@ -16,8 +17,9 @@ import isSeller from "../../middlewares/seller.js";
 const router = express.Router();
 
 //* Admin Routes
+router.get("/seller", isAuthenticated, isSeller, fetchSellerProducts);
 router.post(
-  "/",
+  "/seller",
   isAuthenticated,
   isSeller,
   upload.array("images", 4),
@@ -26,14 +28,14 @@ router.post(
 );
 
 router.patch(
-  "/:id",
+  "/seller/:id",
   isAuthenticated,
   isSeller,
   validate(productValidationSchema),
   updateProduct
 );
 
-router.delete("/:id", isAuthenticated, isSeller, deleteProduct);
+router.delete("/seller/:id", isAuthenticated, isSeller, deleteProduct);
 
 //* Public Routes
 router.get("/", fetchAllProducts);
