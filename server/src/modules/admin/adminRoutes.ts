@@ -20,25 +20,22 @@ import {
 
 const router = express.Router();
 
+router.use(isAuthenticated, isAdmin);
+
 //* Seller Management
-router.get("/pending-sellers", isAuthenticated, isAdmin, getPendingSellers);
-router.patch("/approve-seller", isAuthenticated, isAdmin, approveSeller);
-router.patch("/reject-seller", isAuthenticated, isAdmin, rejectSeller);
+router.get("/pending-sellers", getPendingSellers);
+router.patch("/approve-seller", approveSeller);
+router.patch("/reject-seller", rejectSeller);
 
 //* User Management
-router.get("/users", isAuthenticated, isAdmin, getAllUsers);
-router.get("/users/:id", isAuthenticated, isAdmin, getUserById);
-router.patch("/users/:id/block", isAuthenticated, isAdmin, blockUser);
-router.patch("/users/:id/unblock", isAuthenticated, isAdmin, unBlockUser);
-router.patch(
-  "/users/:id/update-status",
-  isAuthenticated,
-  isAdmin,
-  updateOrderStatus
-);
+router.get("/users", getAllUsers);
+router.get("/users/:id", getUserById);
+router.patch("/users/:id/block", blockUser);
+router.patch("/users/:id/unblock", unBlockUser);
+router.patch("/users/:id/update-status", updateOrderStatus);
 
 //* Product Moderation
-router.get("/products", isAuthenticated, isAdmin, getAllProduct);
-router.delete("/products/:id", isAuthenticated, isAdmin, deleteProduct);
+router.get("/products", getAllProduct);
+router.delete("/products/:id", deleteProduct);
 
 export default router;
