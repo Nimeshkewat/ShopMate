@@ -13,6 +13,10 @@ import {
   unBlockUser,
 } from "./controllers/userAdminController.js";
 import { updateOrderStatus } from "../order/orderController.js";
+import {
+  deleteProduct,
+  getAllProduct,
+} from "./controllers/productAdminController.js";
 
 const router = express.Router();
 
@@ -32,5 +36,9 @@ router.patch(
   isAdmin,
   updateOrderStatus
 );
+
+//* Product Moderation
+router.get("/products", isAuthenticated, isAdmin, getAllProduct);
+router.delete("/products/:id", isAuthenticated, isAdmin, deleteProduct);
 
 export default router;
