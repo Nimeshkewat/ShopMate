@@ -22,6 +22,7 @@ import {
   getOrderById,
   updateOrderStatus as updateOrderPaymentStatus,
 } from "./controllers/orderAdminController.js";
+import { getAdminDashboard } from "./controllers/dashboardAdminController.js";
 
 const router = express.Router();
 
@@ -47,5 +48,8 @@ router.delete("/products/:id", deleteProduct);
 router.get("/orders", getAllOrders);
 router.get("/orders/:id", getOrderById);
 router.patch("/orders/:id", updateOrderPaymentStatus);
+
+//* Admin Dashboard
+router.get("/dashboard", getAdminDashboard);
 
 export default router;
