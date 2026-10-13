@@ -77,3 +77,28 @@ export const unBlockUser = async (req: Request, res: Response) => {
 
   res.status(200).json({ success: true, message: "User Unblocked", user });
 };
+
+export const updateUserRole = async (req: Request, res: Response) => {
+  const { id: userId } = req.params;
+  const { id: adminId } = req.user;
+  const { role } = req.body;
+
+  if (!["user", "admin"].includes(role)) {
+    throw new AppError("Invalid role", 404);
+  }
+  if (userId === adminId)
+    throw new AppError("You cannot change your own role", 400);
+
+  if (typeof userId !== "string" || !mongoose.isValidObjectId(userId)) {
+    throw new AppError("Invalid user id", 400);
+  }
+
+  const user = await User.findByIdAndUpdate(
+    { userId },
+    { role },
+    { returnDocument: "after" }
+  );
+  if (!user) throw new AppError("User not found", 404);
+
+  res.status(200).json({ success: true, message: "User role updated", user });
+};

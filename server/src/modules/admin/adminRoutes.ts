@@ -12,6 +12,7 @@ import {
   getUserById,
   unBlockUser,
 } from "./controllers/userAdminController.js";
+import { updateOrderStatus } from "../order/orderController.js";
 
 const router = express.Router();
 
@@ -25,5 +26,11 @@ router.get("/users", isAuthenticated, isAdmin, getAllUsers);
 router.get("/users/:id", isAuthenticated, isAdmin, getUserById);
 router.patch("/users/:id/block", isAuthenticated, isAdmin, blockUser);
 router.patch("/users/:id/unblock", isAuthenticated, isAdmin, unBlockUser);
+router.patch(
+  "/users/:id/update-status",
+  isAuthenticated,
+  isAdmin,
+  updateOrderStatus
+);
 
 export default router;
