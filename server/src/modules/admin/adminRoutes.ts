@@ -17,6 +17,11 @@ import {
   deleteProduct,
   getAllProduct,
 } from "./controllers/productAdminController.js";
+import {
+  getAllOrders,
+  getOrderById,
+  updateOrderStatus as updateOrderPaymentStatus,
+} from "./controllers/orderAdminController.js";
 
 const router = express.Router();
 
@@ -37,5 +42,10 @@ router.patch("/users/:id/update-status", updateOrderStatus);
 //* Product Moderation
 router.get("/products", getAllProduct);
 router.delete("/products/:id", deleteProduct);
+
+//* Order Oversight
+router.get("/orders", getAllOrders);
+router.get("/orders/:id", getOrderById);
+router.patch("/orders/:id", updateOrderPaymentStatus);
 
 export default router;
