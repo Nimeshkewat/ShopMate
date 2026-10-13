@@ -25,6 +25,7 @@ interface IUser extends Document {
   resetPasswordTokenExpiresAt?: Date | undefined;
   refreshTokenHash: string;
   refreshTokenExpiresAt?: Date | undefined;
+  isBlocked: boolean;
 }
 
 const userSchema = new mongoose.Schema<IUser>(
@@ -60,6 +61,7 @@ const userSchema = new mongoose.Schema<IUser>(
     resetPasswordTokenExpiresAt: { type: Date, select: false },
     refreshTokenHash: { type: String, select: false },
     refreshTokenExpiresAt: { type: Date, select: false },
+    isBlocked: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
