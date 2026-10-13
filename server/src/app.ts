@@ -13,6 +13,7 @@ import cartRouter from "./modules/cart/cartRoutes.js";
 import shippingRouter from "./modules/shipping/shippingRoutes.js";
 import orderRouter from "./modules/order/orderRoutes.js";
 import paymentRouter from "./modules/payment/paymentRoutes.js";
+import adminRouter from "./modules/admin/adminRoutes.js";
 
 //* Instance
 const app = express();
@@ -37,6 +38,7 @@ app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/shipping", shippingRouter);
 app.use("/api/v1/orders", orderRouter);
 app.use("/api/v1/payment", paymentRouter);
+app.use("/api/v1/admin", adminRouter);
 
 //* Error Handling Middlewares
 app.use(notFound);
