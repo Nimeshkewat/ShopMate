@@ -6,7 +6,12 @@ import {
   getPendingSellers,
   rejectSeller,
 } from "./controllers/sellerAdminController.js";
-import { getAllUsers, getUserById } from "./controllers/userAdminController.js";
+import {
+  blockUser,
+  getAllUsers,
+  getUserById,
+  unBlockUser,
+} from "./controllers/userAdminController.js";
 
 const router = express.Router();
 
@@ -18,5 +23,7 @@ router.patch("/reject-seller", isAuthenticated, isAdmin, rejectSeller);
 //* User Management
 router.get("/users", isAuthenticated, isAdmin, getAllUsers);
 router.get("/users/:id", isAuthenticated, isAdmin, getUserById);
+router.patch("/users/:id/block", isAuthenticated, isAdmin, blockUser);
+router.patch("/users/:id/unblock", isAuthenticated, isAdmin, unBlockUser);
 
 export default router;

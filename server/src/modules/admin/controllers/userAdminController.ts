@@ -42,3 +42,38 @@ export const getUserById = async (req: Request, res: Response) => {
 
   res.status(200).json({ success: true, user });
 };
+
+export const blockUser = async (req: Request, res: Response) => {
+  const { id: userId } = req.params;
+  if (typeof userId !== "string" || !mongoose.isValidObjectId(userId)) {
+    throw new AppError("Invalid user id", 400);
+  }
+
+  const user = await User.findOneAndUpdate(
+    { userId, role: { $ne: "admin" } },
+    {
+      $set: { isBlocked: true },
+      $unset: { refreshTokenHash: 1, refreshTokenExpiresAt: 1 },
+    },
+    { returnDocument: "after" }
+  );
+  if (!user) throw new AppError("User not found", 404);
+
+  res.status(200).json({ success: true, message: "User Blocked", user });
+};
+
+export const unBlockUser = async (req: Request, res: Response) => {
+  const { id: userId } = req.params;
+  if (typeof userId !== "string" || !mongoose.isValidObjectId(userId)) {
+    throw new AppError("Invalid user id", 400);
+  }
+
+  const user = await User.findOneAndUpdate(
+    { userId, role: { $ne: "admin" } },
+    { isBlocked: false },
+    { returnDocument: "after" }
+  );
+  if (!user) throw new AppError("User not found", 404);
+
+  res.status(200).json({ success: true, message: "User Unblocked", user });
+};
