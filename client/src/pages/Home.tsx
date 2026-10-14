@@ -1,3 +1,6 @@
+import ProductCarousel from "@/components/product/ProductCarousel";
+import { newArrivals, topRated } from "@/mock/storeFront";
+import CategoryGrid from "../components/product/CategoryGrid";
 import HeroCarousel from "../components/home/HeroCarousel";
 
 function Home() {
@@ -5,6 +8,9 @@ function Home() {
   return (
     <>
       <HeroCarousel />
+      <CategoryGrid />
+      <ProductCarousel title="New Arrivals" products={newArrivals} />
+      <ProductCarousel title="Top Rated Products" products={topRated} />
     </>
   );
 }
