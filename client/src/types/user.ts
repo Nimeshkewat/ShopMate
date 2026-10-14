@@ -31,3 +31,8 @@ export interface UpdateProfileResponse {
   message: string;
   user: User;
 }
+
+export interface UpdatePasswordResponse {
+  success: boolean;
+  message: string;
+}
