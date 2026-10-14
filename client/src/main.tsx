@@ -5,6 +5,7 @@ import App from "./App.tsx";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { Toaster } from "sonner";
+import AuthProvider from "./context/AuthContext.tsx";
 
 const client = new QueryClient();
 
@@ -12,8 +13,10 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <QueryClientProvider client={client}>
-        <Toaster />
-        <App />
+        <AuthProvider>
+          <Toaster />
+          <App />
+        </AuthProvider>
       </QueryClientProvider>
     </BrowserRouter>
   </StrictMode>,
