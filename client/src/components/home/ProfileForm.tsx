@@ -1,4 +1,10 @@
-import { useRef, useState, type ChangeEvent, type SubmitEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type SubmitEvent,
+} from "react";
 import { Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +26,12 @@ function ProfileForm({ onHandle, avatarFile }: ProfileFormProps) {
   const [username, setUsername] = useState(data?.user.username ?? "");
   const [email, setEmail] = useState(data?.user.email ?? "");
 
+  //* snapshot of last saved values, used to detect real changes
+  const [originalData, setOriginalData] = useState({
+    username: "",
+    hasOrignalAvatar: false,
+  });
+
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
@@ -32,6 +44,7 @@ function ProfileForm({ onHandle, avatarFile }: ProfileFormProps) {
     updateProfile(formData, {
       onSuccess: async (data) => {
         toast.success(data.message || "Profile Updated");
+        setOriginalData((prev) => ({ ...prev, username }));
         await queryClient.invalidateQueries({ queryKey: ["profile"] });
       },
       onError: (error) => {
@@ -39,6 +52,16 @@ function ProfileForm({ onHandle, avatarFile }: ProfileFormProps) {
       },
     });
   };
+
+  const hasChanges = username !== originalData.username || avatarFile !== null;
+  useEffect(() => {
+    if (data?.user) {
+      setOriginalData({
+        username: data.user.username || "",
+        hasOrignalAvatar: !!data.user.avatar,
+      });
+    }
+  }, [data]);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
@@ -86,7 +109,7 @@ function ProfileForm({ onHandle, avatarFile }: ProfileFormProps) {
         type="submit"
         variant="outline"
         className="h-11 w-full border-primary/30 bg-primary/20 hover:bg-primary/30"
-        disabled={isPending}
+        disabled={isPending || !hasChanges}
       >
         {isPending ? "Saving..." : "Save Changes"}
       </Button>

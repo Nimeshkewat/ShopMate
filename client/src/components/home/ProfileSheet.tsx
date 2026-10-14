@@ -11,6 +11,9 @@ import { useAuth } from "@/context/AuthContext";
 import ProfileForm from "./ProfileForm";
 import { useProfile } from "@/hooks/user/useProfile";
 import { useState, type ChangeEvent } from "react";
+import { useLogout } from "@/hooks/auth/useLogout";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 interface Props {
   open: boolean;
@@ -23,6 +26,8 @@ function ProfileSheet({ open, onOpenChange }: Props) {
 
   const { isAuthenticated } = useAuth();
   const { data, isLoading } = useProfile();
+  const { mutate: logout, isPending } = useLogout();
+  const queryClient = useQueryClient();
   if (!isAuthenticated) return null;
 
   const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +38,16 @@ function ProfileSheet({ open, onOpenChange }: Props) {
   };
 
   const handleLogout = () => {
-    onOpenChange(false);
+    logout(null, {
+      onSuccess: async (data) => {
+        toast.success(data.message || "Logged out successfully");
+        await queryClient.invalidateQueries({});
+        onOpenChange(false);
+      },
+      onError: (error) => {
+        toast.error(error.response?.data.message || "Internal Server Error");
+      },
+    });
   };
 
   return (
@@ -89,9 +103,10 @@ function ProfileSheet({ open, onOpenChange }: Props) {
               variant="outline"
               onClick={handleLogout}
               className="h-11 w-full border-destructive/40 bg-destructive/10 text-destructive hover:bg-destructive/20 hover:text-destructive"
+              disabled={isPending}
             >
               <LogOut className="size-4" />
-              Logout
+              {isPending ? "Logging out..." : "Logout"}
             </Button>
           </div>
         )}
