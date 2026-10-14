@@ -11,6 +11,8 @@ import LoginForm from "./LoginForm";
 import SignupForm from "./SignUpForm";
 import { useSignup } from "@/hooks/auth/useSignup";
 import { toast } from "sonner";
+import { useLogin } from "@/hooks/auth/useLogin";
+import { useQueryClient } from "@tanstack/react-query";
 
 type Mode = "login" | "signup" | "forgot";
 
@@ -35,6 +37,8 @@ interface Props {
 function AuthDialog({ open, onOpenChange }: Props) {
   const [mode, setMode] = useState<Mode>("login");
   const { mutate: signup, isPending: isSignupPending } = useSignup();
+  const { mutate: login, isPending: isLoginPending } = useLogin();
+  const queryClient = useQueryClient();
 
   const handleSignup = ({
     username,
@@ -49,12 +53,12 @@ function AuthDialog({ open, onOpenChange }: Props) {
       { username, email, password },
       {
         onSuccess: (data) => {
-          console.log(data);
+          toast.success(data.message || "Account Created");
+          onOpenChange(false);
         },
         onError: (error) => {
           toast.error(error.response?.data.message || "Internel Server Error");
         },
-        onSettled: () => onOpenChange(false),
       },
     );
   };
@@ -66,8 +70,19 @@ function AuthDialog({ open, onOpenChange }: Props) {
     email: string;
     password: string;
   }) => {
-    console.log({ email, password });
-    onOpenChange(false);
+    login(
+      { email, password },
+      {
+        onSuccess: async (data) => {
+          await queryClient.invalidateQueries();
+          toast.success(data.message || "Logged In Successfully");
+          onOpenChange(false);
+        },
+        onError: (error) => {
+          toast.error(error.response?.data.message || "Internel Server Error");
+        },
+      },
+    );
   };
 
   const handleForgot = (_email: string) => {};
@@ -91,6 +106,7 @@ function AuthDialog({ open, onOpenChange }: Props) {
             onSubmit={handleLogin}
             onForgotPassword={() => setMode("forgot")}
             onSwitchToSignup={() => setMode("signup")}
+            isPending={isLoginPending}
           />
         )}
         {mode === "signup" && (
