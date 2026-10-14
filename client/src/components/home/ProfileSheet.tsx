@@ -1,4 +1,7 @@
+import { useState, type ChangeEvent } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { LogOut } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -7,13 +10,13 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { getErrorMessage } from "@/api/apiClient";
 import { useAuth } from "@/context/AuthContext";
-import ProfileForm from "./ProfileForm";
-import { useProfile } from "@/hooks/user/useProfile";
-import { useState, type ChangeEvent } from "react";
 import { useLogout } from "@/hooks/auth/useLogout";
-import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useProfile } from "@/hooks/user/useProfile";
+import { useUpdatePassword } from "@/hooks/user/useUpdatePassword";
+import PasswordForm from "./PasswordForm";
+import ProfileForm from "./ProfileForm";
 
 interface Props {
   open: boolean;
@@ -21,13 +24,16 @@ interface Props {
 }
 
 function ProfileSheet({ open, onOpenChange }: Props) {
+  const { isAuthenticated } = useAuth();
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string>();
 
-  const { isAuthenticated } = useAuth();
   const { data, isLoading } = useProfile();
-  const { mutate: logout, isPending } = useLogout();
+  const { mutate: logout, isPending: isLoggingOut } = useLogout();
+  const updatePassword = useUpdatePassword();
   const queryClient = useQueryClient();
+
+  //* the early return must come after every hook, never before them
   if (!isAuthenticated) return null;
 
   const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
@@ -64,7 +70,7 @@ function ProfileSheet({ open, onOpenChange }: Props) {
         </SheetHeader>
 
         {isLoading ? (
-          <h1>Loading...</h1>
+          <p className="p-5 text-muted-foreground">Loading...</p>
         ) : (
           <div className="space-y-8 p-5">
             <div className="flex flex-col items-center text-center">
@@ -87,26 +93,33 @@ function ProfileSheet({ open, onOpenChange }: Props) {
               </p>
             </div>
 
-            {/* key remounts the form when the user changes, so fields stay in sync */}
             <ProfileForm
               key={data?.user._id}
               onHandle={handleFile}
               avatarFile={avatarFile}
             />
-            {/* <PasswordForm
-            onSubmit={(values) => mutate(values)}
-            isPending={isPending}
-            serverError={error?.message}
-          /> */}
+
+            <PasswordForm
+              onSubmit={async (values) => {
+                const res = await updatePassword.mutateAsync(values);
+                toast.success(res.message || "Password updated successfully");
+              }}
+              isPending={updatePassword.isPending}
+              serverError={
+                updatePassword.error
+                  ? getErrorMessage(updatePassword.error)
+                  : undefined
+              }
+            />
 
             <Button
               variant="outline"
               onClick={handleLogout}
+              disabled={isLoggingOut}
               className="h-11 w-full border-destructive/40 bg-destructive/10 text-destructive hover:bg-destructive/20 hover:text-destructive"
-              disabled={isPending}
             >
               <LogOut className="size-4" />
-              {isPending ? "Logging out..." : "Logout"}
+              {isLoggingOut ? "Logging out..." : "Logout"}
             </Button>
           </div>
         )}

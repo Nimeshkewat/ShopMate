@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-  type ChangeEvent,
-  type SubmitEvent,
-} from "react";
+import { useRef, useState, type ChangeEvent, type SubmitEvent } from "react";
 import { Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,10 +22,11 @@ function ProfileForm({ onHandle, avatarFile }: ProfileFormProps) {
 
   //* snapshot of last saved values, used to detect real changes
   const [originalData, setOriginalData] = useState({
-    username: "",
-    hasOrignalAvatar: false,
+    username: data?.user.username || "",
+    hasOrignalAvatar: data?.user.avatar ? true : false,
   });
 
+  const hasChanges = username !== originalData.username || avatarFile !== null;
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
@@ -52,16 +47,6 @@ function ProfileForm({ onHandle, avatarFile }: ProfileFormProps) {
       },
     });
   };
-
-  const hasChanges = username !== originalData.username || avatarFile !== null;
-  useEffect(() => {
-    if (data?.user) {
-      setOriginalData({
-        username: data.user.username || "",
-        hasOrignalAvatar: !!data.user.avatar,
-      });
-    }
-  }, [data]);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
