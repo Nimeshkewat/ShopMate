@@ -1,5 +1,5 @@
 import ProductCarousel from "@/components/product/ProductCarousel";
-import { newArrivals, topRated } from "@/mock/storeFront";
+import { newArrivals, topRated } from "../mock/storeFront";
 import CategoryGrid from "../components/product/CategoryGrid";
 import HeroCarousel from "../components/home/HeroCarousel";
 

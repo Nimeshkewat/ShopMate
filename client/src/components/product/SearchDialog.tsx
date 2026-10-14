@@ -7,8 +7,8 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+} from "../../components/ui/dialog";
+import { Input } from "../../components/ui/input";
 import { products } from "../../mock/storeFront";
 
 interface Props {

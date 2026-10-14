@@ -1,6 +1,6 @@
 import { forwardRef, useId, useState, type ComponentProps } from "react";
 import { Eye, EyeOff, type LucideIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 
 interface Props extends Omit<ComponentProps<"input">, "ref"> {

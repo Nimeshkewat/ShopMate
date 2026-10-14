@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { categories } from "@/mock/storeFront";
+import { categories } from "../../mock/storeFront";
 
 function CategoryGrid() {
   return (

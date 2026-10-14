@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { heroSlides } from "@/mock/storeFront";
+import { heroSlides } from "../../mock/storeFront";
 
 const AUTOPLAY_MS = 5000;
 
