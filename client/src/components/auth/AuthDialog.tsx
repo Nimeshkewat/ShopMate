@@ -13,6 +13,7 @@ import { useSignup } from "@/hooks/auth/useSignup";
 import { toast } from "sonner";
 import { useLogin } from "@/hooks/auth/useLogin";
 import { useQueryClient } from "@tanstack/react-query";
+import { useForgotPassword } from "@/hooks/auth/useForgotPassword";
 
 type Mode = "login" | "signup" | "forgot";
 
@@ -38,6 +39,8 @@ function AuthDialog({ open, onOpenChange }: Props) {
   const [mode, setMode] = useState<Mode>("login");
   const { mutate: signup, isPending: isSignupPending } = useSignup();
   const { mutate: login, isPending: isLoginPending } = useLogin();
+  const { mutate: forgotPassword, isPending: isForgotPending } =
+    useForgotPassword();
   const queryClient = useQueryClient();
 
   const handleSignup = ({
@@ -85,7 +88,21 @@ function AuthDialog({ open, onOpenChange }: Props) {
     );
   };
 
-  const handleForgot = (_email: string) => {};
+  const handleForgot = (email: string) => {
+    forgotPassword(
+      { email },
+      {
+        onSuccess: (data) => {
+          toast.success(
+            data.message || "Forgot password link sent to your email",
+          );
+        },
+        onError: (error) => {
+          toast.error(error.response?.data.message || "Internal Server Error");
+        },
+      },
+    );
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -119,6 +136,7 @@ function AuthDialog({ open, onOpenChange }: Props) {
         {mode === "forgot" && (
           <ForgotPasswordForm
             onSubmit={handleForgot}
+            isPending={isForgotPending}
             onBackToLogin={() => setMode("login")}
           />
         )}
