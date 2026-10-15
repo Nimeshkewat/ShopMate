@@ -9,9 +9,22 @@ import {
 
 const router = express.Router();
 
-router.post("/", isAuthenticated, createReview);
-router.patch("/", isAuthenticated, updateReview);
-router.delete("/", isAuthenticated, deleteReview);
+//* Public route: fetch reviews for a product
+router.get("/product/:productId", async (req, res) => {
+  const { productId } = req.params;
+  const reviews = await (
+    await import("./reviewModel.js")
+  ).default
+    .find({ productId })
+    .populate("userId", "username avatar")
+    .sort({ createdAt: -1 })
+    .lean();
+  res.status(200).json({ success: true, reviews });
+});
+
+router.post("/:id", isAuthenticated, createReview);
+router.patch("/:id", isAuthenticated, updateReview);
+router.delete("/:id", isAuthenticated, deleteReview);
 
 //* Admin Route
 router.get("/", isAuthenticated, fetchAllReviews);

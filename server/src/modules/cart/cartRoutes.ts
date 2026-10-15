@@ -10,7 +10,7 @@ import {
 
 const router = express.Router();
 
-router.post("/", isAuthenticated, addToCart);
+router.post("/:id", isAuthenticated, addToCart);
 router.get("/", isAuthenticated, fetchCart);
 router.delete("/clear", isAuthenticated, clearCart);
 router.patch("/:id", isAuthenticated, updateCartQuantity);

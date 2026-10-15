@@ -93,14 +93,13 @@ export const fetchAllProducts = async (req: Request, res: Response) => {
 };
 
 export const fetchProductDetails = async (req: Request, res: Response) => {
-  const { id: sellerId } = req.user;
   const { id: productId } = req.params;
 
   if (typeof productId !== "string" || !mongoose.isValidObjectId(productId)) {
     throw new AppError("Invalid Product Id", 400);
   }
 
-  const product = await Product.findOne({ _id: productId, sellerId });
+  const product = await Product.findOne({ _id: productId, });
   if (!product) {
     throw new AppError("Product not found", 404);
   }
