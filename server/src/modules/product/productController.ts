@@ -99,7 +99,7 @@ export const fetchProductDetails = async (req: Request, res: Response) => {
     throw new AppError("Invalid Product Id", 400);
   }
 
-  const product = await Product.findOne({ _id: productId, });
+  const product = await Product.findOne({ _id: productId });
   if (!product) {
     throw new AppError("Product not found", 404);
   }
