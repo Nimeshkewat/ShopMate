@@ -23,7 +23,7 @@ router.post("/logout", logout);
 router.post("/refresh", refresh);
 router.post("/forgot-password", validate(forgotPasswordSchema), forgotPassword);
 router.post(
-  "/reest-password/:token",
+  "/reset-password/:token",
   validate(resetPasswordSchema),
   resetPassword
 );

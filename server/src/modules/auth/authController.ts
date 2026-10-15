@@ -155,6 +155,10 @@ export const resetPassword = async (req: Request, res: Response) => {
     throw new AppError("Invalid or missing reset token", 400);
   }
 
+  if (!newPassword || typeof newPassword !== "string") {
+    throw new AppError("New password is required", 400);
+  }
+
   const resetPasswordTokenHash = crypto
     .createHash("sha256")
     .update(token)
@@ -171,8 +175,8 @@ export const resetPassword = async (req: Request, res: Response) => {
     throw new AppError("User not found", 404);
   }
 
-  const hadhedPassword = await bcrypt.hash(newPassword, 10);
-  user.password = hadhedPassword;
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  user.password = hashedPassword;
   user.resetPasswordToken = "";
   user.resetPasswordTokenExpiresAt = undefined;
   await user.save();
