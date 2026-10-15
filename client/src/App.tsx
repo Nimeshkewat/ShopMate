@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import PlaceholderPage from "@/components/PlaceHolderPage";
 import StorefrontLayout from "@/layouts/StoreFrontLayout";
 import Home from "@/pages/Home";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Route element={<StorefrontLayout />}>
         <Route index element={<Home />} />
         <Route path="products" element={<PlaceholderPage title="Products" />} />
+        <Route path="reset-password/:token" element={<ResetPassword />} />
         <Route
           path="product/:id"
           element={<PlaceholderPage title="Product Details" />}

@@ -2,6 +2,7 @@ import { api } from "./apiClient";
 import {
   type ForgotPasswordValues,
   type LoginValues,
+  type ResetPasswordPayload,
   type SignupValues,
 } from "../schema/auth";
 import type { AuthResponse } from "@/types/auth";
@@ -28,9 +29,13 @@ export const forgotPassword = async (
   return resposne.data;
 };
 
-export const resetPassword = async (token: string): Promise<AuthResponse> => {
+export const resetPassword = async (
+  payload: ResetPasswordPayload,
+): Promise<AuthResponse> => {
+  const { token, ...input } = payload;
   const resposne = await api.post<AuthResponse>(
     `/auth/reset-password/${token}`,
+    input.newPassword,
   );
   return resposne.data;
 };

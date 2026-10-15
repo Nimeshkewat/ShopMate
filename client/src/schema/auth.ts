@@ -25,6 +25,21 @@ export const signupSchema = z.object({
 
 export const forgotPasswordSchema = z.object({ email });
 
+export const resetPasswordSchema = z
+  .object({
+    newPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .max(64, "Password must be 64 characters or less"),
+    confirmPassword: z.string().min(1, "Please confirm your new password"),
+  })
+  .refine((v) => v.newPassword === v.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
+
 export type LoginValues = z.infer<typeof loginSchema>;
 export type SignupValues = z.infer<typeof signupSchema>;
 export type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>;
+export type ResetPasswordValues = z.infer<typeof resetPasswordSchema>;
+export type ResetPasswordPayload = ResetPasswordValues & { token: string };
