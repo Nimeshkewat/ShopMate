@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from "react";
+import { useState, type SubmitEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
 import {
@@ -7,40 +7,87 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "../../components/ui/dialog";
-import { Input } from "../../components/ui/input";
-import { products } from "../../mock/storeFront";
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
+import { useDebounce } from "@/hooks/global/useDebounce";
+import { useProducts } from "@/hooks/product/useProducts";
+
+interface ResultsProps {
+  term: string;
+  onSelect: () => void;
+}
+
+// rendered only while there is a search term, so the query never runs for an empty box
+function SearchResults({ term, onSelect }: ResultsProps) {
+  const { data, isLoading } = useProducts({ search: term, limit: 5 });
+  const results = data?.products ?? [];
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center gap-2 py-6 text-sm text-muted-foreground">
+        <Spinner size="sm" className="text-primary" />
+        <span>Searching catalog...</span>
+      </div>
+    );
+  }
+  if (results.length === 0) {
+    return (
+      <p className="py-2 text-center text-sm text-muted-foreground">
+        No products found for "{term}".
+      </p>
+    );
+  }
+
+  return (
+    <ul className="max-h-[55vh] space-y-2 overflow-y-auto">
+      {results.map((product) => (
+        <li key={product._id}>
+          <Link
+            to={`/product/${product._id}`}
+            onClick={onSelect}
+            className="flex items-center gap-3 rounded-xl border border-primary/15 bg-primary/10 p-2 transition-colors hover:bg-primary/20"
+          >
+            {product.images[0]?.url && (
+              <img
+                src={product.images[0].url}
+                alt=""
+                className="size-12 rounded-lg object-cover"
+              />
+            )}
+            <span className="min-w-0 flex-1 truncate font-medium">
+              {product.name}
+            </span>
+            <span className="font-semibold text-primary">
+              ${product.price.toFixed(2)}
+            </span>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-function SearchDialog({ open, onOpenChange }: Props) {
+export default function SearchDialog({ open, onOpenChange }: Props) {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
-  const term = query.trim().toLowerCase();
-
-  // TODO: replace with your debounced search hook
-  const results = useMemo(
-    () =>
-      term
-        ? products
-            .filter((p) => p.name.toLowerCase().includes(term))
-            .slice(0, 5)
-        : [],
-    [term],
-  );
+  const trimmed = query.trim();
+  const debounced = useDebounce(trimmed, 300);
 
   const handleOpenChange = (next: boolean) => {
     onOpenChange(next);
     if (!next) setQuery("");
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = (e: SubmitEvent) => {
     e.preventDefault();
-    if (!term) return;
-    navigate(`/products?search=${encodeURIComponent(query.trim())}`);
+    if (!trimmed) return;
+    navigate(`/products?search=${encodeURIComponent(trimmed)}`);
     handleOpenChange(false);
   };
 
@@ -65,42 +112,22 @@ function SearchDialog({ open, onOpenChange }: Props) {
           />
         </form>
 
-        {!term ? (
+        {!trimmed ? (
           <p className="py-2 text-center text-sm text-muted-foreground">
             Start typing to search for products.
           </p>
-        ) : results.length === 0 ? (
-          <p className="py-2 text-center text-sm text-muted-foreground">
-            No products found for "{query.trim()}".
-          </p>
+        ) : !debounced ? (
+          <div className="flex items-center justify-center gap-2 py-4 text-sm text-muted-foreground">
+            <Spinner size="xs" className="text-primary" />
+            <span>Searching...</span>
+          </div>
         ) : (
-          <ul className="max-h-[55vh] space-y-2 overflow-y-auto">
-            {results.map((product) => (
-              <li key={product.id}>
-                <Link
-                  to={`/product/${product.id}`}
-                  onClick={() => handleOpenChange(false)}
-                  className="flex items-center gap-3 rounded-xl border border-primary/15 bg-primary/10 p-2 transition-colors hover:bg-primary/20"
-                >
-                  <img
-                    src={product.image}
-                    alt=""
-                    className="size-12 rounded-lg object-cover"
-                  />
-                  <span className="min-w-0 flex-1 truncate font-medium">
-                    {product.name}
-                  </span>
-                  <span className="font-semibold text-primary">
-                    ${product.price.toFixed(2)}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <SearchResults
+            term={debounced}
+            onSelect={() => handleOpenChange(false)}
+          />
         )}
       </DialogContent>
     </Dialog>
   );
 }
-
-export default SearchDialog;
