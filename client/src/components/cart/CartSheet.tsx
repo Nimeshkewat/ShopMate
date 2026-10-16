@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Sheet,
   SheetContent,
@@ -8,35 +9,29 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-
-export interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  quantity: number;
-}
+import type { CartItem } from "@/types/cart";
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   items: CartItem[];
-  onChange: (items: CartItem[]) => void;
+  isLoading?: boolean;
+  onQuantityChange: (productId: string, quantity: number) => void;
+  onRemove: (productId: string) => void;
 }
 
 const qtyButton =
   "size-7 rounded-md border-primary/20 bg-primary/15 text-primary hover:bg-primary hover:text-primary-foreground";
 
-function CartSheet({ open, onOpenChange, items, onChange }: Props) {
+export default function CartSheet({
+  open,
+  onOpenChange,
+  items,
+  isLoading,
+  onQuantityChange,
+  onRemove,
+}: Props) {
   const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
-
-  const changeQty = (id: string, delta: number) =>
-    onChange(
-      items.map((i) =>
-        i.id === id ? { ...i, quantity: Math.max(1, i.quantity + delta) } : i,
-      ),
-    );
-  const remove = (id: string) => onChange(items.filter((i) => i.id !== id));
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -53,12 +48,19 @@ function CartSheet({ open, onOpenChange, items, onChange }: Props) {
           </SheetDescription>
         </SheetHeader>
 
-        {items.length === 0 ? (
+        {isLoading ? (
+          <div className="flex flex-1 flex-col items-center justify-center gap-3 px-5 py-12 text-muted-foreground">
+            <Spinner size="lg" className="text-primary" />
+            <p className="text-sm">Loading your cart...</p>
+          </div>
+        ) : items.length === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-3 px-5 text-center">
             <ShoppingBag className="size-12 text-muted-foreground" />
             <p className="font-medium">Your cart is empty</p>
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
-              <Link to="/products">Browse products</Link>
+            <Button variant="outline">
+              <Link to="/products" onClick={() => onOpenChange(false)}>
+                Browse products
+              </Link>
             </Button>
           </div>
         ) : (
@@ -66,7 +68,7 @@ function CartSheet({ open, onOpenChange, items, onChange }: Props) {
             <ul className="flex-1 space-y-3 overflow-y-auto px-5">
               {items.map((item) => (
                 <li
-                  key={item.id}
+                  key={item.productId}
                   className="flex gap-3 rounded-xl border border-primary/15 bg-primary/10 p-3"
                 >
                   <img
@@ -84,7 +86,10 @@ function CartSheet({ open, onOpenChange, items, onChange }: Props) {
                         variant="outline"
                         size="icon"
                         className={qtyButton}
-                        onClick={() => changeQty(item.id, -1)}
+                        disabled={item.quantity <= 1}
+                        onClick={() =>
+                          onQuantityChange(item.productId, item.quantity - 1)
+                        }
                         aria-label="Decrease quantity"
                       >
                         <Minus className="size-3.5" />
@@ -96,7 +101,9 @@ function CartSheet({ open, onOpenChange, items, onChange }: Props) {
                         variant="outline"
                         size="icon"
                         className={qtyButton}
-                        onClick={() => changeQty(item.id, 1)}
+                        onClick={() =>
+                          onQuantityChange(item.productId, item.quantity + 1)
+                        }
                         aria-label="Increase quantity"
                       >
                         <Plus className="size-3.5" />
@@ -105,7 +112,7 @@ function CartSheet({ open, onOpenChange, items, onChange }: Props) {
                         variant="ghost"
                         size="icon"
                         className="size-7 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                        onClick={() => remove(item.id)}
+                        onClick={() => onRemove(item.productId)}
                         aria-label={`Remove ${item.name}`}
                       >
                         <Trash2 className="size-4" />
@@ -133,5 +140,3 @@ function CartSheet({ open, onOpenChange, items, onChange }: Props) {
     </Sheet>
   );
 }
-
-export default CartSheet;
