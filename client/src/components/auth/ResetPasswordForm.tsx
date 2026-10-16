@@ -64,10 +64,11 @@ export default function ResetPasswordForm({
 
       <Button
         type="submit"
-        disabled={isPending}
+        loading={isPending}
+        loadingText="Resetting Password..."
         className="h-12 w-full text-base"
       >
-        {isPending ? "Resetting..." : "Reset Password"}
+        Reset Password
       </Button>
     </form>
   );

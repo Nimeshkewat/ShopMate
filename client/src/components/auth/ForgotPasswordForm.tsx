@@ -79,7 +79,8 @@ function ForgotPasswordForm({
 
       <Button
         type="submit"
-        disabled={isPending}
+        loading={isPending}
+        loadingText="Sending Link..."
         className="h-12 w-full text-base"
       >
         Send Reset Link

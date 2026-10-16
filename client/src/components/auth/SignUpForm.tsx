@@ -64,7 +64,8 @@ function SignupForm({
 
       <Button
         type="submit"
-        disabled={isPending}
+        loading={isPending}
+        loadingText="Creating Account..."
         className="h-12 w-full text-base"
       >
         Create Account

@@ -69,7 +69,8 @@ export default function LoginForm({
 
       <Button
         type="submit"
-        disabled={isPending}
+        loading={isPending}
+        loadingText="Signing in..."
         className="h-12 w-full text-base"
       >
         Sign In
