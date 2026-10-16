@@ -94,9 +94,11 @@ function ProfileForm({ onHandle, avatarFile }: ProfileFormProps) {
         type="submit"
         variant="outline"
         className="h-11 w-full border-primary/30 bg-primary/20 hover:bg-primary/30"
-        disabled={isPending || !hasChanges}
+        loading={isPending}
+        loadingText="Saving Changes..."
+        disabled={!hasChanges}
       >
-        {isPending ? "Saving..." : "Save Changes"}
+        Save Changes
       </Button>
     </form>
   );

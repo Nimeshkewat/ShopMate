@@ -111,7 +111,8 @@ export default function PasswordForm({
       <Button
         type="submit"
         variant="outline"
-        disabled={isPending}
+        loading={isPending}
+        loadingText="Updating Password..."
         className="h-11 w-full border-primary/30 bg-primary/20 hover:bg-primary/30"
       >
         Update Password

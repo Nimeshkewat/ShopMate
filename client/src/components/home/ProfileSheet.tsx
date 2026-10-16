@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Sheet,
   SheetContent,
@@ -70,7 +71,10 @@ function ProfileSheet({ open, onOpenChange }: Props) {
         </SheetHeader>
 
         {isLoading ? (
-          <p className="p-5 text-muted-foreground">Loading...</p>
+          <div className="flex flex-1 flex-col items-center justify-center gap-3 p-8 text-muted-foreground">
+            <Spinner size="lg" className="text-primary" />
+            <p className="text-sm">Loading profile...</p>
+          </div>
         ) : (
           <div className="space-y-8 p-5">
             <div className="flex flex-col items-center text-center">
@@ -115,11 +119,12 @@ function ProfileSheet({ open, onOpenChange }: Props) {
             <Button
               variant="outline"
               onClick={handleLogout}
-              disabled={isLoggingOut}
+              loading={isLoggingOut}
+              loadingText="Logging out..."
               className="h-11 w-full border-destructive/40 bg-destructive/10 text-destructive hover:bg-destructive/20 hover:text-destructive"
             >
               <LogOut className="size-4" />
-              {isLoggingOut ? "Logging out..." : "Logout"}
+              Logout
             </Button>
           </div>
         )}
