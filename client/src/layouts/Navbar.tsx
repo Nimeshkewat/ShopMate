@@ -1,17 +1,21 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, Search, ShoppingCart, User } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/context/ThemeContext";
-import { mockCartItems } from "../mock/storeFront";
-import CartSheet, { type CartItem } from "@/components/cart/CartSheet";
-import MenuSheet from "@/layouts/MenuSheet";
-import SearchDialog from "@/components/product/SearchDialog";
+import { getErrorMessage } from "@/api/apiClient";
 import { useAuth } from "@/context/AuthContext";
+import { useCart } from "@/hooks/cart/useCart";
+import { useRemoveFromCart } from "@/hooks/cart/useRemoveFromCart";
+import { useUpdateCartItem } from "@/hooks/cart/useUpdateCartItem";
 import AuthDialog from "@/components/auth/AuthDialog";
+import CartSheet from "@/components/cart/CartSheet";
+import SearchDialog from "@/components/product/SearchDialog";
 import ProfileSheet from "@/components/home/ProfileSheet";
+import MenuSheet from "./MenuSheet";
 
-function Navbar() {
+export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
@@ -19,9 +23,14 @@ function Navbar() {
   const [profileOpen, setProfileOpen] = useState(false);
   const { isAuthenticated } = useAuth();
 
-  // TODO: replace with your cart query hook
-  const [cartItems, setCartItems] = useState<CartItem[]>(mockCartItems);
-  const cartCount = cartItems.reduce((n, i) => n + i.quantity, 0);
+  const { data: cartData, isLoading: cartLoading } = useCart();
+  const updateItem = useUpdateCartItem();
+  const removeItem = useRemoveFromCart();
+
+  const items = isAuthenticated ? (cartData?.cart?.items ?? []) : [];
+  const cartCount = items.reduce((n, i) => n + i.quantity, 0);
+
+  const handleError = (error: unknown) => toast.error(getErrorMessage(error));
 
   return (
     <>
@@ -85,13 +94,17 @@ function Navbar() {
       <CartSheet
         open={cartOpen}
         onOpenChange={setCartOpen}
-        items={cartItems}
-        onChange={setCartItems}
+        items={items}
+        isLoading={isAuthenticated && cartLoading}
+        onQuantityChange={(productId, quantity) =>
+          updateItem.mutate({ productId, quantity }, { onError: handleError })
+        }
+        onRemove={(productId) =>
+          removeItem.mutate({ productId }, { onError: handleError })
+        }
       />
       <AuthDialog open={authOpen} onOpenChange={setAuthOpen} />
       <ProfileSheet open={profileOpen} onOpenChange={setProfileOpen} />
     </>
   );
 }
-
-export default Navbar;
