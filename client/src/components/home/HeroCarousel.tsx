@@ -3,7 +3,36 @@ import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { heroSlides } from "../../mock/storeFront";
+
+const HERO_SLIDES = [
+  {
+    id: 1,
+    eyebrow: "Latest technology",
+    title: "Electronics",
+    subtitle: "Discover the newest gadgets and devices",
+    cta: "Shop Electronics",
+    category: "Electronics",
+    gradient: "from-blue-900/80 via-indigo-900/60 to-background",
+  },
+  {
+    id: 2,
+    eyebrow: "New season styles",
+    title: "Fashion",
+    subtitle: "Trending looks for every occasion",
+    cta: "Shop Fashion",
+    category: "Fashion",
+    gradient: "from-rose-900/80 via-pink-900/60 to-background",
+  },
+  {
+    id: 3,
+    eyebrow: "Transform your space",
+    title: "Home & Garden",
+    subtitle: "Beautiful furniture and decor for every home",
+    cta: "Shop Home",
+    category: "Home & Garden",
+    gradient: "from-emerald-900/80 via-teal-900/60 to-background",
+  },
+];
 
 const AUTOPLAY_MS = 5000;
 
@@ -13,7 +42,7 @@ const arrowClass =
 function HeroCarousel() {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const count = heroSlides.length;
+  const count = HERO_SLIDES.length;
 
   useEffect(() => {
     if (paused) return;
@@ -32,7 +61,7 @@ function HeroCarousel() {
       aria-roledescription="carousel"
       aria-label="Featured categories"
     >
-      {heroSlides.map((slide, i) => (
+      {HERO_SLIDES.map((slide, i) => (
         <div
           key={slide.id}
           aria-hidden={i !== index}
@@ -41,12 +70,7 @@ function HeroCarousel() {
             i === index ? "opacity-100" : "pointer-events-none opacity-0",
           )}
         >
-          <img
-            src={slide.image}
-            alt=""
-            className="size-full scale-110 object-cover blur-md"
-          />
-          <div className="absolute inset-0 bg-background/60 dark:bg-background/70" />
+          <div className={cn("absolute inset-0 bg-gradient-to-br", slide.gradient)} />
 
           <div className="relative flex size-full flex-col items-center justify-center px-16 text-center">
             <p className="text-sm font-medium text-primary sm:text-base">
@@ -89,7 +113,7 @@ function HeroCarousel() {
       </Button>
 
       <div className="absolute bottom-5 left-1/2 z-20 flex -translate-x-1/2 gap-2">
-        {heroSlides.map((slide, i) => (
+        {HERO_SLIDES.map((slide, i) => (
           <button
             key={slide.id}
             type="button"
