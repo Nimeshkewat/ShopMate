@@ -70,7 +70,9 @@ function HeroCarousel() {
             i === index ? "opacity-100" : "pointer-events-none opacity-0",
           )}
         >
-          <div className={cn("absolute inset-0 bg-gradient-to-br", slide.gradient)} />
+          <div
+            className={cn("absolute inset-0 bg-linear-to-br", slide.gradient)}
+          />
 
           <div className="relative flex size-full flex-col items-center justify-center px-16 text-center">
             <p className="text-sm font-medium text-primary sm:text-base">

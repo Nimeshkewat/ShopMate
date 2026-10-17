@@ -12,7 +12,7 @@ export default function ProductGallery({ images, name }: Props) {
 
   return (
     <div>
-      <div className="aspect-[4/3] overflow-hidden rounded-xl border border-primary/15 bg-primary/10">
+      <div className="aspect-4/3 overflow-hidden rounded-xl border border-primary/15 bg-primary/10">
         {images.length > 0 ? (
           <img
             src={images[active]}

@@ -41,7 +41,7 @@ export default function ProductCard({ product }: { product: Product }) {
             </span>
           )}
           {product.rating >= 4.5 && (
-            <span className="rounded bg-gradient-to-r from-amber-500 to-red-500 px-2 py-0.5 text-[10px] font-bold text-white">
+            <span className="rounded bg-linear-to-r from-amber-500 to-red-500 px-2 py-0.5 text-[10px] font-bold text-white">
               TOP RATED
             </span>
           )}
@@ -66,7 +66,7 @@ export default function ProductCard({ product }: { product: Product }) {
       </div>
 
       <Link to={href} className="mt-3 block">
-        <h3 className="line-clamp-2 min-h-[2.75rem] font-semibold leading-snug transition-colors group-hover:text-primary">
+        <h3 className="line-clamp-2 min-h-11 font-semibold leading-snug transition-colors group-hover:text-primary">
           {product.name}
         </h3>
       </Link>
