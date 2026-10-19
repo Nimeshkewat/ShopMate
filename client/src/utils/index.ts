@@ -1,4 +1,5 @@
 import type { Product, StockStatus } from "../types/product";
+import type { CartItem } from "../types/cart";
 
 export type { StockStatus };
 
@@ -41,3 +42,38 @@ export const defaultFilters: ProductFilterValues = {
   minRating: null,
   availability: null,
 };
+
+//*
+const TAX_RATE = 0.18;
+const FREE_SHIPPING_ABOVE = 500;
+const SHIPPING_FEE = 50;
+
+export interface OrderTotals {
+  itemCount: number;
+  subtotal: number;
+  shipping: number;
+  tax: number;
+  total: number;
+}
+
+export const calculateTotals = (items: CartItem[]): OrderTotals => {
+  const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+  const shipping =
+    subtotal === 0 || subtotal > FREE_SHIPPING_ABOVE ? 0 : SHIPPING_FEE;
+  const tax = Math.round(subtotal * TAX_RATE);
+  return {
+    itemCount: items.reduce((n, i) => n + i.quantity, 0),
+    subtotal,
+    shipping,
+    tax,
+    total: subtotal + shipping + tax,
+  };
+};
+
+export const formatPrice = (amount: number) => `$${amount.toFixed(2)}`;
+
+//*
+export const MAX_ADDRESSES = 3;
+// edit these lists to match the regions you ship to
+export const COUNTRIES = ["India"];
+export const STATES = ["Maharashtra"];
