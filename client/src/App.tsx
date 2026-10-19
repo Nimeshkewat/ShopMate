@@ -5,6 +5,15 @@ import Home from "@/pages/Home";
 import ResetPassword from "./pages/ResetPassword";
 import Products from "./pages/Products";
 import ProductDetails from "./components/product/ProductDetails";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import OrderSuccess from "./pages/OrderSuccess";
+import {
+  AdminRoute,
+  GuestRoute,
+  PrivateRoute,
+  SellerRoute,
+} from "./protected-routes/AuthGuard";
 
 function App() {
   return (
@@ -14,20 +23,63 @@ function App() {
         <Route index element={<Home />} />
         <Route path="products" element={<Products />} />
         <Route path="product/:id" element={<ProductDetails />} />
-        <Route path="reset-password/:token" element={<ResetPassword />} />
         <Route
-          path="cart"
-          element={<PlaceholderPage title="Shopping Cart" />}
+          path="reset-password/:token"
+          element={
+            <GuestRoute>
+              <ResetPassword />
+            </GuestRoute>
+          }
         />
-        <Route path="checkout" element={<PlaceholderPage title="Checkout" />} />
-        <Route path="orders" element={<PlaceholderPage title="My Orders" />} />
+        <Route path="cart" element={<Cart />} />
+        <Route
+          path="checkout"
+          element={
+            <PrivateRoute>
+              <Checkout />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="order-success/:id"
+          element={
+            <PrivateRoute>
+              <OrderSuccess />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="orders"
+          element={
+            <PrivateRoute>
+              <PlaceholderPage title="My Orders" />
+            </PrivateRoute>
+          }
+        />
         <Route path="about" element={<PlaceholderPage title="About" />} />
         <Route path="faq" element={<PlaceholderPage title="FAQ" />} />
         <Route path="contact" element={<PlaceholderPage title="Contact" />} />
       </Route>
 
-      {/* Seller panel: <Route path="/seller/*" ...> goes here later */}
-      {/* Admin panel: <Route path="/admin/*" ...> goes here last */}
+      {/* Seller panel*/}
+      <Route
+        path="/seller/*"
+        element={
+          <SellerRoute>
+            <PlaceholderPage title="Seller Layout" />
+          </SellerRoute>
+        }
+      ></Route>
+
+      {/* Seller panel*/}
+      <Route
+        path="/admin/*"
+        element={
+          <AdminRoute>
+            <PlaceholderPage title="Admin Layout" />
+          </AdminRoute>
+        }
+      ></Route>
 
       <Route path="*" element={<PlaceholderPage title="Page not found" />} />
     </Routes>
