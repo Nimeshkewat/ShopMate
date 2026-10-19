@@ -37,7 +37,7 @@ app.use("/api/v1/reviews", reviewRouter);
 app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/shipping", shippingRouter);
 app.use("/api/v1/orders", orderRouter);
-app.use("/api/v1/payment", paymentRouter);
+app.use("/api/v1/payments", paymentRouter);
 app.use("/api/v1/admin", adminRouter);
 
 //* Error Handling Middlewares

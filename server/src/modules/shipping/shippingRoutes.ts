@@ -26,6 +26,6 @@ router.put(
   validate(shippingValidationSchema),
   updateShippingInfo
 );
-router.delete("/", isAuthenticated, deleteShippingInfo);
+router.delete("/:id", isAuthenticated, deleteShippingInfo);
 
 export default router;
