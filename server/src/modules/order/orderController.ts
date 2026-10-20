@@ -43,6 +43,7 @@ export const createOrder = async (req: Request, res: Response) => {
       productId: p._id,
       sellerId: p.sellerId,
       name: p.name,
+      image: p.images?.[0]?.url ?? "",
       quantity: i.quantity,
       price: p.price,
     };
@@ -120,7 +121,10 @@ export const fetchOrderDetail = async (req: Request, res: Response) => {
     throw new AppError("Invalid order id", 400);
   }
 
-  const order = await Order.findOne({ userId, _id: orderId });
+  const order = await Order.findOne({ userId, _id: orderId }).populate(
+    "shippingInfoId",
+    "fullname state country city phone address pincode"
+  );
   if (!order) {
     throw new AppError("Order not found", 404);
   }
