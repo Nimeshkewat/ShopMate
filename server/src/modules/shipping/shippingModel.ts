@@ -71,7 +71,7 @@ const shippingSchema = new mongoose.Schema<IShipping>(
 );
 
 const Shipping: Model<IShipping> =
-  mongoose.models.ShippingInfo ||
-  mongoose.model<IShipping>("IShipping", shippingSchema);
+  mongoose.models.Shipping ||
+  mongoose.model<IShipping>("Shipping", shippingSchema);
 
 export default Shipping;
