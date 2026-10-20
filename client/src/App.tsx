@@ -14,6 +14,8 @@ import {
   PrivateRoute,
   SellerRoute,
 } from "./protected-routes/AuthGuard";
+import MyOrders from "./pages/MyOrders";
+import OrderDetails from "./components/order/OrderDetails";
 
 function App() {
   return (
@@ -52,7 +54,15 @@ function App() {
           path="orders"
           element={
             <PrivateRoute>
-              <PlaceholderPage title="My Orders" />
+              <MyOrders />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="orders/:id"
+          element={
+            <PrivateRoute>
+              <OrderDetails />
             </PrivateRoute>
           }
         />
