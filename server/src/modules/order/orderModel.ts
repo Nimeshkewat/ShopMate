@@ -5,6 +5,7 @@ interface IOrderItem {
   productId: mongoose.Types.ObjectId;
   sellerId: mongoose.Types.ObjectId;
   name: string; //* Capturing snapshot details helps if product data changes later
+  image?: string;
   quantity: number;
   price: number;
 }
@@ -30,7 +31,7 @@ const orderSchema = new mongoose.Schema<IOrder>(
     },
     shippingInfoId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "ShippingInfo",
+      ref: "Shipping",
       required: true,
     },
     orderItems: [
@@ -46,6 +47,7 @@ const orderSchema = new mongoose.Schema<IOrder>(
           required: true,
         },
         name: { type: String, required: true },
+        image: { type: String, default: "" },
         quantity: {
           type: Number,
           required: true,
