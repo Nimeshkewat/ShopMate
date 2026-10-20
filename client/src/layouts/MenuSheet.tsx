@@ -3,10 +3,12 @@ import {
   CircleHelp,
   Home,
   Info,
+  LayoutDashboard,
   ListOrdered,
   Package,
   Phone,
   ShoppingCart,
+  Store,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -16,6 +18,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { useProfile } from "@/hooks/user/useProfile";
 
 const links = [
   { to: "/", label: "Home", icon: Home },
@@ -24,7 +27,7 @@ const links = [
   { to: "/faq", label: "FAQ", icon: CircleHelp },
   { to: "/contact", label: "Contact", icon: Phone },
   { to: "/cart", label: "Cart", icon: ShoppingCart },
-  { to: "/orders", label: "My Orders", icon: ListOrdered },
+  { to: "/orders", label: "My orders", icon: ListOrdered },
 ];
 
 interface Props {
@@ -33,6 +36,7 @@ interface Props {
 }
 
 function MenuSheet({ open, onOpenChange }: Props) {
+  const { data, isError } = useProfile();
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
@@ -65,6 +69,48 @@ function MenuSheet({ open, onOpenChange }: Props) {
               {label}
             </NavLink>
           ))}
+          {!isError && data?.success && data.user.role !== "admin" && (
+            <NavLink
+              to={
+                data.user.role === "user"
+                  ? "/upgrade-to-seller"
+                  : "/seller/dashboard"
+              }
+              onClick={() => onOpenChange(false)}
+              className={({ isActive }) =>
+                cn(
+                  "flex items-center gap-3 rounded-xl border border-primary/15 bg-primary/10 px-4 py-3 text-sm font-medium transition-colors hover:bg-primary/20",
+                  isActive &&
+                    "bg-primary text-primary-foreground hover:bg-primary",
+                )
+              }
+            >
+              {data.user.role === "user" ? (
+                <Store className="size-4" />
+              ) : (
+                <LayoutDashboard className="size-4" />
+              )}
+              {data.user.role === "user"
+                ? "Become a seller"
+                : "Seller Dashboard"}
+            </NavLink>
+          )}
+          {!isError && data?.success && data.user.role === "admin" && (
+            <NavLink
+              to={"/admin/dashboard"}
+              onClick={() => onOpenChange(false)}
+              className={({ isActive }) =>
+                cn(
+                  "flex items-center gap-3 rounded-xl border border-primary/15 bg-primary/10 px-4 py-3 text-sm font-medium transition-colors hover:bg-primary/20",
+                  isActive &&
+                    "bg-primary text-primary-foreground hover:bg-primary",
+                )
+              }
+            >
+              <LayoutDashboard className="size-4" />
+              Admin Dashboard
+            </NavLink>
+          )}
         </nav>
       </SheetContent>
     </Sheet>
