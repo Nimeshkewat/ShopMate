@@ -10,8 +10,8 @@ interface IShopPayoutBankDetails {
 interface IShop extends Document {
   userId: mongoose.Types.ObjectId;
   shopName: string;
-  shopImage: string;
-  shopImagePublicID: string;
+  shopImage?: string;
+  shopImagePublicId?: string;
   businessPhone: string;
   taxId: string;
   isApproved: boolean;
@@ -38,7 +38,7 @@ const shopSchema = new mongoose.Schema<IShop>(
       type: String,
       default: "",
     },
-    shopImagePublicID: {
+    shopImagePublicId: {
       type: String,
       default: "",
     },
