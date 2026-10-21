@@ -16,7 +16,10 @@ import {
 } from "./protected-routes/AuthGuard";
 import MyOrders from "./pages/MyOrders";
 import OrderDetails from "./components/order/OrderDetails";
-import BecomeSeller from "./pages/BecomeSeller";
+import BecomeSeller from "./pages/seller/BecomeSeller";
+import About from "./pages/About";
+import FAQ from "./pages/FAQ";
+import Contact from "./pages/Contact";
 
 function App() {
   return (
@@ -75,9 +78,9 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route path="about" element={<PlaceholderPage title="About" />} />
-        <Route path="faq" element={<PlaceholderPage title="FAQ" />} />
-        <Route path="contact" element={<PlaceholderPage title="Contact" />} />
+        <Route path="about" element={<About />} />
+        <Route path="faq" element={<FAQ />} />
+        <Route path="contact" element={<Contact />} />
       </Route>
 
       {/* Seller panel*/}
