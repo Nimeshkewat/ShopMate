@@ -40,7 +40,6 @@ export function usePlaceOrder() {
       const rzp = await createRazorpayOrder.mutateAsync({ orderId: order._id });
 
       // wait until the payment window is finished or closed
-      let paid = false;
       await new Promise<void>((resolve) => {
         const checkout = new window.Razorpay!({
           key: rzp.keyId,
@@ -52,12 +51,13 @@ export function usePlaceOrder() {
           handler: async (response: RazorpayResponse) => {
             try {
               await verifyPayment.mutateAsync(response);
-              paid = true;
               toast.success("Payment successful");
+              navigate(`/order-success/${order._id}`, { state: { paymentType } });
             } catch (error) {
               toast.error(getErrorMessage(error));
+            } finally {
+              resolve();
             }
-            resolve();
           },
           modal: {
             ondismiss: () => {
@@ -70,9 +70,6 @@ export function usePlaceOrder() {
         });
         checkout.open();
       });
-      if (paid) {
-        navigate(`/order-success/${order._id}`, { state: { paymentType } });
-      }
     } catch (error) {
       toast.error(getErrorMessage(error));
     } finally {
