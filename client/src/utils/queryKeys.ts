@@ -1,6 +1,5 @@
-// One place for query keys. Make sure these match the keys your existing
-// cart and product hooks use, so invalidations refresh them.
 export const queryKeys = {
+  profile: ["profile"] as const,
   cart: ["cart"] as const,
   products: ["products"] as const,
   orders: ["orders"] as const,
