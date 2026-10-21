@@ -3,6 +3,7 @@ import ProductCarousel from "@/components/product/ProductCarousel";
 import CategoryGrid from "../components/product/CategoryGrid";
 import HeroCarousel from "../components/home/HeroCarousel";
 import { useProducts } from "@/hooks/product/useProducts";
+import Footer from "@/components/home/Footer";
 
 function Home() {
   const { data, isLoading } = useProducts();
@@ -35,6 +36,7 @@ function Home() {
         products={topRated}
         isLoading={isLoading}
       />
+      <Footer />
     </>
   );
 }
