@@ -42,15 +42,3 @@ export interface UpdatePasswordResponse {
   success: boolean;
   message: string;
 }
-
-export interface BecomeSellerResponse {
-  success: boolean;
-  message: string;
-  user: {
-    id: string;
-    username: string;
-    email: string;
-    role: string;
-    shopId: string;
-  };
-}
