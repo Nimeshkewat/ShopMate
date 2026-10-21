@@ -10,6 +10,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import type { CartItem } from "@/types/cart";
+import { useClearCart } from "@/hooks/cart/useClearCart";
 
 interface Props {
   open: boolean;
@@ -32,6 +33,7 @@ export default function CartSheet({
   onRemove,
 }: Props) {
   const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+  const { mutate: clearCart, isPending } = useClearCart();
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -125,8 +127,16 @@ export default function CartSheet({
 
             <div className="space-y-4 border-t border-white/10 p-5">
               <div className="flex items-center justify-between text-lg font-semibold">
-                <span>Total:</span>
-                <span className="text-primary">${total.toFixed(2)}</span>
+                <div className="space-x-2">
+                  <span>Total:</span>
+                  <span className="text-primary">${total.toFixed(2)}</span>
+                </div>
+                <p
+                  onClick={() => clearCart()}
+                  className="text-red-400 text-sm font-medium cursor-pointer hover:text-red-500"
+                >
+                  {isPending ? "clearing." : "clear cart"}
+                </p>
               </div>
               <Button className="h-11 w-full text-base">
                 <Link to="/cart" onClick={() => onOpenChange(false)}>
