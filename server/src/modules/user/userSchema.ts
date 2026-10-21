@@ -7,6 +7,9 @@ export const sellerValidationSchema = z.object({
     .min(1, "Shop name cannot be empty")
     .max(50, "Shop name must be less than 50 characters"),
 
+  shopImage: z.string().trim().optional(),
+  shopImagePublicId: z.string().trim().optional(),
+
   businessPhone: z
     .string("Business phone number is required")
     .trim()
