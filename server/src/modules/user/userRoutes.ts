@@ -18,6 +18,7 @@ router.patch("/update-password", isAuthenticated, updatePassword);
 router.patch(
   "/become-seller",
   isAuthenticated,
+  upload.single("shopImage"),
   validate(sellerValidationSchema),
   upgradeToSeller
 );
