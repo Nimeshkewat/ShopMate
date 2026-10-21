@@ -103,12 +103,25 @@ export const upgradeToSeller = async (req: Request, res: Response) => {
     throw new AppError("User not found", 404);
   }
 
+  let shopImage = "";
+  let shopImagePublicId = "";
+  if (req.file?.buffer) {
+    const result = await uploadToCloudinary(req.file?.buffer, {
+      folder: "Shop_folder",
+      type: "general",
+    });
+    shopImage = result.secure_url;
+    shopImagePublicId = result.public_id;
+  }
+
   const shop = await Shop.findOneAndUpdate(
     { userId },
     {
       $set: {
         userId,
         shopName,
+        shopImage,
+        shopImagePublicId,
         businessPhone,
         taxId,
         isApproved: false,
