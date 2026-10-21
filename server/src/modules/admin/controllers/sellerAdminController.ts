@@ -6,6 +6,7 @@ import {
 } from "../../../utils/paginate.js";
 import { AppError } from "../../../utils/AppError.js";
 import User from "../../user/userModel.js";
+import Shop from "../../shop/shopModel.js";
 import mongoose from "mongoose";
 
 //* Seller Management
@@ -20,13 +21,13 @@ export const getPendingSellers = async (req: Request, res: Response) => {
   const { page: p, limit: l, skip } = getPaginationParams(result.data);
 
   const [pendingSellers, total] = await Promise.all([
-    User.find({ role: "seller", "sellerDetails.isApproved": false })
-      .select("sellerDetails")
+    Shop.find({ isApproved: false })
+      .populate("userId", "username email role avatar")
       .sort({ createdAt: -1 })
       .limit(l)
       .skip(skip)
       .lean(),
-    User.countDocuments({ role: "seller", "sellerDetails.isApproved": false }),
+    Shop.countDocuments({ isApproved: false }),
   ]);
 
   res.status(200).json({
@@ -37,40 +38,82 @@ export const getPendingSellers = async (req: Request, res: Response) => {
 };
 
 export const approveSeller = async (req: Request, res: Response) => {
-  const { id: sellerId } = req.params;
-  if (typeof sellerId !== "string" || !mongoose.isValidObjectId(sellerId)) {
+  const sellerId =
+    req.params.id || req.body.id || req.body.sellerId || req.body.shopId;
+  if (
+    !sellerId ||
+    typeof sellerId !== "string" ||
+    !mongoose.isValidObjectId(sellerId)
+  ) {
     throw new AppError("Invalid seller id", 400);
   }
 
-  const { matchedCount } = await User.updateOne(
-    {
-      _id: sellerId,
-      role: "seller",
-      "sellerDetails.isApproved": false,
-    },
-    { $set: { "sellerDetails.isApproved": true } }
-  );
-  if (!matchedCount) throw new AppError("Pending seller not found", 404);
+  // sellerId could be a Shop _id or a User _id
+  let shop = await Shop.findOne({
+    _id: sellerId,
+    isApproved: false,
+  });
 
-  res.status(200).json({ success: true, message: "Seller approved" });
+  if (!shop) {
+    shop = await Shop.findOne({
+      userId: sellerId,
+      isApproved: false,
+    });
+  }
+
+  if (!shop) {
+    throw new AppError("Pending seller not found", 404);
+  }
+
+  shop.isApproved = true;
+  await shop.save();
+
+  await User.updateOne(
+    { _id: shop.userId },
+    { $set: { role: "seller", shopId: shop._id } }
+  );
+
+  res.status(200).json({ success: true, message: "Seller approved", shop });
 };
 
 export const rejectSeller = async (req: Request, res: Response) => {
-  const { id: sellerId } = req.params;
-  if (typeof sellerId !== "string" || !mongoose.isValidObjectId(sellerId)) {
+  const sellerId =
+    req.params.id || req.body.id || req.body.sellerId || req.body.shopId;
+  if (
+    !sellerId ||
+    typeof sellerId !== "string" ||
+    !mongoose.isValidObjectId(sellerId)
+  ) {
     throw new AppError("Invalid seller id", 400);
   }
 
-  const { modifiedCount } = await User.updateOne(
-    { _id: sellerId, role: "seller", "sellerDetails.isApproved": false },
+  // sellerId could be a Shop _id or a User _id
+  let shop = await Shop.findOne({
+    _id: sellerId,
+    isApproved: false,
+  });
+
+  if (!shop) {
+    shop = await Shop.findOne({
+      userId: sellerId,
+      isApproved: false,
+    });
+  }
+
+  if (!shop) {
+    throw new AppError("Pending seller not found", 404);
+  }
+
+  const userId = shop.userId;
+  await Shop.deleteOne({ _id: shop._id });
+
+  await User.updateOne(
+    { _id: userId },
     {
       $set: { role: "user" },
-      $unset: { sellerDetails: 1 },
+      $unset: { shopId: 1 },
     }
   );
 
-  if (!modifiedCount) {
-    throw new AppError("Pending seller not found", 404);
-  }
   res.status(200).json({ success: true, message: "Seller Rejected" });
 };

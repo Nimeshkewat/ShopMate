@@ -16,6 +16,7 @@ import {
 } from "./protected-routes/AuthGuard";
 import MyOrders from "./pages/MyOrders";
 import OrderDetails from "./components/order/OrderDetails";
+import BecomeSeller from "./pages/BecomeSeller";
 
 function App() {
   return (
@@ -63,6 +64,14 @@ function App() {
           element={
             <PrivateRoute>
               <OrderDetails />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="upgrade-to-seller"
+          element={
+            <PrivateRoute>
+              <BecomeSeller />
             </PrivateRoute>
           }
         />

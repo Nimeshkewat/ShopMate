@@ -64,7 +64,7 @@ function OrderTrackingDialog({ order, onOpenChange }: Props) {
                       {i < STEPS.length - 1 && (
                         <span
                           className={cn(
-                            "absolute left-[15px] top-8 h-[calc(100%-2rem)] w-0.5",
+                            "absolute left-3.75 top-8 h-[calc(100%-2rem)] w-0.5",
                             i < currentIndex ? "bg-primary" : "bg-border",
                           )}
                         />

@@ -1,17 +1,6 @@
 import type { Document, Model } from "mongoose";
 import mongoose from "mongoose";
 
-interface SellerDetails {
-  shopName?: string;
-  businessPhone?: string;
-  taxId?: string;
-  isApproved: boolean;
-  payoutBankDetails?: {
-    accountNumber: string;
-    ifscCode: string;
-    bankName: string;
-  };
-}
 
 interface IUser extends Document {
   username: string;
@@ -20,7 +9,7 @@ interface IUser extends Document {
   avatar: string;
   avatarPublicId: string;
   role: "user" | "seller" | "admin";
-  sellerDetails: SellerDetails;
+  shopId?: mongoose.Types.ObjectId;
   resetPasswordToken: string;
   resetPasswordTokenExpiresAt?: Date | undefined;
   refreshTokenHash: string;
@@ -43,19 +32,10 @@ const userSchema = new mongoose.Schema<IUser>(
     avatar: { type: String, default: "" },
     avatarPublicId: { type: String, default: "", select: false },
     role: { type: String, enum: ["user", "seller", "admin"], default: "user" },
-    sellerDetails: {
-      type: {
-        shopName: { type: String, trim: true, sparse: true },
-        businessPhone: { type: String, trim: true },
-        taxId: { type: String, trim: true },
-        isApproved: { type: Boolean, default: false },
-        payoutBankDetails: {
-          accountNumber: { type: String, select: false },
-          ifscCode: { type: String, select: false },
-          bankName: { type: String },
-        },
-      },
-      select: false,
+    shopId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Shop",
+      default: null,
     },
     resetPasswordToken: { type: String, select: false },
     resetPasswordTokenExpiresAt: { type: Date, select: false },

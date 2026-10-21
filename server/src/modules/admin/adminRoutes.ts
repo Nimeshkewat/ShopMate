@@ -30,8 +30,8 @@ router.use(isAuthenticated, isAdmin);
 
 //* Seller Management
 router.get("/pending-sellers", getPendingSellers);
-router.patch("/approve-seller", approveSeller);
-router.patch("/reject-seller", rejectSeller);
+router.patch("/approve-seller/:id?", approveSeller);
+router.patch("/reject-seller/:id?", rejectSeller);
 
 //* User Management
 router.get("/users", getAllUsers);

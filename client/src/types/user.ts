@@ -1,22 +1,28 @@
+export interface Shop {
+  _id: string;
+  userId: string;
+  shopName: string;
+  shopImage?: string;
+  shopImagePublicID?: string;
+  businessPhone: string;
+  taxId: string;
+  isApproved: boolean;
+  payoutBankDetails?: {
+    accountNumber?: string;
+    ifscCode?: string;
+    bankName?: string;
+  };
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface User {
   _id: string;
   username: string;
   email: string;
   avatar?: string;
   role: "user" | "seller" | "admin";
-
-  sellerDetails: {
-    _id: string;
-    shopName?: string;
-    businessPhone?: string;
-    taxId?: string;
-    isApproved: boolean;
-    payoutBankDetails?: {
-      accountNumber: string;
-      ifscCode: string;
-      bankName: string;
-    };
-  };
+  shopId?: Shop;
   createdAt: string;
   updatedAt: string;
 }
@@ -35,4 +41,16 @@ export interface UpdateProfileResponse {
 export interface UpdatePasswordResponse {
   success: boolean;
   message: string;
+}
+
+export interface BecomeSellerResponse {
+  success: boolean;
+  message: string;
+  user: {
+    id: string;
+    username: string;
+    email: string;
+    role: string;
+    shopId: string;
+  };
 }

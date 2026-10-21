@@ -5,13 +5,14 @@ import uploadToCloudinary from "../../utils/uploadToCloudinary.js";
 import { v2 as cloudinary } from "cloudinary";
 import bcrypt from "bcryptjs";
 import { refreshTokenExpiresAt, setAuthCookies } from "../../utils/tokens.js";
+import Shop from "../shop/shopModel.js";
 
 export const profile = async (req: Request, res: Response) => {
   const { id: userId } = req.user;
   if (!userId) {
     throw new AppError("Not Authoried", 401);
   }
-  const user = await User.findById(userId);
+  const user = await User.findById(userId).populate("shopId");
   if (!user) {
     throw new AppError("User not found", 404);
   }
@@ -97,35 +98,34 @@ export const upgradeToSeller = async (req: Request, res: Response) => {
   const { shopName, businessPhone, taxId, bankName, accountNumber, ifscCode } =
     req.body;
 
-  const updatedUser = await User.findByIdAndUpdate(
-    userId,
-    {
-      $set: {
-        role: "seller",
-        sellerDetails: {
-          shopName,
-          businessPhone,
-          taxId,
-          isApproved: false,
-          payoutBankDetails: { bankName, accountNumber, ifscCode },
-        },
-      },
-    },
-    { new: true }
-  );
-
-  if (!updatedUser) {
+  const user = await User.findById(userId);
+  if (!user) {
     throw new AppError("User not found", 404);
   }
 
-  const refreshTokenHash = setAuthCookies(
-    res,
-    updatedUser._id.toString(),
-    updatedUser.role
+  const shop = await Shop.findOneAndUpdate(
+    { userId },
+    {
+      $set: {
+        userId,
+        shopName,
+        businessPhone,
+        taxId,
+        isApproved: false,
+        payoutBankDetails: { bankName, accountNumber, ifscCode },
+      },
+    },
+    { new: true, upsert: true }
   );
 
+  user.role = "seller";
+  user.shopId = shop._id;
+  await user.save();
+
+  const refreshTokenHash = setAuthCookies(res, user._id.toString(), user.role);
+
   await User.updateOne(
-    { _id: updatedUser._id },
+    { _id: user._id },
     {
       $set: {
         refreshTokenHash,
@@ -139,10 +139,11 @@ export const upgradeToSeller = async (req: Request, res: Response) => {
     message:
       "Account upgraded to Seller successfully! Awaiting admin verification.",
     user: {
-      id: updatedUser._id.toString(),
-      username: updatedUser.username,
-      email: updatedUser.email,
-      role: updatedUser.role,
+      id: user._id.toString(),
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      shopId: user.shopId,
     },
   });
 };

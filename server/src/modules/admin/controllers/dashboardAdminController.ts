@@ -3,6 +3,7 @@ import User from "../../user/userModel.js";
 import Product from "../../product/productModel.js";
 import Order from "../../order/orderModel.js";
 import Payment from "../../payment/paymentModel.js";
+import Shop from "../../shop/shopModel.js";
 
 export const getAdminDashboard = async (req: Request, res: Response) => {
   const [
@@ -15,11 +16,8 @@ export const getAdminDashboard = async (req: Request, res: Response) => {
     recentOrders,
   ] = await Promise.all([
     User.countDocuments({ role: "user" }),
-    User.countDocuments({ role: "seller", "sellerDetails.isApproved": true }),
-    User.countDocuments({
-      role: "seller",
-      "sellerDetails.isApproved": false,
-    }),
+    Shop.countDocuments({ isApproved: true }),
+    Shop.countDocuments({ isApproved: false }),
     Product.countDocuments(),
     Order.aggregate([{ $group: { _id: "$orderStatus", count: { $sum: 1 } } }]),
     Payment.aggregate([
