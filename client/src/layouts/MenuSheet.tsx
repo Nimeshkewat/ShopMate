@@ -72,7 +72,8 @@ function MenuSheet({ open, onOpenChange }: Props) {
           {!isError && data?.success && data.user.role !== "admin" && (
             <NavLink
               to={
-                data.user.role === "user"
+                data.user.shopId === null ||
+                data.user.shopId?.isApproved === false
                   ? "/upgrade-to-seller"
                   : "/seller/dashboard"
               }
