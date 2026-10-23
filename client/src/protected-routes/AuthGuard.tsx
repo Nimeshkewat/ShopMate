@@ -32,7 +32,7 @@ export const SellerRoute = ({ children }: { children: ReactNode }) => {
 
   if (data?.success) {
     const role = data.user.role;
-    if (role === "seller" || role === "admin") {
+    if (role === "seller") {
       return children;
     }
     return <Navigate to="/unauthorized" replace />;
