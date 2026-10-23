@@ -20,6 +20,12 @@ import BecomeSeller from "./pages/seller/BecomeSeller";
 import About from "./pages/About";
 import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
+import SellerLayout from "./layouts/SellerLayout";
+import SellerDashboard from "./pages/seller/SellerDashboard";
+import SellerOrders from "./pages/seller/SellerOrders";
+import SellerProducts from "./pages/seller/SellerProducts";
+import Unauthorized from "./pages/Unauthorized";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -83,19 +89,23 @@ function App() {
         <Route path="contact" element={<Contact />} />
       </Route>
 
-      {/* Seller panel*/}
+      {/* Seller*/}
       <Route
-        path="/seller/*"
+        path="/seller"
         element={
           <SellerRoute>
-            <PlaceholderPage title="Seller Layout" />
+            <SellerLayout />
           </SellerRoute>
         }
-      ></Route>
+      >
+        <Route index path="dashboard" element={<SellerDashboard />} />
+        <Route path="orders" element={<SellerOrders />} />
+        <Route path="products" element={<SellerProducts />} />
+      </Route>
 
-      {/* Seller panel*/}
+      {/* Admin*/}
       <Route
-        path="/admin/*"
+        path="/admin"
         element={
           <AdminRoute>
             <PlaceholderPage title="Admin Layout" />
@@ -103,7 +113,8 @@ function App() {
         }
       ></Route>
 
-      <Route path="*" element={<PlaceholderPage title="Page not found" />} />
+      <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
