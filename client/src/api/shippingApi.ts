@@ -2,23 +2,13 @@ import { api } from "@/api/apiClient";
 import type { ShippingValues } from "../schema/shipping";
 import type {
   DeleteShippingResponse,
-  ShippingInfo,
+  RawShippingItemResponse,
+  RawShippingListResponse,
   ShippingInfoResponse,
   ShippingInfosResponse,
 } from "../types/shipping";
 
 const BASE = "/shipping";
-
-interface RawShippingListResponse {
-  success: boolean;
-  shipping: ShippingInfo[];
-}
-
-interface RawShippingItemResponse {
-  success: boolean;
-  message?: string;
-  shipping: ShippingInfo;
-}
 
 export const fetchShippingInfos = () =>
   api.get<RawShippingListResponse>(BASE).then(
