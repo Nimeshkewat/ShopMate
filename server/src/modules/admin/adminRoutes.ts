@@ -12,7 +12,6 @@ import {
   getUserById,
   unBlockUser,
 } from "./controllers/userAdminController.js";
-import { updateOrderStatus } from "../order/orderController.js";
 import {
   deleteProduct,
   getAllProduct,
@@ -21,6 +20,7 @@ import {
   getAllOrders,
   getOrderById,
   updateOrderStatus as updateOrderPaymentStatus,
+  updateOrderStatus,
 } from "./controllers/orderAdminController.js";
 import { getAdminDashboard } from "./controllers/dashboardAdminController.js";
 
