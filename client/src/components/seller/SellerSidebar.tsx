@@ -1,10 +1,5 @@
 import ThemeToggle from "@/context/ThemeContext";
-import {
-  ArrowLeft,
-  LayoutDashboardIcon,
-  ListOrdered,
-  Package,
-} from "lucide-react";
+import { LayoutDashboardIcon, ListOrdered, Package } from "lucide-react";
 import { Link } from "react-router-dom";
 
 function SellerSidebar() {
@@ -19,11 +14,16 @@ function SellerSidebar() {
   ];
 
   return (
-    <aside className="w-16 md:w-64 border-r border-sidebar-border h-screen bg-sidebar text-sidebar-foreground flex flex-col justify-between transition-colors duration-300">
+    <aside className="w-16  md:w-64 border-r border-sidebar-border bg-sidebar text-sidebar-foreground flex flex-col justify-between transition-colors duration-300">
       <div className="p-4">
         {/* Sidebar Header / Brand */}
-        <div className="mb-8 flex items-center justify-between  font-bold text-xl tracking-wide text-primary">
-          <span className="hidden md:inline">Seller Panel</span>
+        <div className="mb-8  flex items-center justify-between  font-bold text-xl tracking-wide text-primary">
+          {/* <Link to="/" className="text-lg text-muted-foreground">
+            <ArrowLeft />
+          </Link> */}
+          <span className="hidden md:inline font-extrabold text-2xl">
+            Seller Panel
+          </span>
           <ThemeToggle />
         </div>
 
@@ -44,20 +44,6 @@ function SellerSidebar() {
             </Link>
           ))}
         </nav>
-      </div>
-
-      {/* Footer System */}
-      <div className="p-4 border-t border-sidebar-border">
-        <Link
-          to="/"
-          className="hidden md:flex items-center gap-2 text-lg text-muted-foreground"
-        >
-          <ArrowLeft />
-          Back
-        </Link>
-        <Link to="/" className="md:hidden text-lg text-muted-foreground">
-          <ArrowLeft />
-        </Link>
       </div>
     </aside>
   );
