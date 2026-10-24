@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/sheet";
 import type { CartItem } from "@/types/cart";
 import { useClearCart } from "@/hooks/cart/useClearCart";
+import { CURRENCY } from "@/utils/constants";
 
 interface Props {
   open: boolean;
@@ -81,7 +82,8 @@ export default function CartSheet({
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-medium">{item.name}</p>
                     <p className="text-sm text-primary">
-                      ${item.price.toFixed(2)}
+                      {CURRENCY}
+                      {item.price}
                     </p>
                     <div className="mt-2 flex items-center gap-2">
                       <Button
@@ -129,7 +131,10 @@ export default function CartSheet({
               <div className="flex items-center justify-between text-lg font-semibold">
                 <div className="space-x-2">
                   <span>Total:</span>
-                  <span className="text-primary">${total.toFixed(2)}</span>
+                  <span className="text-primary">
+                    {CURRENCY}
+                    {total}
+                  </span>
                 </div>
                 <p
                   onClick={() => clearCart()}
