@@ -1,41 +1,11 @@
 import express from "express";
-import isAuthenticated from "../../middlewares/auth.js";
-import validate from "../../middlewares/validate.js";
-import { productValidationSchema } from "./productSchema.js";
-import upload from "../../middlewares/multer.js";
 import {
-  createProduct,
-  deleteProduct,
   fetchAiFilteredProducts,
   fetchAllProducts,
   fetchProductDetails,
-  fetchSellerProducts,
-  updateProduct,
 } from "./productController.js";
-import isSeller from "../../middlewares/seller.js";
 
 const router = express.Router();
-
-//* Admin Routes
-router.get("/seller", isAuthenticated, isSeller, fetchSellerProducts);
-router.post(
-  "/seller",
-  isAuthenticated,
-  isSeller,
-  upload.array("images", 4),
-  validate(productValidationSchema),
-  createProduct
-);
-
-router.patch(
-  "/seller/:id",
-  isAuthenticated,
-  isSeller,
-  validate(productValidationSchema),
-  updateProduct
-);
-
-router.delete("/seller/:id", isAuthenticated, isSeller, deleteProduct);
 
 //* Public Routes
 router.get("/", fetchAllProducts);
