@@ -47,7 +47,10 @@ export default function Navbar() {
             </Button>
           </div>
 
-          <Link to="/" className="text-xl font-bold text-primary sm:text-2xl">
+          <Link
+            to="/"
+            className="mr-6 md:mr-0 text-xl font-bold text-primary sm:text-2xl"
+          >
             ShopMate
           </Link>
 
