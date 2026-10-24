@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
-import { CATEGORIES } from "@/utils/constants";
+import { CATEGORIES, CURRENCY } from "@/utils/constants";
 import { productSchema, type ProductValues } from "@/schema/product";
 import FormField from "./FormField";
 
@@ -53,7 +53,7 @@ function ProductForm({
   const submit = async (values: ProductValues) => {
     try {
       await onSubmit(values, images);
-    } catch { }
+    } catch {}
   };
 
   return (
@@ -81,7 +81,10 @@ function ProductForm({
         </FormField>
 
         <div className="grid gap-5 sm:grid-cols-2">
-          <FormField label="Price ($) *" error={errors.price?.message}>
+          <FormField
+            label={`Price (${CURRENCY}) *`}
+            error={errors.price?.message}
+          >
             <Input
               type="number"
               min={0}
