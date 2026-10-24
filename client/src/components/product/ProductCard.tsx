@@ -6,6 +6,7 @@ import { useAddToCartAction } from "@/hooks/cart/useAddToCartAction";
 import type { Product } from "../../types/product";
 import { getStockStatus, isNewProduct, stockBadge } from "../../utils/index";
 import RatingStars from "../review/RatingStars";
+import { CURRENCY } from "@/utils/constants";
 
 export default function ProductCard({ product }: { product: Product }) {
   const { addToCart, isPending } = useAddToCartAction();
@@ -81,7 +82,8 @@ export default function ProductCard({ product }: { product: Product }) {
       </div>
 
       <p className="mt-2 text-lg font-bold text-primary">
-        ${product.price.toFixed(2)}
+        {CURRENCY}
+        {product.price.toFixed(0)}
       </p>
       <span
         className={cn(
