@@ -1,5 +1,6 @@
 import type { BecomeSellerValues } from "@/schema/seller";
 import type { Product } from "./product";
+import type { Order } from "./order";
 
 export interface BecomeSellerPayload extends Omit<
   BecomeSellerValues,
@@ -53,4 +54,24 @@ export interface UpdateProductResponse {
   success: boolean;
   message: string;
   product: Product;
+}
+
+//* Seller Orders
+export type NextOrderStatus = "Shipped" | "Delivered";
+
+//* the backend returns only this seller's items in each order, with the address populated
+export interface SellerOrdersResponse {
+  success: boolean;
+  sellerOrders: Order[];
+}
+
+export interface UpdateOrderStatusPayload {
+  id: string;
+  orderStatus: NextOrderStatus;
+}
+
+export interface UpdateOrderStatusResponse {
+  success: boolean;
+  message: string;
+  order: Order;
 }
