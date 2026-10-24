@@ -24,3 +24,14 @@ export interface DeleteShippingResponse {
   success: boolean;
   message: string;
 }
+
+export interface RawShippingListResponse {
+  success: boolean;
+  shipping: ShippingInfo[];
+}
+
+export interface RawShippingItemResponse {
+  success: boolean;
+  message?: string;
+  shipping: ShippingInfo;
+}
