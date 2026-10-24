@@ -17,9 +17,9 @@ import {
 } from "@/hooks/seller/useSellerProductMutations";
 import type { Product } from "@/types/product";
 import type { ProductValues } from "@/schema/product";
-import ProductForm from "../../components/seller/ProductForm";
-import ProductRow from "../../components/seller/ProductRow";
-import DeleteProductDialog from "../../components/seller/DeleteProductDialog";
+import ProductForm from "@/components/seller/product/ProductForm";
+import ProductRow from "../../components/seller/product/ProductRow";
+import DeleteProductDialog from "../../components/seller/product/DeleteProductDialog";
 
 function SellerProducts() {
   const { data, isLoading, isError } = useSellerProducts();
