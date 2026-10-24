@@ -46,9 +46,11 @@ const transformCartResponse = (
   };
 };
 
+const BASE = "/cart";
+
 export const fetchCart = async (): Promise<CartResponse> => {
   try {
-    const response = await api.get<RawCartResponse>("/cart");
+    const response = await api.get<RawCartResponse>(BASE);
     return {
       success: response.data.success,
       cart: transformCartResponse(response.data.cart),
@@ -72,7 +74,7 @@ export const addToCart = async ({
   productId: string;
   quantity: number;
 }): Promise<CartActionResponse> => {
-  const response = await api.post<CartActionResponse>(`/cart/${productId}`, {
+  const response = await api.post<CartActionResponse>(`${BASE}/${productId}`, {
     quantity,
     productId,
   });
@@ -86,7 +88,7 @@ export const updateCartItem = async ({
   productId: string;
   quantity: number;
 }): Promise<CartActionResponse> => {
-  const response = await api.patch<CartActionResponse>(`/cart/${productId}`, {
+  const response = await api.patch<CartActionResponse>(`${BASE}/${productId}`, {
     quantity,
   });
   return response.data;
@@ -97,7 +99,7 @@ export const removeFromCart = async ({
 }: {
   productId: string;
 }): Promise<CartActionResponse> => {
-  const response = await api.delete<CartActionResponse>(`/cart/${productId}`);
+  const response = await api.delete<CartActionResponse>(`${BASE}/${productId}`);
   return response.data;
 };
 
