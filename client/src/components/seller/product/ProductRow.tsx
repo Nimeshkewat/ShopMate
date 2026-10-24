@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getStockStatus, stockBadge } from "@/utils";
 import type { Product } from "@/types/product";
+import { CURRENCY } from "@/utils/constants";
 
 export interface ProductRowProps {
   product: Product;
@@ -37,10 +38,13 @@ function ProductRow({ product, onEdit, onDelete }: ProductRowProps) {
         <p className="truncate text-sm font-semibold leading-snug sm:text-base">
           {product.name}
         </p>
-        <p className="truncate text-xs text-muted-foreground">{product.category}</p>
+        <p className="truncate text-xs text-muted-foreground">
+          {product.category}
+        </p>
         <div className="mt-1 flex flex-wrap items-center gap-1.5">
           <span className="text-sm font-bold text-primary">
-            ${product.price.toFixed(2)}
+            {CURRENCY}
+            {product.price.toFixed(2)}
           </span>
           <span
             className={cn(
