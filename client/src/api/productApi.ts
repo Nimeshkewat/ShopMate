@@ -6,6 +6,8 @@ import type {
   ProductsResponse,
 } from "@/types/product";
 
+const BASE = "/products";
+
 export const fetchProducts = async (
   query?: ProductQuery,
 ): Promise<ProductsResponse> => {
@@ -34,7 +36,9 @@ export const fetchProducts = async (
     params.limit = query.limit;
   }
 
-  const response = await api.get<ProductsResponse>("/products", { params });
+  const response = await api.get<ProductsResponse>(BASE, {
+    params,
+  });
   let products = response.data.products ?? [];
 
   // If availability filter is specified, refine on client side as server does not filter availability directly
@@ -57,14 +61,14 @@ export const fetchProducts = async (
 export const fetchProductById = async (
   id: string,
 ): Promise<ProductDetailsResponse> => {
-  const response = await api.get<ProductDetailsResponse>(`/products/${id}`);
+  const response = await api.get<ProductDetailsResponse>(`${BASE}/${id}`);
   return response.data;
 };
 
 export const fetchAiFilteredProducts = async (
   prompt: string,
 ): Promise<AISearchResponse> => {
-  const response = await api.post<AISearchResponse>("/products/ai-search", {
+  const response = await api.post<AISearchResponse>(`${BASE}/ai-search`, {
     prompt,
   });
   return response.data;
