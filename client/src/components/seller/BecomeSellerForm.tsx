@@ -4,10 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import FormField from "./FormField";
+import FormField from "./product/FormField";
 import type { BecomeSellerPayload } from "@/types/seller";
 import { becomeSellerSchema, type BecomeSellerValues } from "@/schema/seller";
-import ShopImageUpload from "./ShopImageUpload";
+import ShopImageUpload from "./product/ShopImageUpload";
 
 const cardClass =
   "space-y-5 rounded-xl border border-primary/15 bg-primary/10 p-5 sm:p-6";
