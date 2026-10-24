@@ -7,25 +7,29 @@ import {
 } from "../schema/auth";
 import type { AuthResponse } from "@/types/auth";
 
+const BASE = "/auth";
 export const sighup = async (input: SignupValues): Promise<AuthResponse> => {
-  const resposne = await api.post<AuthResponse>("/auth/register", input);
+  const resposne = await api.post<AuthResponse>(`${BASE}/register`, input);
   return resposne.data;
 };
 
 export const login = async (input: LoginValues): Promise<AuthResponse> => {
-  const resposne = await api.post<AuthResponse>("/auth/login", input);
+  const resposne = await api.post<AuthResponse>(`${BASE}/login`, input);
   return resposne.data;
 };
 
 export const logout = async (): Promise<AuthResponse> => {
-  const resposne = await api.post<AuthResponse>("/auth/logout");
+  const resposne = await api.post<AuthResponse>(`${BASE}/logout`);
   return resposne.data;
 };
 
 export const forgotPassword = async (
   input: ForgotPasswordValues,
 ): Promise<AuthResponse> => {
-  const resposne = await api.post<AuthResponse>("/auth/forgot-password", input);
+  const resposne = await api.post<AuthResponse>(
+    `${BASE}/forgot-password`,
+    input,
+  );
   return resposne.data;
 };
 
@@ -34,7 +38,7 @@ export const resetPassword = async (
 ): Promise<AuthResponse> => {
   const { token, ...input } = payload;
   const resposne = await api.post<AuthResponse>(
-    `/auth/reset-password/${token}`,
+    `${BASE}/reset-password/${token}`,
     input.newPassword,
   );
   return resposne.data;
