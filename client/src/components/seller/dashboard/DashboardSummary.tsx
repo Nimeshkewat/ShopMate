@@ -10,7 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/utils/index";
 import type { SellerDashboardStats } from "@/api/seller/sellerDashboardApi";
-import SellerDashboardCard from "./sellerDashboardCard";
+import SellerDashboardCard from "./SellerDashboardCard";
 
 function DashboardSummary({ stats }: { stats: SellerDashboardStats }) {
   const { summary, topProducts } = stats;
