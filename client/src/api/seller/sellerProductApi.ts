@@ -8,7 +8,7 @@ import type {
   UpdateProductResponse,
 } from "@/types/seller";
 
-const SELLER_PRODUCTS_URL = "/products/seller";
+const SELLER_PRODUCTS_URL = "/seller/products";
 
 export const fetchSellerProducts = async (): Promise<ProductsResponse> => {
   const response = await api.get<ProductsResponse>(SELLER_PRODUCTS_URL);
