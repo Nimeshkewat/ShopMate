@@ -1,5 +1,6 @@
 import type { Product, StockStatus } from "../types/product";
 import type { CartItem } from "../types/cart";
+import { CURRENCY } from "./constants";
 
 export type { StockStatus };
 
@@ -70,10 +71,22 @@ export const calculateTotals = (items: CartItem[]): OrderTotals => {
   };
 };
 
-export const formatPrice = (amount: number) => `$${amount.toFixed(2)}`;
+export const formatPrice = (amount: number) => `${CURRENCY}${amount}`;
 
 //*
 export const MAX_ADDRESSES = 3;
 // edit these lists to match the regions you ship to
 export const COUNTRIES = ["India"];
 export const STATES = ["Maharashtra"];
+
+//*
+export const formatCompact = (amount: number) =>
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "INR",
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(amount);
+
+export const formatPercent = (value: number) =>
+  `${value > 0 ? "+" : ""}${value.toFixed(2)}%`;
