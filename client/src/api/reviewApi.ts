@@ -6,11 +6,13 @@ import type {
   UpdateReviewInput,
 } from "@/types/review";
 
+const BASE = "/reviews";
+
 export const fetchProductReviews = async (
   productId: string,
 ): Promise<ReviewsResponse> => {
   const response = await api.get<ReviewsResponse>(
-    `/reviews/product/${productId}`,
+    `${BASE}/product/${productId}`,
   );
   return response.data;
 };
@@ -21,7 +23,7 @@ export const createReview = async ({
   comment,
 }: CreateReviewInput): Promise<ReviewActionResponse> => {
   const response = await api.post<ReviewActionResponse>(
-    `/reviews/${productId}`,
+    `${BASE}/${productId}`,
     { rating, comment },
   );
   return response.data;
@@ -33,7 +35,7 @@ export const updateReview = async ({
   comment,
 }: UpdateReviewInput): Promise<ReviewActionResponse> => {
   const response = await api.patch<ReviewActionResponse>(
-    `/reviews/${reviewId}`,
+    `${BASE}/${reviewId}`,
     { rating, comment },
   );
   return response.data;
@@ -43,7 +45,7 @@ export const deleteReview = async (
   reviewId: string,
 ): Promise<ReviewActionResponse> => {
   const response = await api.delete<ReviewActionResponse>(
-    `/reviews/${reviewId}`,
+    `${BASE}/${reviewId}`,
   );
   return response.data;
 };
