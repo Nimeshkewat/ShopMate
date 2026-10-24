@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { LogOut } from "lucide-react";
+import { LogOut, X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -27,7 +27,7 @@ interface Props {
 function ProfileSheet({ open, onOpenChange }: Props) {
   const { isAuthenticated } = useAuth();
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const [avatarPreview, setAvatarPreview] = useState<string>();
+  const [avatarPreview, setAvatarPreview] = useState<string>("");
 
   const { data, isLoading } = useProfile();
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
@@ -77,13 +77,25 @@ function ProfileSheet({ open, onOpenChange }: Props) {
           </div>
         ) : (
           <div className="space-y-8 p-5">
-            <div className="flex flex-col items-center text-center">
+            <div className=" flex flex-col items-center text-center">
               {avatarPreview || data?.user.avatar ? (
-                <img
-                  src={avatarPreview || data?.user.avatar}
-                  alt={data?.user.username}
-                  className="size-20 rounded-full object-cover"
-                />
+                <div className="relative group">
+                  <img
+                    src={avatarPreview || data?.user.avatar}
+                    alt={data?.user.username}
+                    className="size-20 rounded-full object-cover"
+                  />
+                  {avatarPreview && (
+                    <X
+                      size={20}
+                      onClick={() => {
+                        setAvatarFile(null);
+                        setAvatarPreview("");
+                      }}
+                      className="absolute hidden inset-0 group-hover:bg-black/40 text-black/90 group-hover:inline cursor-pointer rounded-full w-full h-full"
+                    />
+                  )}
+                </div>
               ) : (
                 <div className="grid size-20 place-items-center rounded-full bg-amber-400 text-3xl font-semibold text-amber-950">
                   {data?.user.username.charAt(0).toUpperCase()}
