@@ -1,15 +1,14 @@
 import { z } from "zod";
 
-export const getPaginationParams = (
-  query: {
-    page?: number;
-    limit?: number;
-  },
-  defaultLimit = 4,
-  maxLimit = 50
-) => {
+const defaultLimit = 5;
+const maxLimit = 50;
+
+export const getPaginationParams = (query: {
+  page?: number;
+  limit?: number;
+}) => {
   const page = Math.max(Number(query.page) || 1, 1);
-  const limit = Math.min(Number(query.limit) || defaultLimit, maxLimit);
+  const limit = Math.min(Number(query.limit) || defaultLimit);
   const skip = (page - 1) * limit;
 
   return { page, limit, skip };
@@ -23,7 +22,7 @@ export const buildPaginationMeta = (
   const totalPages = Math.ceil(total / limit);
   return {
     page,
-    limit,
+    limit: limit > 0 ? limit : defaultLimit,
     total,
     totalPages,
     hasPrevPage: page > 1,
@@ -33,5 +32,5 @@ export const buildPaginationMeta = (
 
 export const paginationSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
-  limit: z.coerce.number().int().min(1).max(50).default(4),
+  limit: z.coerce.number().int().min(1).max(maxLimit).default(defaultLimit),
 });
