@@ -52,7 +52,9 @@ export function usePlaceOrder() {
             try {
               await verifyPayment.mutateAsync(response);
               toast.success("Payment successful");
-              navigate(`/order-success/${order._id}`, { state: { paymentType } });
+              navigate(`/order-success/${order._id}`, {
+                state: { paymentType },
+              });
             } catch (error) {
               toast.error(getErrorMessage(error));
             } finally {

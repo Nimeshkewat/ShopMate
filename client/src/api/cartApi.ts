@@ -104,6 +104,6 @@ export const removeFromCart = async ({
 };
 
 export const clearCart = async (): Promise<CartActionResponse> => {
-  const response = await api.delete<CartActionResponse>("/cart/clear");
+  const response = await api.delete<CartActionResponse>(`${BASE}/clear`);
   return response.data;
 };

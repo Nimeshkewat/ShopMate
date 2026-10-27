@@ -2,6 +2,24 @@ import type { BecomeSellerValues } from "@/schema/seller";
 import type { Product } from "./product";
 import type { Order } from "./order";
 
+export interface Shop {
+  _id: string;
+  userId: string;
+  shopName: string;
+  shopImage?: string;
+  shopImagePublicID?: string;
+  businessPhone: string;
+  taxId: string;
+  isApproved: boolean;
+  payoutBankDetails?: {
+    accountNumber?: string;
+    ifscCode?: string;
+    bankName?: string;
+  };
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface BecomeSellerPayload extends Omit<
   BecomeSellerValues,
   "shopImage"

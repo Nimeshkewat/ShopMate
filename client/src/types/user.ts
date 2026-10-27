@@ -1,20 +1,4 @@
-export interface Shop {
-  _id: string;
-  userId: string;
-  shopName: string;
-  shopImage?: string;
-  shopImagePublicID?: string;
-  businessPhone: string;
-  taxId: string;
-  isApproved: boolean;
-  payoutBankDetails?: {
-    accountNumber?: string;
-    ifscCode?: string;
-    bankName?: string;
-  };
-  createdAt?: string;
-  updatedAt?: string;
-}
+import type { Shop } from "./seller";
 
 export interface User {
   _id: string;

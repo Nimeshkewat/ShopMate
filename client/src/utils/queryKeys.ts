@@ -1,4 +1,5 @@
 export const queryKeys = {
+  adminPendingSeller: ["admin", "pending-seller"] as const,
   sellerOrders: ["seller", "orders"] as const,
   sellerDashboard: ["seller", "dashboard"] as const,
   profile: ["profile"] as const,
