@@ -1,5 +1,6 @@
 import type { PaginationMeta } from "./pagination";
 import type { Shop } from "./seller";
+import type { User } from "./user";
 
 //* Seller Management
 export interface PopulatedShopUser {
@@ -45,3 +46,19 @@ export interface RejectSellerResponse {
 }
 
 //* User Management
+export interface AllUsersResponse {
+  success: boolean;
+  users: User[];
+  pagination: PaginationMeta;
+}
+
+export interface GetUserResponse {
+  success: boolean;
+  users: User[];
+}
+
+export interface UserResponse {
+  success: boolean;
+  message: string;
+  user: User;
+}

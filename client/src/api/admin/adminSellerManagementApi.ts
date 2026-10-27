@@ -4,15 +4,12 @@ import type {
   RejectSellerResponse,
 } from "@/types/admin";
 import { api } from "../apiClient";
+import type { PaginationParams } from "@/types/pagination";
 
 const BASE = "/admin";
-interface GetPendingSellersParams {
-  page?: number;
-  limit?: number;
-}
 
 export const getPendingSellers = async (
-  params?: GetPendingSellersParams,
+  params?: PaginationParams,
 ): Promise<PendingSellersResponse> => {
   const response = await api.get<PendingSellersResponse>(
     `${BASE}/pending-sellers`,
@@ -20,7 +17,6 @@ export const getPendingSellers = async (
   );
   return response.data;
 };
-
 
 export const approveSeller = async (
   id: string,

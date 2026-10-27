@@ -6,3 +6,8 @@ export interface PaginationMeta {
   hasPrevPage: boolean;
   hasNextPage: boolean;
 }
+
+export interface PaginationParams {
+  page?: number;
+  limit?: number;
+}

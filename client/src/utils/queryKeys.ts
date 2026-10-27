@@ -1,8 +1,18 @@
+import type { PaginationParams } from "@/types/pagination";
+
 export const queryKeys = {
-  adminPendingSeller: (params?: { page?: number; limit?: number }) =>
+  adminPendingSeller: (params?: PaginationParams) =>
     params
       ? (["admin", "pending-seller", params] as const)
       : (["admin", "pending-seller"] as const),
+
+  adminUsers: (params?: PaginationParams) =>
+    params
+      ? (["admin", "users", params] as const)
+      : (["admin", "users"] as const),
+
+  adminUser: (id?: string) =>
+    id ? (["admin", "user", id] as const) : (["admin", "user"] as const),
 
   sellerOrders: ["seller", "orders"] as const,
   sellerDashboard: ["seller", "dashboard"] as const,
