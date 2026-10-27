@@ -18,10 +18,11 @@ export const getAllUsers = async (req: Request, res: Response) => {
   }
 
   const { page: p, limit: l, skip } = getPaginationParams(result.data);
+  const filter = { _id: { $ne: req.user.id }, role: { $ne: "admin" as const } };
 
   const [users, total] = await Promise.all([
-    User.find({}).sort({ createdAt: -1 }).limit(l).skip(skip).lean(),
-    User.countDocuments(),
+    User.find(filter).sort({ createdAt: -1 }).limit(l).skip(skip).lean(),
+    User.countDocuments({ filter }),
   ]);
 
   res.status(200).json({
@@ -37,7 +38,7 @@ export const getUserById = async (req: Request, res: Response) => {
     throw new AppError("Invalid user id", 400);
   }
 
-  const user = await User.findById(userId);
+  const user = await User.findOne({ _id: userId, role: { $ne: "admin" } });
   if (!user) throw new AppError("User not found", 404);
 
   res.status(200).json({ success: true, user });
@@ -50,7 +51,7 @@ export const blockUser = async (req: Request, res: Response) => {
   }
 
   const user = await User.findOneAndUpdate(
-    { userId, role: { $ne: "admin" } },
+    { _id: userId, role: { $ne: "admin" } },
     {
       $set: { isBlocked: true },
       $unset: { refreshTokenHash: 1, refreshTokenExpiresAt: 1 },
@@ -69,7 +70,7 @@ export const unBlockUser = async (req: Request, res: Response) => {
   }
 
   const user = await User.findOneAndUpdate(
-    { userId, role: { $ne: "admin" } },
+    { _id: userId, role: { $ne: "admin" } },
     { isBlocked: false },
     { returnDocument: "after" }
   );
@@ -84,7 +85,7 @@ export const updateUserRole = async (req: Request, res: Response) => {
   const { role } = req.body;
 
   if (!["user", "admin"].includes(role)) {
-    throw new AppError("Invalid role", 404);
+    throw new AppError("Invalid role", 400);
   }
   if (userId === adminId)
     throw new AppError("You cannot change your own role", 400);
@@ -94,7 +95,7 @@ export const updateUserRole = async (req: Request, res: Response) => {
   }
 
   const user = await User.findByIdAndUpdate(
-    { userId },
+    userId,
     { role },
     { returnDocument: "after" }
   );
