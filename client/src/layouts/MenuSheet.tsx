@@ -98,7 +98,7 @@ function MenuSheet({ open, onOpenChange }: Props) {
           )}
           {!isError && data?.success && data.user.role === "admin" && (
             <NavLink
-              to={"/admin/dashboard"}
+              to={"/admin"}
               onClick={() => onOpenChange(false)}
               className={({ isActive }) =>
                 cn(

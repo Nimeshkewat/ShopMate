@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import PlaceholderPage from "@/components/PlaceHolderPage";
 import StorefrontLayout from "@/layouts/StoreFrontLayout";
 import Home from "@/pages/Home";
 import ResetPassword from "./pages/ResetPassword";
@@ -26,6 +25,7 @@ import SellerOrders from "./pages/seller/SellerOrders";
 import SellerProducts from "./pages/seller/SellerProducts";
 import Unauthorized from "./pages/Unauthorized";
 import NotFound from "./pages/NotFound";
+import AdminLayout from "./layouts/AdminLayout";
 
 function App() {
   return (
@@ -108,7 +108,7 @@ function App() {
         path="/admin"
         element={
           <AdminRoute>
-            <PlaceholderPage title="Admin Layout" />
+            <AdminLayout />
           </AdminRoute>
         }
       ></Route>
