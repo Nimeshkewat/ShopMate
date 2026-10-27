@@ -1,10 +1,8 @@
-import type { ApiError } from "@/api/apiError";
 import { fetchProductById } from "@/api/productApi";
-import type { ProductDetailsResponse } from "@/types/product";
 import { useQuery } from "@tanstack/react-query";
 
 export const useProduct = (id: string) => {
-  return useQuery<ProductDetailsResponse, ApiError>({
+  return useQuery({
     queryKey: ["product", id],
     queryFn: () => fetchProductById(id),
     enabled: !!id,

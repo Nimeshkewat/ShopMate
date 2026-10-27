@@ -1,6 +1,4 @@
-import type { ApiError } from "@/api/apiError";
 import { addToCart } from "@/api/cartApi";
-import type { CartActionResponse } from "@/types/cart";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface AddToCartParams {
@@ -11,8 +9,8 @@ interface AddToCartParams {
 export const useAddToCart = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<CartActionResponse, ApiError, AddToCartParams>({
-    mutationFn: ({ productId, quantity = 1 }) =>
+  return useMutation({
+    mutationFn: ({ productId, quantity = 1 }: AddToCartParams) =>
       addToCart({ productId, quantity }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });

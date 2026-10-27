@@ -45,7 +45,7 @@ function ProfileSheet({ open, onOpenChange }: Props) {
   };
 
   const handleLogout = () => {
-    logout(null, {
+    logout(undefined, {
       onSuccess: async (data) => {
         toast.success(data.message || "Logged out successfully");
         await queryClient.invalidateQueries({});

@@ -1,17 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/utils/queryKeys";
-import type { ApiError } from "@/api/apiError";
 import { addShippingInfo } from "@/api/shippingApi";
-import type {
-  ShippingInfoResponse,
-  ShippingInfosResponse,
-} from "@/types/shipping";
-import type { ShippingValues } from "@/schema/shipping";
+import type { ShippingInfosResponse } from "@/types/shipping";
 
 export function useAddShippingInfo() {
   const queryClient = useQueryClient();
 
-  return useMutation<ShippingInfoResponse, ApiError, ShippingValues>({
+  return useMutation({
     mutationFn: addShippingInfo,
     onSuccess: (data) => {
       queryClient.setQueryData<ShippingInfosResponse>(

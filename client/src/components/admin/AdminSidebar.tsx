@@ -33,7 +33,7 @@ function AdminSidebar({ onNavigate }: Props) {
   const { mutate: logout, isPending } = useLogout();
 
   const handleLogout = () =>
-    logout(null, {
+    logout(undefined, {
       onSuccess: async (data) => {
         toast.success(data?.message || "Logged out successfully");
         await queryClient.invalidateQueries({});

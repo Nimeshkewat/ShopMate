@@ -1,13 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/utils/queryKeys";
 import { createOrder } from "@/api/orderApi";
-import type { CreateOrderPayload, CreateOrderResponse } from "@/types/order";
-import type { ApiError } from "@/api/apiError";
 
 export function useCreateOrder() {
   const queryClient = useQueryClient();
 
-  return useMutation<CreateOrderResponse, ApiError, CreateOrderPayload>({
+  return useMutation({
     mutationFn: createOrder,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.cart });

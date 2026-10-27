@@ -1,10 +1,8 @@
-import type { ApiError } from "@/api/apiError";
 import { fetchAiFilteredProducts } from "@/api/productApi";
-import type { AISearchResponse } from "@/types/product";
 import { useQuery } from "@tanstack/react-query";
 
 export const useAISearch = (prompt: string) => {
-  return useQuery<AISearchResponse, ApiError>({
+  return useQuery({
     queryKey: ["ai-search", prompt],
     queryFn: () => fetchAiFilteredProducts(prompt),
     enabled: !!prompt.trim(),
