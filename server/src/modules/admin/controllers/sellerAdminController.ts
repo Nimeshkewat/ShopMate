@@ -38,8 +38,7 @@ export const getPendingSellers = async (req: Request, res: Response) => {
 };
 
 export const approveSeller = async (req: Request, res: Response) => {
-  const sellerId =
-    req.params.id || req.body.id || req.body.sellerId || req.body.shopId;
+  const sellerId = req.params.id;
   if (
     !sellerId ||
     typeof sellerId !== "string" ||
@@ -77,8 +76,7 @@ export const approveSeller = async (req: Request, res: Response) => {
 };
 
 export const rejectSeller = async (req: Request, res: Response) => {
-  const sellerId =
-    req.params.id || req.body.id || req.body.sellerId || req.body.shopId;
+  const sellerId = req.params.id;
   if (
     !sellerId ||
     typeof sellerId !== "string" ||
