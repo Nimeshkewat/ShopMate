@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { getErrorMessage } from "@/api/apiClient";
 import { useLogout } from "@/hooks/auth/useLogout";
 import { cn } from "@/lib/utils";
+import ThemeToggle from "@/context/ThemeContext";
 
 const navItems = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
@@ -43,7 +44,10 @@ function AdminSidebar({ onNavigate }: Props) {
 
   return (
     <div className="flex h-full flex-col rounded-2xl border bg-card p-4 shadow-sm">
-      <p className="border-b px-2 pb-4 text-xl font-bold">Admin Panel</p>
+      <div className="flex justify-between">
+        <p className="border-b px-2 pb-4 text-xl font-bold">Admin Panel</p>
+        <ThemeToggle />
+      </div>
 
       <nav aria-label="Admin" className="mt-4 space-y-1">
         {navItems.map(({ to, label, icon: Icon, end }) => (

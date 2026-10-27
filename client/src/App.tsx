@@ -26,6 +26,7 @@ import SellerProducts from "./pages/seller/SellerProducts";
 import Unauthorized from "./pages/Unauthorized";
 import NotFound from "./pages/NotFound";
 import AdminLayout from "./layouts/AdminLayout";
+import SellerManagement from "./pages/admin/SellerManagement";
 
 function App() {
   return (
@@ -111,7 +112,9 @@ function App() {
             <AdminLayout />
           </AdminRoute>
         }
-      ></Route>
+      >
+        <Route path="sellers" element={<SellerManagement />} />
+      </Route>
 
       <Route path="/unauthorized" element={<Unauthorized />} />
       <Route path="*" element={<NotFound />} />

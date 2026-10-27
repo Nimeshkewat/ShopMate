@@ -1,16 +1,35 @@
-import type { PaginationMeta } from "./product";
+import type { PaginationMeta } from "./pagination";
 import type { Shop } from "./seller";
 
-//* Seller Management Types
-interface PopulatedShop extends Omit<Shop, "userId"> {
+//* Seller Management
+export interface PopulatedShopUser {
+  _id: string;
   username: string;
   email: string;
   role: string;
-  avatar: string;
+  avatar?: string;
 }
+
+export interface PendingSeller {
+  _id: string;
+  shopName: string;
+  shopImage?: string;
+  businessPhone: string;
+  taxId: string;
+  isApproved: boolean;
+  payoutBankDetails?: {
+    accountNumber?: string;
+    ifscCode?: string;
+    bankName?: string;
+  };
+  userId: PopulatedShopUser;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface PendingSellersResponse {
   success: boolean;
-  pendingSellers: PopulatedShop;
+  pendingSellers: PendingSeller[];
   pagination: PaginationMeta;
 }
 
@@ -24,3 +43,5 @@ export interface RejectSellerResponse {
   success: boolean;
   message: string;
 }
+
+//* User Management

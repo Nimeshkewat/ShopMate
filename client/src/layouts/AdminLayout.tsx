@@ -10,7 +10,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { useProfile } from "@/hooks/user/useProfile";
-import AdminSidebar from "@/components/admin/adminSidebar";
+import AdminSidebar from "@/components/admin/AdminSidebar";
 
 const titles: Record<string, string> = {
   "/admin": "Dashboard",

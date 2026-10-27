@@ -4,15 +4,16 @@ import type { ApproveSellerResponse } from "@/types/admin";
 import { queryKeys } from "@/utils/queryKeys";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const useApproveSeller = (id: string) => {
+export const useApproveSeller = () => {
   const queryClient = useQueryClient();
 
   return useMutation<ApproveSellerResponse, ApiError, string>({
-    mutationFn: () => approveSeller(id),
+    mutationFn: (id: string) => approveSeller(id),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: queryKeys.adminPendingSeller,
+        queryKey: queryKeys.adminPendingSeller(),
       });
     },
   });
 };
+

@@ -6,12 +6,21 @@ import type {
 import { api } from "../apiClient";
 
 const BASE = "/admin";
-export const getPendingSellers = async (): Promise<PendingSellersResponse> => {
+interface GetPendingSellersParams {
+  page?: number;
+  limit?: number;
+}
+
+export const getPendingSellers = async (
+  params?: GetPendingSellersParams,
+): Promise<PendingSellersResponse> => {
   const response = await api.get<PendingSellersResponse>(
     `${BASE}/pending-sellers`,
+    { params },
   );
   return response.data;
 };
+
 
 export const approveSeller = async (
   id: string,

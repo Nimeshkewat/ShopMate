@@ -4,9 +4,15 @@ import type { PendingSellersResponse } from "@/types/admin";
 import { queryKeys } from "@/utils/queryKeys";
 import { useQuery } from "@tanstack/react-query";
 
-export const usePendingSellers = () => {
+interface UsePendingSellersParams {
+  page?: number;
+  limit?: number;
+}
+
+export const usePendingSellers = (params?: UsePendingSellersParams) => {
   return useQuery<PendingSellersResponse, ApiError>({
-    queryKey: queryKeys.adminPendingSeller,
-    queryFn: getPendingSellers,
+    queryKey: queryKeys.adminPendingSeller(params),
+    queryFn: () => getPendingSellers(params),
   });
 };
+

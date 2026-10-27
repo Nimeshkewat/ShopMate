@@ -1,3 +1,5 @@
+import type { PaginationMeta } from "./pagination";
+
 export type StockStatus = "in" | "limited" | "out";
 
 export interface ProductImage {
@@ -19,14 +21,7 @@ export interface Product {
   createdAt: string;
 }
 
-export interface PaginationMeta {
-  total: number;
-  limit: number;
-  page: number;
-  totalPages: number;
-  hasNextPage: boolean;
-  hasPrevPage: boolean;
-}
+export type { PaginationMeta } from "./pagination";
 
 export interface ProductQuery {
   search?: string;
