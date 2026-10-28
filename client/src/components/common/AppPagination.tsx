@@ -21,7 +21,7 @@ interface AppPaginationProps {
   className?: string;
 }
 
-export function AppPagination({
+function AppPagination({
   pagination,
   onPageChange,
   page: controlledPage,

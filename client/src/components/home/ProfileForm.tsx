@@ -69,7 +69,7 @@ function ProfileForm({ onHandle, avatarFile }: ProfileFormProps) {
         aria-label="Email address"
         required
         readOnly
-        className="h-11 bg-background/50"
+        className="h-11 bg-background/50 text-muted-foreground"
       />
 
       <input
