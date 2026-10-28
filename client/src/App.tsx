@@ -27,6 +27,7 @@ import Unauthorized from "./pages/Unauthorized";
 import NotFound from "./pages/NotFound";
 import AdminLayout from "./layouts/AdminLayout";
 import SellerManagement from "./pages/admin/SellerManagement";
+import UserManagement from "./pages/admin/UserManagement";
 
 function App() {
   return (
@@ -114,6 +115,7 @@ function App() {
         }
       >
         <Route path="sellers" element={<SellerManagement />} />
+        <Route path="users" element={<UserManagement />} />
       </Route>
 
       <Route path="/unauthorized" element={<Unauthorized />} />
