@@ -1,5 +1,7 @@
 import type { Shop } from "./seller";
 
+export type UserRole = "user" | "seller" | "admin";
+
 export interface User {
   _id: string;
   username: string;
@@ -7,6 +9,7 @@ export interface User {
   avatar?: string;
   role: "user" | "seller" | "admin";
   shopId?: Shop;
+  isBlocked: boolean;
   createdAt: string;
   updatedAt: string;
 }

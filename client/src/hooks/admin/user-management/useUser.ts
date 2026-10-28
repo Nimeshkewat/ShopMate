@@ -6,5 +6,8 @@ export const useUser = (id: string) => {
   return useQuery({
     queryKey: queryKeys.adminUser(id),
     queryFn: () => getUser(id),
+    retry: false,
+    enabled: !!id,
+    staleTime: 5 * 60 * 1000,
   });
 };
