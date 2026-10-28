@@ -20,7 +20,6 @@ import {
   getAllOrders,
   getOrderById,
   updateOrderStatus as updateOrderPaymentStatus,
-  updateOrderStatus,
 } from "./controllers/orderAdminController.js";
 import { getAdminDashboard } from "./controllers/dashboardAdminController.js";
 
@@ -38,7 +37,6 @@ router.get("/users", getAllUsers);
 router.get("/users/:id", getUserById);
 router.patch("/users/:id/block", blockUser);
 router.patch("/users/:id/unblock", unBlockUser);
-router.patch("/users/:id/update-status", updateOrderStatus);
 
 //* Product Moderation
 router.get("/products", getAllProduct);
