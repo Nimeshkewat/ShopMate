@@ -1,4 +1,5 @@
 import type { PaginationMeta } from "./pagination";
+import type { ProductImage } from "./product";
 import type { Shop } from "./seller";
 import type { User } from "./user";
 
@@ -61,4 +62,30 @@ export interface UserResponse {
   success: boolean;
   message: string;
   user: User;
+}
+
+//* Product Management
+export interface AdminProduct {
+  _id: string;
+  sellerId: { username: string; email: string; role: string };
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  rating: number;
+  stock: number;
+  images: ProductImage[];
+  reviewCount?: number;
+  createdAt: string;
+}
+
+export interface GetAllAdminProductsResponse {
+  success: boolean;
+  products: AdminProduct[];
+  pagination: PaginationMeta;
+}
+
+export interface DeleteAdminProductResponse {
+  success: boolean;
+  message: string;
 }
