@@ -32,9 +32,25 @@ export const getAllOrders = async (req: Request, res: Response) => {
     Order.countDocuments(),
   ]);
 
+  const orderIds = orders.map((o) => o._id);
+  const payments = await Payment.find({ orderId: { $in: orderIds } }).lean();
+  const paymentMap = new Map(
+    payments.map((p) => [p.orderId.toString(), p])
+  );
+
+  const ordersWithPayment = orders.map((order) => {
+    const payment = paymentMap.get(order._id.toString());
+    return {
+      ...order,
+      paymentType: payment?.paymentType,
+      paymentStatus: payment?.paymentStatus,
+      payment: payment || null,
+    };
+  });
+
   res.status(200).json({
     success: true,
-    orders,
+    orders: ordersWithPayment,
     pagination: buildPaginationMeta(total, l, p),
   });
 };
@@ -47,9 +63,21 @@ export const getOrderById = async (req: Request, res: Response) => {
 
   const order = await Order.findById(orderId)
     .populate("userId", "username email")
-    .populate("shippingInfoId");
+    .populate("shippingInfoId")
+    .lean();
   if (!order) throw new AppError("Order not found", 404);
-  res.status(200).json({ success: true, order });
+
+  const payment = await Payment.findOne({ orderId: order._id }).lean();
+
+  res.status(200).json({
+    success: true,
+    order: {
+      ...order,
+      paymentType: payment?.paymentType,
+      paymentStatus: payment?.paymentStatus,
+      payment: payment || null,
+    },
+  });
 };
 
 export const updateOrderStatus = async (req: Request, res: Response) => {
