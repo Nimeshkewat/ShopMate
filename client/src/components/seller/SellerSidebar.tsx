@@ -42,7 +42,7 @@ function SellerSidebar() {
           {menuItems.map((item) => (
             <Link
               title={item.name}
-              onClick={() => logout.mutate()}
+              onClick={() => item.name === "Logout" && logout.mutate()}
               key={item.name}
               to={item.path}
               className={`${item.name === "Logout" && "text-destructive bg-red-600 not-dark:text-white"} flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-lg transition-all duration-200 group text-sidebar-foreground ${item.name === "Logout" ? "hover:bg-red-700" : "hover:bg-sidebar-accent"} hover:text-sidebar-accent-foreground`}

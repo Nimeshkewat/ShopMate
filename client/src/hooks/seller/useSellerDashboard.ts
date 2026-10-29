@@ -7,5 +7,6 @@ export function useSellerDashboard() {
     queryKey: queryKeys.sellerDashboard,
     queryFn: fetchSellerDashboard,
     retry: false,
+    staleTime: 5 * 60 * 1000,
   });
 }
