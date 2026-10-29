@@ -1,4 +1,5 @@
 import { Mail, Phone, MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const Footer = () => {
   return (
@@ -29,12 +30,12 @@ export const Footer = () => {
                 href="tel:+15551234567"
                 className="hover:underline hover:text-[#0066CC] dark:hover:text-[#c084fc]"
               >
-                +1 (555) 123-4567
+                +91 (0000000000)
               </a>
             </div>
             <div className="flex items-center gap-3">
               <MapPin className="w-4 h-4 text-[#0066CC] dark:text-[#c084fc]" />
-              <span>San Francisco, CA</span>
+              <span>India</span>
             </div>
           </div>
         </div>
@@ -46,12 +47,12 @@ export const Footer = () => {
           </h3>
           <ul className="space-y-2 text-sm text-[#5A6A85] dark:text-muted-foreground">
             <li>
-              <a
-                href="#"
+              <Link
+                to="/about"
                 className="hover:text-[#0066CC] dark:hover:text-[#c084fc] transition-colors"
               >
                 About Us
-              </a>
+              </Link>
             </li>
             <li>
               <a
@@ -87,20 +88,20 @@ export const Footer = () => {
           </h3>
           <ul className="space-y-2 text-sm text-[#5A6A85] dark:text-muted-foreground">
             <li>
-              <a
-                href="#"
+              <Link
+                to="/contact"
                 className="hover:text-[#0066CC] dark:hover:text-[#c084fc] transition-colors"
               >
                 Contact Us
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="#"
+              <Link
+                to="/FAQ"
                 className="hover:text-[#0066CC] dark:hover:text-[#c084fc] transition-colors"
               >
                 FAQ
-              </a>
+              </Link>
             </li>
             <li>
               <a

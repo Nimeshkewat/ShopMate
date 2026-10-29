@@ -105,6 +105,9 @@ export default function CartSheet({
                         variant="outline"
                         size="icon"
                         className={qtyButton}
+                        disabled={
+                          item.stock ? item?.stock <= item.quantity : false
+                        }
                         onClick={() =>
                           onQuantityChange(item.productId, item.quantity + 1)
                         }
