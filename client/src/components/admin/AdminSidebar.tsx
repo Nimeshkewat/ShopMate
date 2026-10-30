@@ -16,7 +16,12 @@ import { cn } from "@/lib/utils";
 import ThemeToggle from "@/context/ThemeContext";
 
 const navItems = [
-  { to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
+  {
+    to: "/admin/dashboard",
+    label: "Dashboard",
+    icon: LayoutDashboard,
+    end: true,
+  },
   { to: "/admin/sellers", label: "Sellers", icon: Store },
   { to: "/admin/users", label: "Users", icon: Users },
   { to: "/admin/products", label: "Products", icon: Package },

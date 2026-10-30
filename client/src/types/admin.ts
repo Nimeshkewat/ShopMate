@@ -132,3 +132,27 @@ export interface UpdateAdminOrderStatusResponse {
   message: string;
   order: Order;
 }
+
+//* Admin Dashboard
+export interface AdminDashboardStats {
+  users: number;
+  sellers: number;
+  pendingSellers: number;
+  products: number;
+  totalOrders: number;
+  revenue: number;
+  orderStatus: { status: OrderStatus; count: number }[];
+}
+
+export interface RecentOrder {
+  _id: string;
+  totalPrice: number;
+  orderStatus: OrderStatus;
+  createdAt: string;
+  userId: { username: string };
+}
+
+export interface AdminDashboardResponse {
+  stats: AdminDashboardStats;
+  recentOrders: RecentOrder[];
+}

@@ -30,6 +30,7 @@ import SellerManagement from "./pages/admin/SellerManagement";
 import UserManagement from "./pages/admin/UserManagement";
 import ProductManagement from "./pages/admin/ProductManagement";
 import OrderManagement from "./pages/admin/OrderManagement";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 function App() {
   return (
@@ -116,6 +117,7 @@ function App() {
           </AdminRoute>
         }
       >
+        <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="sellers" element={<SellerManagement />} />
         <Route path="users" element={<UserManagement />} />
         <Route path="products" element={<ProductManagement />} />

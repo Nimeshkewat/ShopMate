@@ -27,6 +27,8 @@ export const queryKeys = {
   adminOrder: (id: string) =>
     id ? (["admin", "orders", id] as const) : ["admin", "order"],
 
+  adminDashboard: ["admin", "dashboard" as const],
+
   sellerOrders: ["seller", "orders"] as const,
   sellerDashboard: ["seller", "dashboard"] as const,
   profile: ["profile"] as const,

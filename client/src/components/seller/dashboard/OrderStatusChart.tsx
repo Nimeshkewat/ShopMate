@@ -22,7 +22,7 @@ function OrderStatusChart({
 }: {
   data: { status: OrderStatus; count: number }[];
 }) {
-  const isEmpty = data.every((d) => d.count === 0);
+  const isEmpty = data && data.every((d) => d.count === 0);
 
   return (
     <SellerDashboardCard title="Order Status">
@@ -40,9 +40,10 @@ function OrderStatusChart({
                 outerRadius={85}
                 paddingAngle={2}
               >
-                {data.map((entry) => (
-                  <Cell key={entry.status} fill={COLORS[entry.status]} />
-                ))}
+                {data &&
+                  data.map((entry) => (
+                    <Cell key={entry.status} fill={COLORS[entry.status]} />
+                  ))}
               </Pie>
               <Tooltip content={<ChartTooltip />} />
               <Legend iconType="circle" />
