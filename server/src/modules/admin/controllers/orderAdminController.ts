@@ -34,9 +34,7 @@ export const getAllOrders = async (req: Request, res: Response) => {
 
   const orderIds = orders.map((o) => o._id);
   const payments = await Payment.find({ orderId: { $in: orderIds } }).lean();
-  const paymentMap = new Map(
-    payments.map((p) => [p.orderId.toString(), p])
-  );
+  const paymentMap = new Map(payments.map((p) => [p.orderId.toString(), p]));
 
   const ordersWithPayment = orders.map((order) => {
     const payment = paymentMap.get(order._id.toString());

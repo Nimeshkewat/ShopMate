@@ -15,6 +15,7 @@ import orderRouter from "./modules/order/orderRoutes.js";
 import paymentRouter from "./modules/payment/paymentRoutes.js";
 import adminRouter from "./modules/admin/adminRoutes.js";
 import sellerRouter from "./modules/seller/sellerRoutes.js";
+import shopRouter from "./modules/shop/shopRoutes.js";
 
 //* Instance
 const app = express();
@@ -39,6 +40,7 @@ app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/shipping", shippingRouter);
 app.use("/api/v1/orders", orderRouter);
 app.use("/api/v1/payments", paymentRouter);
+app.use("/api/v1/shop", shopRouter);
 
 //* Seller Route
 app.use("/api/v1/seller", sellerRouter);
