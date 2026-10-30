@@ -1,4 +1,4 @@
-import { deleteAdminProduct } from "@/api/admin/productManagementApi";
+import { deleteAdminProduct } from "@/api/admin/adminProductManagementApi";
 import { useMutation } from "@tanstack/react-query";
 
 export const useDeleteAdminProduct = () => {

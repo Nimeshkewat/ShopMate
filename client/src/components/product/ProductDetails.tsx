@@ -9,6 +9,7 @@ import ProductTabs from "./ProductTabs";
 import PurchaseBox from "./PurchaseBox";
 import RatingStars from "../review/RatingStars";
 import { getStockStatus, isNewProduct, stockBadge } from "@/utils/index";
+import { CURRENCY } from "@/utils/constants";
 
 function DetailsSkeleton() {
   return (
@@ -91,7 +92,10 @@ function ProductDetails() {
             )}
           </div>
 
-          <p className="text-3xl font-bold">${product.price.toFixed(2)}</p>
+          <p className="text-3xl font-bold">
+            {CURRENCY}
+            {product.price.toFixed(2)}
+          </p>
 
           <div className="flex items-center gap-3 text-sm text-muted-foreground">
             <span>Category: {product.category}</span>

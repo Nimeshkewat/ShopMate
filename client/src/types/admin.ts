@@ -1,6 +1,9 @@
+import type { Order, OrderItem, OrderStatus, PaymentType } from "./order";
+import type { PaymentStatus } from "./payment";
 import type { PaginationMeta } from "./pagination";
 import type { ProductImage } from "./product";
 import type { Shop } from "./seller";
+import type { ShippingInfo } from "./shipping";
 import type { User } from "./user";
 
 //* Seller Management
@@ -88,4 +91,44 @@ export interface GetAllAdminProductsResponse {
 export interface DeleteAdminProductResponse {
   success: boolean;
   message: string;
+}
+
+//* Order Management
+export interface AdminOrder {
+  _id: string;
+  userId: { username: string; email: string };
+  shippingInfoId: ShippingInfo;
+  orderItems: OrderItem[];
+  price: number;
+  tax: number;
+  shippingPrice: number;
+  totalPrice: number;
+  orderStatus: OrderStatus;
+  paymentType?: PaymentType;
+  paymentStatus?: PaymentStatus;
+  paidAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GetAllAdminOrdersResponse {
+  success: boolean;
+  orders: AdminOrder[];
+  pagination: PaginationMeta;
+}
+
+export interface GetAminOrderResponse {
+  success: boolean;
+  order: AdminOrder;
+}
+
+export interface UpdatePaymentStatusPayload {
+  id: string;
+  orderStatus: string;
+}
+
+export interface UpdateAdminOrderStatusResponse {
+  success: boolean;
+  message: string;
+  order: Order;
 }

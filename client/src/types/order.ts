@@ -1,7 +1,15 @@
 import type { ShippingInfo } from "@/types/shipping";
+import type { PaymentStatus } from "./payment";
 
 export type PaymentType = "Online" | "CashOnDelivery";
 export type OrderStatus = "Processing" | "Shipped" | "Delivered" | "Cancelled";
+//* the statuses an admin can set, add Refunded here if your update controller accepts it
+export const PAYMENT_STATUSES: readonly PaymentStatus[] = [
+  "Pending",
+  "Paid",
+  "Failed",
+  "Refunded",
+];
 
 export interface OrderItem {
   productId: string;

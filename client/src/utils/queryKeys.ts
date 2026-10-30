@@ -19,6 +19,14 @@ export const queryKeys = {
       ? (["admin", "products", params] as const)
       : (["admin", "products"] as const),
 
+  adminOrders: (params?: PaginationParams) =>
+    params
+      ? (["admin", "orders", params] as const)
+      : (["admin", "orders"] as const),
+
+  adminOrder: (id: string) =>
+    id ? (["admin", "orders", id] as const) : ["admin", "order"],
+
   sellerOrders: ["seller", "orders"] as const,
   sellerDashboard: ["seller", "dashboard"] as const,
   profile: ["profile"] as const,

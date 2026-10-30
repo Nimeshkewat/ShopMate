@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {
-  CircleDollarSign,
   Heart,
+  IndianRupee,
   Minus,
   Plus,
   Share2,
@@ -94,7 +94,7 @@ export default function PurchaseBox({
           loadingText="Processing..."
           onClick={() => onBuyNow(quantity)}
         >
-          <CircleDollarSign className="size-4" />
+          <IndianRupee className="size-4" />
           Buy Now
         </Button>
       </div>

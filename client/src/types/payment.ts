@@ -1,3 +1,5 @@
+export type PaymentStatus = "Pending" | "Paid" | "Failed" | "Refunded";
+
 export interface RazorpayOrderPayload {
   orderId: string;
 }

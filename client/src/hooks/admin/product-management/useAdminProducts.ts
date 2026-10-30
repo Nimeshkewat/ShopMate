@@ -1,4 +1,4 @@
-import { getAllAdminProducts } from "@/api/admin/productManagementApi";
+import { getAllAdminProducts } from "@/api/admin/adminProductManagementApi";
 import type { PaginationParams } from "@/types/pagination";
 import { queryKeys } from "@/utils/queryKeys";
 import { useQuery } from "@tanstack/react-query";
