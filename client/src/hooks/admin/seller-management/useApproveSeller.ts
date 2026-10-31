@@ -9,9 +9,8 @@ export const useApproveSeller = () => {
     mutationFn: (id: string) => approveSeller(id),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: queryKeys.adminPendingSeller(),
+        queryKey: queryKeys.adminPendingSellers,
       });
     },
   });
 };
-

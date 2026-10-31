@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useAdminOrders = (params?: PaginationParams) => {
   return useQuery({
-    queryKey: queryKeys.adminOrders(params),
+    queryKey: queryKeys.adminOrders,
     queryFn: () => getAllAdminOrders(params),
     staleTime: 5 * 60 * 1000,
   });

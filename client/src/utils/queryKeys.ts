@@ -1,36 +1,15 @@
-import type { PaginationParams } from "@/types/pagination";
-
 export const queryKeys = {
-  adminPendingSeller: (params?: PaginationParams) =>
-    params
-      ? (["admin", "pending-seller", params] as const)
-      : (["admin", "pending-seller"] as const),
-
-  adminUsers: (params?: PaginationParams) =>
-    params
-      ? (["admin", "users", params] as const)
-      : (["admin", "users"] as const),
-
-  adminUser: (id?: string) =>
-    id ? (["admin", "user", id] as const) : (["admin", "user"] as const),
-
-  adminProducts: (params?: PaginationParams) =>
-    params
-      ? (["admin", "products", params] as const)
-      : (["admin", "products"] as const),
-
-  adminOrders: (params?: PaginationParams) =>
-    params
-      ? (["admin", "orders", params] as const)
-      : (["admin", "orders"] as const),
-
-  adminOrder: (id: string) =>
-    id ? (["admin", "orders", id] as const) : ["admin", "order"],
-
-  adminDashboard: ["admin", "dashboard" as const],
-
   sellerOrders: ["seller", "orders"] as const,
   sellerDashboard: ["seller", "dashboard"] as const,
+  adminPendingSellers: ["admin", "pending-sellers"] as const,
+  adminUsers: ["admin", "users"] as const,
+  adminUser: (id: string) => ["admin", "users", id] as const,
+  adminProducts: ["admin", "products"] as const,
+  adminOrders: ["admin", "orders"] as const,
+  adminOrder: (id: string) => ["admin", "orders", id] as const,
+  adminDashboard: ["admin", "dashboard"] as const,
+  shops: ["shops"] as const,
+  shopProducts: (id: string) => ["shops", id, "products"] as const,
   profile: ["profile"] as const,
   cart: ["cart"] as const,
   products: ["products"] as const,

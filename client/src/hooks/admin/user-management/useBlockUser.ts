@@ -9,7 +9,7 @@ export const useBlockUser = () => {
     mutationFn: (id: string) => blockUser(id),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: queryKeys.adminUsers(),
+        queryKey: queryKeys.adminUsers,
       });
     },
   });
