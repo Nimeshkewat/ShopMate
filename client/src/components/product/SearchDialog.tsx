@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { useDebounce } from "@/hooks/global/useDebounce";
 import { useProducts } from "@/hooks/product/useProducts";
+import { CURRENCY } from "@/utils/constants";
 
 interface ResultsProps {
   term: string;
@@ -21,7 +22,9 @@ interface ResultsProps {
 // rendered only while there is a search term, so the query never runs for an empty box
 function SearchResults({ term, onSelect }: ResultsProps) {
   const { data, isLoading } = useProducts({ search: term, limit: 5 });
+  const { data: topData } = useProducts({ limit: 3 });
   const results = data?.products ?? [];
+  const topProducts = topData?.products ?? [];
 
   if (isLoading) {
     return (
@@ -31,11 +34,47 @@ function SearchResults({ term, onSelect }: ResultsProps) {
       </div>
     );
   }
+
   if (results.length === 0) {
     return (
-      <p className="py-2 text-center text-sm text-muted-foreground">
-        No products found for "{term}".
-      </p>
+      <>
+        <p className="py-2 text-center text-sm text-muted-foreground">
+          No products found for "{term}".
+        </p>
+        {topProducts.length > 0 && (
+          <div className="mt-2">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Top picks for you
+            </p>
+            <ul className="space-y-2">
+              {topProducts.map((product) => (
+                <li key={product._id}>
+                  <Link
+                    to={`/product/${product._id}`}
+                    onClick={onSelect}
+                    className="flex items-center gap-3 rounded-xl border border-primary/15 bg-primary/10 p-2 transition-colors hover:bg-primary/20"
+                  >
+                    {product.images[0]?.url && (
+                      <img
+                        src={product.images[0].url}
+                        alt={product.name}
+                        className="size-12 rounded-lg object-cover"
+                      />
+                    )}
+                    <span className="min-w-0 flex-1 truncate font-medium">
+                      {product.name}
+                    </span>
+                    <span className="font-semibold text-primary">
+                      {CURRENCY}
+                      {product.price.toFixed(2)}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </>
     );
   }
 

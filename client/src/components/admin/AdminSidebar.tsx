@@ -1,5 +1,4 @@
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
 import {
   LayoutDashboard,
   ListOrdered,
@@ -34,14 +33,12 @@ interface Props {
 
 function AdminSidebar({ onNavigate }: Props) {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const { mutate: logout, isPending } = useLogout();
 
   const handleLogout = () =>
     logout(undefined, {
-      onSuccess: async (data) => {
+      onSuccess: (data) => {
         toast.success(data?.message || "Logged out successfully");
-        await queryClient.invalidateQueries({});
         navigate("/");
       },
       onError: (error) => toast.error(getErrorMessage(error)),

@@ -1,5 +1,6 @@
 import ThemeToggle from "@/context/ThemeContext";
 import { useLogout } from "@/hooks/auth/useLogout";
+import { cn } from "cn";
 import {
   ArrowLeft,
   LayoutDashboardIcon,
@@ -7,7 +8,7 @@ import {
   LogOut,
   Package,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function SellerSidebar() {
   const logout = useLogout();
@@ -40,12 +41,20 @@ function SellerSidebar() {
         {/* Navigation Links */}
         <nav className="space-y-2">
           {menuItems.map((item) => (
-            <Link
+            <NavLink
               title={item.name}
               onClick={() => item.name === "Logout" && logout.mutate()}
               key={item.name}
               to={item.path}
-              className={`${item.name === "Logout" && "text-destructive bg-red-600 not-dark:text-white"} flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-lg transition-all duration-200 group text-sidebar-foreground ${item.name === "Logout" ? "hover:bg-red-700" : "hover:bg-sidebar-accent"} hover:text-sidebar-accent-foreground`}
+              className={({ isActive }) =>
+                cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                  isActive
+                    ? "bg-foreground text-background"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                )
+              }
+              // className={`${item.name === "Logout" && "text-destructive bg-red-600 not-dark:text-white"} flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-lg transition-all duration-200 group text-sidebar-foreground ${item.name === "Logout" ? "hover:bg-red-700" : "hover:bg-sidebar-accent"} hover:text-sidebar-accent-foreground`}
             >
               <span className="text-xl group-hover:scale-110 transition-transform duration-200">
                 {item.icon}
@@ -53,7 +62,7 @@ function SellerSidebar() {
               <span className="hidden md:inline font-medium text-sm">
                 {item.name}
               </span>
-            </Link>
+            </NavLink>
           ))}
         </nav>
       </div>

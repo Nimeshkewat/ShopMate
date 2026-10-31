@@ -5,8 +5,9 @@ export const useLogout = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: logout,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries();
+    onSuccess: () => {
+      queryClient.resetQueries();
+      queryClient.clear();
     },
   });
 };
