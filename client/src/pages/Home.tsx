@@ -4,6 +4,7 @@ import CategoryGrid from "../components/product/CategoryGrid";
 import HeroCarousel from "../components/home/HeroCarousel";
 import { useProducts } from "@/hooks/product/useProducts";
 import Footer from "@/components/home/Footer";
+import FeaturedShops from "@/components/shop/FeaturedShops";
 
 function Home() {
   const { data, isLoading } = useProducts();
@@ -26,6 +27,7 @@ function Home() {
     <>
       <HeroCarousel />
       <CategoryGrid />
+      <FeaturedShops />
       <ProductCarousel
         title="New Arrivals"
         products={newArrivals}

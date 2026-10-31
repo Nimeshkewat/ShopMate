@@ -31,6 +31,8 @@ import UserManagement from "./pages/admin/UserManagement";
 import ProductManagement from "./pages/admin/ProductManagement";
 import OrderManagement from "./pages/admin/OrderManagement";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import Shops from "./pages/shop/Shops";
+import Shop from "./pages/shop/Shop";
 
 function App() {
   return (
@@ -40,6 +42,8 @@ function App() {
         <Route index element={<Home />} />
         <Route path="products" element={<Products />} />
         <Route path="product/:id" element={<ProductDetails />} />
+        <Route path="/shops" element={<Shops />} />
+        <Route path="/shops/:id" element={<Shop />} />
         <Route
           path="reset-password/:token"
           element={

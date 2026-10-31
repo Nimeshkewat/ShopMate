@@ -23,6 +23,7 @@ import { useProfile } from "@/hooks/user/useProfile";
 const links = [
   { to: "/", label: "Home", icon: Home },
   { to: "/products", label: "Products", icon: Package },
+  { to: "/shops", label: "Shops", icon: Store },
   { to: "/about", label: "About", icon: Info },
   { to: "/faq", label: "FAQ", icon: CircleHelp },
   { to: "/contact", label: "Contact", icon: Phone },
