@@ -8,6 +8,7 @@ import FormField from "./product/FormField";
 import type { BecomeSellerPayload } from "@/types/seller";
 import { becomeSellerSchema, type BecomeSellerValues } from "@/schema/seller";
 import ShopImageUpload from "./product/ShopImageUpload";
+import { Textarea } from "../ui/textarea";
 
 const cardClass =
   "space-y-5 rounded-xl border border-primary/15 bg-primary/10 p-5 sm:p-6";
@@ -47,6 +48,17 @@ function BecomeSellerForm({ onSubmit, isPending, serverError }: Props) {
             aria-invalid={!!errors.shopName}
             className={inputClass}
             {...register("shopName")}
+          />
+        </FormField>
+        <FormField
+          label="Shop description"
+          error={errors.shopDescription?.message}
+        >
+          <Textarea
+            maxLength={50}
+            aria-invalid={!!errors.shopName}
+            className={inputClass}
+            {...register("shopDescription")}
           />
         </FormField>
 

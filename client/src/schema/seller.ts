@@ -6,6 +6,11 @@ export const becomeSellerSchema = z.object({
     .trim()
     .min(1, "Shop name is required")
     .max(50, "Shop name must be 50 characters or less"),
+  shopDescription: z
+    .string()
+    .trim()
+    .max(300, "Shop description must be 300 characters or less")
+    .optional(),
   shopImage: z.string().trim().optional(),
   shopImagePublicId: z.string().trim().optional(),
   businessPhone: z

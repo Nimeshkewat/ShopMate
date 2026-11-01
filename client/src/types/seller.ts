@@ -6,6 +6,7 @@ export interface Shop {
   _id: string;
   userId: string;
   shopName: string;
+  shopDescription: string;
   shopImage?: string;
   shopImagePublicID?: string;
   businessPhone: string;

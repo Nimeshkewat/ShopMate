@@ -20,21 +20,24 @@ export function ShopCardSkeleton() {
 
 function ShopCard({ shop }: { shop: Shop }) {
   return (
-    <Link
-      to={`/shops/${shop._id}`}
-      className="group flex items-center gap-4 rounded-xl border border-primary/15 bg-primary/10 p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/15"
-    >
-      <ShopAvatar image={shop.shopImage} name={shop.shopName} />
-      <div className="min-w-0 flex-1">
-        <h3 className="truncate font-semibold transition-colors group-hover:text-primary">
-          {shop.shopName}
-        </h3>
-        <p className="text-sm text-muted-foreground">
-          {shop.productCount} {shop.productCount === 1 ? "product" : "products"}
-        </p>
-      </div>
-      <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
-    </Link>
+    shop.productCount && (
+      <Link
+        to={`/shops/${shop._id}`}
+        className="group flex items-center gap-4 rounded-xl border border-primary/15 bg-primary/10 p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/15"
+      >
+        <ShopAvatar image={shop.shopImage} name={shop.shopName} />
+        <div className="min-w-0 flex-1">
+          <h3 className="truncate font-semibold transition-colors group-hover:text-primary">
+            {shop.shopName}
+          </h3>
+          <p className="text-sm text-muted-foreground">
+            {shop.productCount}{" "}
+            {shop.productCount === 1 ? "product" : "products"}
+          </p>
+        </div>
+        <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
+      </Link>
+    )
   );
 }
 export default ShopCard;

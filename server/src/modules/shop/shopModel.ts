@@ -10,6 +10,7 @@ interface IShopPayoutBankDetails {
 interface IShop extends Document {
   userId: mongoose.Types.ObjectId;
   shopName: string;
+  shopDescription: string;
   shopImage?: string;
   shopImagePublicId?: string;
   businessPhone: string;
@@ -33,6 +34,12 @@ const shopSchema = new mongoose.Schema<IShop>(
       required: true,
       trim: true,
       maxLength: 50,
+      unique: [true, "shop name is already taken"],
+    },
+    shopDescription: {
+      type: String,
+      trim: true,
+      maxLength: [300, "Must be less than 300 characters"],
     },
     shopImage: {
       type: String,

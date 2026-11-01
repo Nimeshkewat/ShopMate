@@ -95,8 +95,15 @@ export const updatePassword = async (req: Request, res: Response) => {
 
 export const upgradeToSeller = async (req: Request, res: Response) => {
   const { id: userId } = req.user;
-  const { shopName, businessPhone, taxId, bankName, accountNumber, ifscCode } =
-    req.body;
+  const {
+    shopName,
+    shopDescription,
+    businessPhone,
+    taxId,
+    bankName,
+    accountNumber,
+    ifscCode,
+  } = req.body;
 
   const user = await User.findById(userId);
   if (!user) {
@@ -120,6 +127,7 @@ export const upgradeToSeller = async (req: Request, res: Response) => {
       $set: {
         userId,
         shopName,
+        shopDescription,
         shopImage,
         shopImagePublicId,
         businessPhone,
@@ -128,7 +136,7 @@ export const upgradeToSeller = async (req: Request, res: Response) => {
         payoutBankDetails: { bankName, accountNumber, ifscCode },
       },
     },
-    { new: true, upsert: true }
+    { returnDocument: "after", upsert: true }
   );
 
   user.role = "seller";
