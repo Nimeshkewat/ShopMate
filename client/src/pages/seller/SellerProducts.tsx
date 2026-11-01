@@ -85,7 +85,7 @@ function SellerProducts() {
           Array.from({ length: 4 }, (_, i) => (
             <div
               key={i}
-              className="h-24 animate-pulse rounded-xl border border-primary/15 bg-primary/10"
+              className="h-20 animate-pulse rounded-xl bg-card ring-1 ring-border/60"
               aria-hidden
             />
           ))}

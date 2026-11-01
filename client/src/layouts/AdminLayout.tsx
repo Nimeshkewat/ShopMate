@@ -33,52 +33,59 @@ function AdminLayout() {
   const user = data?.user;
 
   return (
-    <div className="min-h-screen bg-muted/40 lg:grid lg:grid-cols-[272px_1fr]">
+    <div className="min-h-screen bg-background lg:grid lg:grid-cols-[272px_1fr]">
+      {/* Sticky sidebar (desktop) */}
       <aside className="hidden p-3 lg:block">
         <div className="sticky top-3 h-[calc(100vh-1.5rem)]">
           <AdminSidebar />
         </div>
       </aside>
 
+      {/* Main content area */}
       <div className="flex min-w-0 flex-col">
-        <header className="flex items-center justify-between gap-3 px-4 py-4 sm:px-8">
+        {/* Top header bar */}
+        <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-border/60 bg-background/80 backdrop-blur-xl px-4 py-3 sm:px-8">
           <div className="flex items-center gap-3">
             <Button
-              variant="outline"
+              variant="ghost"
               size="icon"
-              className="lg:hidden"
+              className="lg:hidden size-8"
               onClick={() => setNavOpen(true)}
               aria-label="Open menu"
             >
-              <Menu className="size-5" />
+              <Menu className="size-4" />
             </Button>
-            <nav aria-label="Breadcrumb" className="text-sm">
+            {/* Breadcrumb */}
+            <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm">
               <span className="text-muted-foreground">
                 {user?.username ?? "Admin"}
               </span>
-              <span className="mx-2 text-muted-foreground">/</span>
-              <span className="font-medium">{getTitle(pathname)}</span>
+              <span className="text-border">/</span>
+              <span className="font-semibold text-foreground">{getTitle(pathname)}</span>
             </nav>
           </div>
 
+          {/* Avatar */}
           {user?.avatar ? (
             <img
               src={user.avatar}
               alt={user.username}
-              className="size-10 rounded-full object-cover"
+              className="size-8 rounded-full object-cover ring-2 ring-border"
             />
           ) : (
-            <span className="grid size-10 place-items-center rounded-full bg-amber-400 font-semibold text-amber-950">
+            <div className="grid size-8 place-items-center rounded-full bg-primary text-xs font-semibold text-primary-foreground ring-2 ring-primary/20">
               {user?.username?.charAt(0).toUpperCase() ?? "A"}
-            </span>
+            </div>
           )}
         </header>
 
-        <main className="flex-1 px-4 pb-10 sm:px-8">
+        {/* Page content */}
+        <main className="flex-1 px-4 pb-10 pt-6 sm:px-8">
           <Outlet />
         </main>
       </div>
 
+      {/* Mobile nav sheet */}
       <Sheet open={navOpen} onOpenChange={setNavOpen}>
         <SheetContent side="left" className="w-72 gap-0 p-3 [&>button]:hidden">
           <SheetHeader className="sr-only">

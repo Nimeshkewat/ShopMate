@@ -28,7 +28,7 @@ function SearchResults({ term, onSelect }: ResultsProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center gap-2 py-6 text-sm text-muted-foreground">
+      <div className="flex items-center justify-center gap-2 py-8 text-sm text-muted-foreground">
         <Spinner size="sm" className="text-primary" />
         <span>Searching catalog...</span>
       </div>
@@ -37,7 +37,7 @@ function SearchResults({ term, onSelect }: ResultsProps) {
 
   if (results.length === 0) {
     return (
-      <>
+      <div className="space-y-4">
         <p className="py-2 text-center text-sm text-muted-foreground">
           No products found for "{term}".
         </p>
@@ -52,19 +52,19 @@ function SearchResults({ term, onSelect }: ResultsProps) {
                   <Link
                     to={`/product/${product._id}`}
                     onClick={onSelect}
-                    className="flex items-center gap-3 rounded-xl border border-primary/15 bg-primary/10 p-2 transition-colors hover:bg-primary/20"
+                    className="flex items-center gap-3 rounded-xl bg-secondary/50 p-2.5 ring-1 ring-border/50 transition-colors hover:bg-secondary hover:ring-primary/30"
                   >
                     {product.images[0]?.url && (
                       <img
                         src={product.images[0].url}
                         alt={product.name}
-                        className="size-12 rounded-lg object-cover"
+                        className="size-11 rounded-lg object-contain bg-background p-1"
                       />
                     )}
-                    <span className="min-w-0 flex-1 truncate font-medium">
+                    <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">
                       {product.name}
                     </span>
-                    <span className="font-semibold text-primary">
+                    <span className="text-sm font-semibold text-primary">
                       {CURRENCY}
                       {product.price.toFixed(2)}
                     </span>
@@ -74,7 +74,7 @@ function SearchResults({ term, onSelect }: ResultsProps) {
             </ul>
           </div>
         )}
-      </>
+      </div>
     );
   }
 
@@ -85,20 +85,21 @@ function SearchResults({ term, onSelect }: ResultsProps) {
           <Link
             to={`/product/${product._id}`}
             onClick={onSelect}
-            className="flex items-center gap-3 rounded-xl border border-primary/15 bg-primary/10 p-2 transition-colors hover:bg-primary/20"
+            className="flex items-center gap-3 rounded-xl bg-secondary/50 p-2.5 ring-1 ring-border/50 transition-colors hover:bg-secondary hover:ring-primary/30"
           >
             {product.images[0]?.url && (
               <img
                 src={product.images[0].url}
                 alt=""
-                className="size-12 rounded-lg object-cover"
+                className="size-11 rounded-lg object-contain bg-background p-1"
               />
             )}
-            <span className="min-w-0 flex-1 truncate font-medium">
+            <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">
               {product.name}
             </span>
-            <span className="font-semibold text-primary">
-              ${product.price.toFixed(2)}
+            <span className="text-sm font-semibold text-primary">
+              {CURRENCY}
+              {product.price.toFixed(2)}
             </span>
           </Link>
         </li>
@@ -132,9 +133,9 @@ export default function SearchDialog({ open, onOpenChange }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="top-6 translate-y-0 gap-4 border-white/20 bg-background/40 p-5 backdrop-blur-xl sm:max-w-2xl sm:p-6 [&>button]:right-5 [&>button]:top-5 [&>button]:rounded-lg [&>button]:bg-primary/15 [&>button]:p-1.5 [&>button]:text-primary">
+      <DialogContent className="top-6 translate-y-0 gap-4 border-border/60 bg-card p-5 shadow-xl sm:max-w-2xl sm:p-6 [&>button]:right-4 [&>button]:top-4 [&>button]:rounded-lg [&>button]:bg-secondary [&>button]:p-1.5 [&>button]:text-muted-foreground">
         <DialogHeader>
-          <DialogTitle className="text-xl">Search Products</DialogTitle>
+          <DialogTitle className="text-lg font-semibold text-foreground">Search Products</DialogTitle>
           <DialogDescription className="sr-only">
             Type to search the product catalog
           </DialogDescription>
@@ -146,17 +147,17 @@ export default function SearchDialog({ open, onOpenChange }: Props) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search for products..."
-            className="h-12 bg-background/50 pl-10"
+            className="h-11 bg-background pl-9 text-sm ring-1 ring-border/60 focus-visible:ring-primary"
             autoFocus
           />
         </form>
 
         {!trimmed ? (
-          <p className="py-2 text-center text-sm text-muted-foreground">
+          <p className="py-6 text-center text-sm text-muted-foreground">
             Start typing to search for products.
           </p>
         ) : !debounced ? (
-          <div className="flex items-center justify-center gap-2 py-4 text-sm text-muted-foreground">
+          <div className="flex items-center justify-center gap-2 py-6 text-sm text-muted-foreground">
             <Spinner size="xs" className="text-primary" />
             <span>Searching...</span>
           </div>

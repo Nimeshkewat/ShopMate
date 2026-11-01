@@ -19,34 +19,45 @@ const headings = [
   "Placed",
   "Actions",
 ];
+
 function AdminOrdersTable({ orders, onView }: Props) {
   return (
-    <div className="overflow-x-auto rounded-2xl border bg-card shadow-sm">
+    <div className="overflow-x-auto rounded-xl bg-card shadow-sm ring-1 ring-border/60">
       <table className="w-full min-w-225 text-sm">
-        <thead className="bg-primary/10 text-left">
-          <tr>
+        <thead>
+          <tr className="border-b border-border/60">
             {headings.map((heading) => (
-              <th key={heading} scope="col" className="px-4 py-3 font-semibold">
+              <th
+                key={heading}
+                scope="col"
+                className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+              >
                 {heading}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y">
+        <tbody className="divide-y divide-border/40">
           {orders.map((order) => {
             const itemCount = order.orderItems.reduce(
               (n, i) => n + i.quantity,
               0,
             );
             return (
-              <tr key={order._id}>
-                <td className="px-4 py-3 font-mono text-xs" title={order._id}>
+              <tr
+                key={order._id}
+                className="transition-colors hover:bg-secondary/40"
+              >
+                <td
+                  className="px-4 py-3 font-mono text-xs text-muted-foreground"
+                  title={order._id}
+                >
                   #{order._id.slice(-8)}
                 </td>
                 <td className="px-4 py-3">
                   {order.userId.username ? (
                     <>
-                      <p className="font-medium">{order.userId.username}</p>
+                      <p className="font-medium text-foreground">{order.userId.username}</p>
                       <p className="text-xs text-muted-foreground">
                         {order.userId.email}
                       </p>
@@ -55,8 +66,10 @@ function AdminOrdersTable({ orders, onView }: Props) {
                     <span className="text-muted-foreground">—</span>
                   )}
                 </td>
-                <td className="px-4 py-3 text-muted-foreground">{itemCount}</td>
-                <td className="px-4 py-3 font-medium">
+                <td className="px-4 py-3 text-muted-foreground tabular-nums">
+                  {itemCount}
+                </td>
+                <td className="px-4 py-3 font-semibold text-foreground tabular-nums">
                   {formatPrice(order.totalPrice)}
                 </td>
                 <td className="px-4 py-3">
@@ -76,7 +89,7 @@ function AdminOrdersTable({ orders, onView }: Props) {
                     <span className="text-muted-foreground">—</span>
                   )}
                 </td>
-                <td className="px-4 py-3 text-muted-foreground">
+                <td className="px-4 py-3 text-xs text-muted-foreground tabular-nums">
                   {order.createdAt
                     ? new Date(order.createdAt).toLocaleDateString()
                     : "—"}
@@ -85,6 +98,7 @@ function AdminOrdersTable({ orders, onView }: Props) {
                   <Button
                     variant="outline"
                     size="sm"
+                    className="h-7 text-xs"
                     onClick={() => onView(order)}
                   >
                     View

@@ -5,18 +5,19 @@ import OrderStatusChart from "@/components/seller/dashboard/OrderStatusChart";
 import StatCard from "@/components/seller/dashboard/StatCard";
 import { formatCompact } from "@/utils/index";
 import RecentOrdersCard from "@/components/admin/dashboard/RecentOrdersCard";
+import { AlertTriangle } from "lucide-react";
 
 function DashboardSkeleton() {
   return (
     <div className="animate-pulse space-y-6" aria-hidden>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {Array.from({ length: 6 }, (_, i) => (
-          <div key={i} className="h-28 rounded-2xl bg-muted" />
+          <div key={i} className="h-24 rounded-xl bg-muted" />
         ))}
       </div>
       <div className="grid gap-4 lg:grid-cols-3">
-        <div className="h-72 rounded-2xl bg-muted" />
-        <div className="h-72 rounded-2xl bg-muted lg:col-span-2" />
+        <div className="h-72 rounded-xl bg-muted" />
+        <div className="h-72 rounded-xl bg-muted lg:col-span-2" />
       </div>
     </div>
   );
@@ -29,8 +30,8 @@ function AdminDashboard() {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="text-2xl font-bold sm:text-3xl">Dashboard</h1>
-        <p className="text-sm text-muted-foreground">
+        <h1 className="text-xl font-bold tracking-tight sm:text-2xl">Dashboard</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
           An overview of your marketplace.
         </p>
       </header>
@@ -54,15 +55,18 @@ function AdminDashboard() {
       ) : (
         <>
           {stats.pendingSellers > 0 && (
-            <div className="flex flex-col gap-3 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm font-medium">
-                {stats.pendingSellers} seller{" "}
-                {stats.pendingSellers === 1
-                  ? "application is"
-                  : "applications are"}{" "}
-                waiting for review.
-              </p>
-              <Button size="sm">
+            <div className="flex flex-col gap-3 rounded-xl border border-amber-500/25 bg-amber-500/8 p-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-2.5">
+                <AlertTriangle className="size-4 shrink-0 text-amber-600 dark:text-amber-400" />
+                <p className="text-sm font-medium">
+                  {stats.pendingSellers} seller{" "}
+                  {stats.pendingSellers === 1
+                    ? "application is"
+                    : "applications are"}{" "}
+                  waiting for review.
+                </p>
+              </div>
+              <Button size="sm" className="shrink-0">
                 <Link to="/admin/sellers">Review now</Link>
               </Button>
             </div>
@@ -79,7 +83,7 @@ function AdminDashboard() {
             <StatCard label="Products" value={String(stats.products)} />
             <Link
               to="/admin/sellers"
-              className="block rounded-2xl focus-visible:outline-2 focus-visible:outline-ring"
+              className="block rounded-xl focus-visible:outline-2 focus-visible:outline-ring"
             >
               <StatCard
                 label="Pending Applications"

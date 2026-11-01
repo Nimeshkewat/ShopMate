@@ -38,19 +38,23 @@ export const STATUS_STYLES: Record<
 > = {
   Processing: {
     icon: Package,
-    className: "bg-amber-500/15 text-amber-600 dark:text-amber-400",
+    className:
+      "bg-amber-500/12 text-amber-700 ring-1 ring-amber-500/20 dark:text-amber-400 dark:bg-amber-500/15 dark:ring-amber-500/25",
   },
   Shipped: {
     icon: Truck,
-    className: "bg-blue-500/15 text-blue-600 dark:text-blue-400",
+    className:
+      "bg-blue-500/12 text-blue-700 ring-1 ring-blue-500/20 dark:text-blue-400 dark:bg-blue-500/15 dark:ring-blue-500/25",
   },
   Delivered: {
     icon: CircleCheck,
-    className: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400",
+    className:
+      "bg-emerald-500/12 text-emerald-700 ring-1 ring-emerald-500/20 dark:text-emerald-400 dark:bg-emerald-500/15 dark:ring-emerald-500/25",
   },
   Cancelled: {
     icon: CircleX,
-    className: "bg-red-500/15 text-red-600 dark:text-red-400",
+    className:
+      "bg-red-500/12 text-red-700 ring-1 ring-red-500/20 dark:text-red-400 dark:bg-red-500/15 dark:ring-red-500/25",
   },
 };
 

@@ -45,13 +45,19 @@ function AdminSidebar({ onNavigate }: Props) {
     });
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border bg-card p-4 shadow-sm">
-      <div className="flex justify-between">
-        <p className="border-b px-2 pb-4 text-xl font-bold">Admin Panel</p>
+    <div className="flex h-full flex-col rounded-2xl bg-card p-4 shadow-sm ring-1 ring-border/60">
+      {/* Header */}
+      <div className="flex items-center justify-between pb-4 mb-4 border-b border-border/60">
+        <div className="flex items-center gap-2.5">
+          <div className="grid size-7 place-items-center rounded-lg bg-primary">
+            <span className="text-xs font-bold text-primary-foreground">A</span>
+          </div>
+          <span className="text-sm font-semibold tracking-tight text-foreground">Admin Panel</span>
+        </div>
         <ThemeToggle />
       </div>
 
-      <nav aria-label="Admin" className="mt-4 space-y-1">
+      <nav aria-label="Admin" className="space-y-0.5">
         {navItems.map(({ to, label, icon: Icon, end }) => (
           <NavLink
             key={to}
@@ -60,33 +66,34 @@ function AdminSidebar({ onNavigate }: Props) {
             onClick={onNavigate}
             className={({ isActive }) =>
               cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
                 isActive
-                  ? "bg-foreground text-background"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:bg-secondary hover:text-foreground",
               )
             }
           >
-            <Icon className="size-4" />
+            <Icon className="size-4 shrink-0" />
             {label}
           </NavLink>
         ))}
       </nav>
 
-      <div className="mt-auto space-y-2 pt-6">
+      <div className="mt-auto space-y-1.5 pt-6 border-t border-border/60">
         <Link
           to="/"
           onClick={onNavigate}
-          className="block rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+          className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
         >
           Back to store
         </Link>
         <Button
           onClick={handleLogout}
           disabled={isPending}
-          className="h-10 w-full bg-red-600 text-white hover:bg-red-700"
+          variant="outline"
+          className="h-9 w-full border-destructive/30 bg-destructive/8 text-destructive hover:bg-destructive/15 hover:border-destructive/50 shadow-none"
         >
-          <LogOut className="size-4" />
+          <LogOut className="size-3.5" />
           {isPending ? "Logging out..." : "Logout"}
         </Button>
       </div>

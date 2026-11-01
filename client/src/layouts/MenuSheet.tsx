@@ -42,16 +42,21 @@ function MenuSheet({ open, onOpenChange }: Props) {
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="left"
-        className="w-72 gap-0 border-r border-white/20 bg-background/40 p-0 backdrop-blur-xl sm:max-w-xs [&>button]:right-5 [&>button]:top-5 [&>button]:rounded-lg [&>button]:bg-primary/15 [&>button]:p-1.5 [&>button]:text-primary"
+        className="w-72 gap-0 border-r border-border/60 bg-card p-0 shadow-xl sm:max-w-xs [&>button]:right-4 [&>button]:top-4 [&>button]:rounded-lg [&>button]:bg-secondary [&>button]:p-1.5 [&>button]:text-muted-foreground"
       >
-        <SheetHeader className="p-5 pb-4">
-          <SheetTitle className="text-xl">Menu</SheetTitle>
+        <SheetHeader className="border-b border-border/60 p-5">
+          <SheetTitle className="flex items-center gap-2.5 text-base font-semibold">
+            <div className="grid size-6 place-items-center rounded-md bg-primary">
+              <span className="text-[10px] font-bold text-primary-foreground">S</span>
+            </div>
+            ShopMate
+          </SheetTitle>
           <SheetDescription className="sr-only">
             Site navigation
           </SheetDescription>
         </SheetHeader>
 
-        <nav className="space-y-3 border-t border-white/10 p-5">
+        <nav className="space-y-0.5 p-3">
           {links.map(({ to, label, icon: Icon }) => (
             <NavLink
               key={to}
@@ -60,16 +65,18 @@ function MenuSheet({ open, onOpenChange }: Props) {
               onClick={() => onOpenChange(false)}
               className={({ isActive }) =>
                 cn(
-                  "flex items-center gap-3 rounded-xl border border-primary/15 bg-primary/10 px-4 py-3 text-sm font-medium transition-colors hover:bg-primary/20",
-                  isActive &&
-                    "bg-primary text-primary-foreground hover:bg-primary",
+                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
+                  isActive
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-secondary hover:text-foreground",
                 )
               }
             >
-              <Icon className="size-4" />
+              <Icon className="size-4 shrink-0" />
               {label}
             </NavLink>
           ))}
+
           {!isError && data?.success && data.user.role !== "admin" && (
             <NavLink
               to={
@@ -81,16 +88,17 @@ function MenuSheet({ open, onOpenChange }: Props) {
               onClick={() => onOpenChange(false)}
               className={({ isActive }) =>
                 cn(
-                  "flex items-center gap-3 rounded-xl border border-primary/15 bg-primary/10 px-4 py-3 text-sm font-medium transition-colors hover:bg-primary/20",
-                  isActive &&
-                    "bg-primary text-primary-foreground hover:bg-primary",
+                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
+                  isActive
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-secondary hover:text-foreground",
                 )
               }
             >
               {data.user.role === "user" ? (
-                <Store className="size-4" />
+                <Store className="size-4 shrink-0" />
               ) : (
-                <LayoutDashboard className="size-4" />
+                <LayoutDashboard className="size-4 shrink-0" />
               )}
               {data.user.role === "user"
                 ? "Become a seller"
@@ -103,13 +111,14 @@ function MenuSheet({ open, onOpenChange }: Props) {
               onClick={() => onOpenChange(false)}
               className={({ isActive }) =>
                 cn(
-                  "flex items-center gap-3 rounded-xl border border-primary/15 bg-primary/10 px-4 py-3 text-sm font-medium transition-colors hover:bg-primary/20",
-                  isActive &&
-                    "bg-primary text-primary-foreground hover:bg-primary",
+                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
+                  isActive
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-secondary hover:text-foreground",
                 )
               }
             >
-              <LayoutDashboard className="size-4" />
+              <LayoutDashboard className="size-4 shrink-0" />
               Admin Dashboard
             </NavLink>
           )}

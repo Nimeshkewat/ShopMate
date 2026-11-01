@@ -22,9 +22,6 @@ interface Props {
   onRemove: (productId: string) => void;
 }
 
-const qtyButton =
-  "size-7 rounded-md border-primary/20 bg-primary/15 text-primary hover:bg-primary hover:text-primary-foreground";
-
 export default function CartSheet({
   open,
   onOpenChange,
@@ -40,11 +37,16 @@ export default function CartSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="right"
-        className="flex w-full flex-col gap-0 border-l border-white/20 bg-background/40 p-0 backdrop-blur-xl sm:max-w-md [&>button]:right-5 [&>button]:top-5 [&>button]:rounded-lg [&>button]:bg-primary/15 [&>button]:p-1.5 [&>button]:text-primary"
+        className="flex w-full flex-col gap-0 border-l border-border/60 bg-card p-0 shadow-xl sm:max-w-md [&>button]:right-4 [&>button]:top-4 [&>button]:rounded-lg [&>button]:bg-secondary [&>button]:p-1.5 [&>button]:text-muted-foreground"
       >
-        <SheetHeader className="p-5 pb-4">
-          <SheetTitle className="text-xl text-primary">
+        <SheetHeader className="border-b border-border/60 p-5">
+          <SheetTitle className="text-base font-semibold text-foreground">
             Shopping Cart
+            {items.length > 0 && (
+              <span className="ml-2 rounded-full bg-primary/12 px-2 py-0.5 text-xs font-medium text-primary">
+                {items.length}
+              </span>
+            )}
           </SheetTitle>
           <SheetDescription className="sr-only">
             Items in your cart
@@ -58,9 +60,14 @@ export default function CartSheet({
           </div>
         ) : items.length === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-3 px-5 text-center">
-            <ShoppingBag className="size-12 text-muted-foreground" />
-            <p className="font-medium">Your cart is empty</p>
-            <Button variant="outline">
+            <div className="grid size-14 place-items-center rounded-2xl bg-secondary">
+              <ShoppingBag className="size-6 text-muted-foreground" />
+            </div>
+            <p className="font-medium text-foreground">Your cart is empty</p>
+            <p className="text-sm text-muted-foreground">
+              Add items to get started
+            </p>
+            <Button variant="outline" size="sm" className="mt-1">
               <Link to="/products" onClick={() => onOpenChange(false)}>
                 Browse products
               </Link>
@@ -68,43 +75,47 @@ export default function CartSheet({
           </div>
         ) : (
           <>
-            <ul className="flex-1 space-y-3 overflow-y-auto px-5">
+            <ul className="flex-1 space-y-2.5 overflow-y-auto p-4">
               {items.map((item) => (
                 <li
                   key={item.productId}
-                  className="flex gap-3 rounded-xl border border-primary/15 bg-primary/10 p-3"
+                  className="flex gap-3 rounded-xl bg-background p-3 ring-1 ring-border/60"
                 >
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="size-16 shrink-0 rounded-lg object-cover"
-                  />
+                  <div className="size-16 shrink-0 overflow-hidden rounded-lg bg-secondary/60">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="size-full object-contain"
+                    />
+                  </div>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-medium">{item.name}</p>
-                    <p className="text-sm text-primary">
+                    <p className="truncate text-sm font-medium text-foreground">
+                      {item.name}
+                    </p>
+                    <p className="mt-0.5 text-sm font-bold text-primary">
                       {CURRENCY}
                       {item.price}
                     </p>
-                    <div className="mt-2 flex items-center gap-2">
+                    <div className="mt-2 flex items-center gap-1.5">
                       <Button
                         variant="outline"
                         size="icon"
-                        className={qtyButton}
+                        className="size-6 rounded-md border-border/60 text-xs"
                         disabled={item.quantity <= 1}
                         onClick={() =>
                           onQuantityChange(item.productId, item.quantity - 1)
                         }
                         aria-label="Decrease quantity"
                       >
-                        <Minus className="size-3.5" />
+                        <Minus className="size-3" />
                       </Button>
-                      <span className="w-5 text-center text-sm">
+                      <span className="w-5 text-center text-sm tabular-nums font-medium">
                         {item.quantity}
                       </span>
                       <Button
                         variant="outline"
                         size="icon"
-                        className={qtyButton}
+                        className="size-6 rounded-md border-border/60 text-xs"
                         disabled={
                           item.stock ? item?.stock <= item.quantity : false
                         }
@@ -113,16 +124,16 @@ export default function CartSheet({
                         }
                         aria-label="Increase quantity"
                       >
-                        <Plus className="size-3.5" />
+                        <Plus className="size-3" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="size-7 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                        className="ml-auto size-6 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                         onClick={() => onRemove(item.productId)}
                         aria-label={`Remove ${item.name}`}
                       >
-                        <Trash2 className="size-4" />
+                        <Trash2 className="size-3.5" />
                       </Button>
                     </div>
                   </div>
@@ -130,23 +141,24 @@ export default function CartSheet({
               ))}
             </ul>
 
-            <div className="space-y-4 border-t border-white/10 p-5">
-              <div className="flex items-center justify-between text-lg font-semibold">
-                <div className="space-x-2">
-                  <span>Total:</span>
-                  <span className="text-primary">
+            <div className="space-y-3 border-t border-border/60 p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-sm text-muted-foreground">Total</span>
+                  <span className="text-lg font-bold text-foreground">
                     {CURRENCY}
                     {total}
                   </span>
                 </div>
-                <p
+                <button
+                  type="button"
                   onClick={() => clearCart()}
-                  className="text-red-400 text-sm font-medium cursor-pointer hover:text-red-500"
+                  className="text-xs text-muted-foreground transition-colors hover:text-destructive"
                 >
-                  {isPending ? "clearing." : "clear cart"}
-                </p>
+                  {isPending ? "Clearing..." : "Clear cart"}
+                </button>
               </div>
-              <Button className="h-11 w-full text-base">
+              <Button className="h-10 w-full font-semibold">
                 <Link to="/cart" onClick={() => onOpenChange(false)}>
                   View Cart & Checkout
                 </Link>

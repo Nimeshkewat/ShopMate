@@ -10,11 +10,12 @@ import type { OrderStatus } from "@/types/order";
 import ChartTooltip from "./ChartToolTip";
 import SellerDashboardCard, { EmptyChart } from "./SellerDashboardCard";
 
+// Calibrated OKLCH-equivalent hex values — match token system
 const COLORS: Record<OrderStatus, string> = {
-  Processing: "#f59e0b",
-  Shipped: "#3b82f6",
-  Delivered: "#10b981",
-  Cancelled: "#ef4444",
+  Processing: "#d97706", // amber-600
+  Shipped:    "#4f46e5", // indigo-600 (brand)
+  Delivered:  "#059669", // emerald-600
+  Cancelled:  "#dc2626", // red-600
 };
 
 function OrderStatusChart({
@@ -25,7 +26,7 @@ function OrderStatusChart({
   const isEmpty = data && data.every((d) => d.count === 0);
 
   return (
-    <SellerDashboardCard title="Order Status">
+    <SellerDashboardCard title="Order Status" description="Breakdown by current status">
       {isEmpty ? (
         <EmptyChart />
       ) : (
@@ -36,9 +37,10 @@ function OrderStatusChart({
                 data={data}
                 dataKey="count"
                 nameKey="status"
-                innerRadius={55}
-                outerRadius={85}
-                paddingAngle={2}
+                innerRadius={52}
+                outerRadius={82}
+                paddingAngle={3}
+                strokeWidth={0}
               >
                 {data &&
                   data.map((entry) => (
@@ -46,7 +48,13 @@ function OrderStatusChart({
                   ))}
               </Pie>
               <Tooltip content={<ChartTooltip />} />
-              <Legend iconType="circle" />
+              <Legend
+                iconType="circle"
+                iconSize={8}
+                formatter={(value) => (
+                  <span className="text-xs text-muted-foreground">{value}</span>
+                )}
+              />
             </PieChart>
           </ResponsiveContainer>
         </div>

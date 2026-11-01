@@ -7,6 +7,7 @@ import {
   type StockStatus,
 } from "../../utils/index";
 import RatingStars from "../review/RatingStars";
+import { CURRENCY } from "@/utils/constants";
 
 const ratingOptions = [4, 3, 2, 1];
 const availabilityOptions: StockStatus[] = ["in", "limited", "out"];
@@ -71,8 +72,11 @@ function ProductFilters({
           aria-label="Maximum price"
         />
         <div className="mt-2 flex justify-between text-xs text-muted-foreground">
-          <span>$0</span>
-          <span>${filters.maxPrice}</span>
+          <span>{CURRENCY}0</span>
+          <span>
+            {CURRENCY}
+            {filters.maxPrice}
+          </span>
         </div>
       </section>
 

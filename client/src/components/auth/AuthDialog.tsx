@@ -106,9 +106,9 @@ function AuthDialog({ open, onOpenChange }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="gap-5 border-white/20 bg-background/40 p-6 backdrop-blur-xl sm:max-w-md [&>button]:right-5 [&>button]:top-5 [&>button]:rounded-lg [&>button]:bg-primary/15 [&>button]:p-1.5 [&>button]:text-primary">
+      <DialogContent className="gap-5 border-border/60 bg-card p-6 shadow-xl sm:max-w-md [&>button]:right-4 [&>button]:top-4 [&>button]:rounded-lg [&>button]:bg-secondary [&>button]:p-1.5 [&>button]:text-muted-foreground">
         <DialogHeader>
-          <DialogTitle className="text-xl">{copy[mode].title}</DialogTitle>
+          <DialogTitle className="text-lg font-semibold">{copy[mode].title}</DialogTitle>
           <DialogDescription
             className={
               mode === "forgot" ? "text-sm text-muted-foreground" : "sr-only"

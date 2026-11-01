@@ -16,13 +16,15 @@ function SellerDashboardCard({
 }: Props) {
   return (
     <section
-      className={cn("rounded-2xl border bg-card p-5 shadow-sm", className)}
+      className={cn("rounded-xl bg-card p-5 shadow-sm ring-1 ring-border/60", className)}
     >
-      <h2 className="font-semibold">{title}</h2>
-      {description && (
-        <p className="text-sm text-muted-foreground">{description}</p>
-      )}
-      <div className="mt-4">{children}</div>
+      <div className="mb-4">
+        <h2 className="text-sm font-semibold text-foreground">{title}</h2>
+        {description && (
+          <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>
+        )}
+      </div>
+      {children}
     </section>
   );
 }

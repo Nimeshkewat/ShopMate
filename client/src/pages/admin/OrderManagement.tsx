@@ -20,13 +20,13 @@ function OrderManagement() {
     <div className="space-y-6">
       <header className="flex flex-wrap items-center gap-3">
         <div>
-          <h1 className="text-2xl font-bold sm:text-3xl">Order Oversight</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="text-xl font-bold tracking-tight sm:text-2xl">Order Oversight</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             Monitor every order and fix payment issues.
           </p>
         </div>
         {!isLoading && total > 0 && (
-          <span className="rounded-full bg-primary/15 px-3 py-1 text-xs font-medium text-primary">
+          <span className="rounded-full bg-primary/12 px-3 py-1 text-xs font-medium text-primary">
             {total} {total === 1 ? "order" : "orders"}
           </span>
         )}
@@ -34,11 +34,11 @@ function OrderManagement() {
 
       {isLoading ? (
         <div
-          className="animate-pulse space-y-2 rounded-2xl border bg-card p-4"
+          className="animate-pulse space-y-2.5 rounded-xl bg-card p-4 ring-1 ring-border/60"
           aria-hidden
         >
           {Array.from({ length: 6 }, (_, i) => (
-            <div key={i} className="h-14 rounded-lg bg-muted" />
+            <div key={i} className="h-12 rounded-lg bg-muted" />
           ))}
         </div>
       ) : isError ? (

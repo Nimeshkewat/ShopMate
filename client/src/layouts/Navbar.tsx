@@ -34,56 +34,62 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b bg-background/60 backdrop-blur-xl">
-        <div className="mx-auto grid h-16 max-w-7xl grid-cols-[1fr_auto_1fr] items-center px-4 sm:px-6">
+      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-xl">
+        <div className="mx-auto grid h-14 max-w-7xl grid-cols-[1fr_auto_1fr] items-center px-4 sm:px-6">
+          {/* Left: hamburger */}
           <div>
             <Button
               variant="ghost"
               size="icon"
+              className="size-8 text-muted-foreground hover:text-foreground"
               onClick={() => setMenuOpen(true)}
               aria-label="Open menu"
             >
-              <Menu className="size-5" />
+              <Menu className="size-4" />
             </Button>
           </div>
 
+          {/* Center: Brand */}
           <Link
             to="/"
-            className="mr-6 md:mr-0 text-xl font-bold text-primary sm:text-2xl"
+            className="mr-6 md:mr-0 text-lg font-bold tracking-tight text-primary sm:text-xl"
           >
             ShopMate
           </Link>
 
-          <div className="flex items-center justify-end">
+          {/* Right: actions */}
+          <div className="flex items-center justify-end gap-0.5">
             <ThemeToggle />
             <Button
               variant="ghost"
               size="icon"
+              className="size-8 text-muted-foreground hover:text-foreground"
               onClick={() => setSearchOpen(true)}
               aria-label="Search products"
             >
-              <Search className="size-5" />
+              <Search className="size-4" />
             </Button>
             <Button
               variant="ghost"
               size="icon"
+              className="size-8 text-muted-foreground hover:text-foreground"
               onClick={() =>
                 isAuthenticated ? setProfileOpen(true) : setAuthOpen(true)
               }
               aria-label={isAuthenticated ? "Open profile" : "Sign in"}
             >
-              <User className="size-5" />
+              <User className="size-4" />
             </Button>
             <Button
               variant="ghost"
               size="icon"
-              className="relative"
+              className="relative size-8 text-muted-foreground hover:text-foreground"
               onClick={() => setCartOpen(true)}
               aria-label="Open cart"
             >
-              <ShoppingCart className="size-5" />
+              <ShoppingCart className="size-4" />
               {cartCount > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
+                <span className="absolute -right-0.5 -top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-primary px-1 text-[9px] font-bold text-primary-foreground tabular-nums">
                   {cartCount}
                 </span>
               )}
