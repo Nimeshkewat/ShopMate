@@ -9,6 +9,7 @@ export const queryKeys = {
   adminOrder: (id: string) => ["admin", "orders", id] as const,
   adminDashboard: ["admin", "dashboard"] as const,
   shops: ["shops"] as const,
+  shopSettings: ["shop", "settings"] as const,
   shopProducts: (id: string) => ["shops", id, "products"] as const,
   profile: ["profile"] as const,
   cart: ["cart"] as const,

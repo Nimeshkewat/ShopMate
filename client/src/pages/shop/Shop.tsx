@@ -18,7 +18,7 @@ function ShopContent({ id }: { id: string }) {
 
   const shop = data?.shop;
   const products = data?.products ?? [];
-  const total = data?.pagination.total ?? 0;
+  const total = data?.products.length ?? 0;
 
   const changePage = (next: number) => {
     setPage(next);

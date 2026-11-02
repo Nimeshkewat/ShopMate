@@ -33,6 +33,7 @@ import OrderManagement from "./pages/admin/OrderManagement";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import Shops from "./pages/shop/Shops";
 import Shop from "./pages/shop/Shop";
+import ShopSettings from "./pages/seller/ShopSettings";
 
 function App() {
   return (
@@ -110,6 +111,7 @@ function App() {
         <Route index path="dashboard" element={<SellerDashboard />} />
         <Route path="orders" element={<SellerOrders />} />
         <Route path="products" element={<SellerProducts />} />
+        <Route path="settings" element={<ShopSettings />} />
       </Route>
 
       {/* Admin*/}

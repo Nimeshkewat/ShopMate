@@ -41,4 +41,18 @@ export const becomeSellerSchema = z.object({
     ),
 });
 
+//* Shop Settings
+export const shopSettingsSchema = z.object({
+  shopName: z
+    .string()
+    .trim()
+    .min(1, "Shop name is required")
+    .max(50, "Shop name must be 50 characters or less"),
+  description: z
+    .string()
+    .trim()
+    .max(300, "Description must be 300 characters or less"),
+});
+
 export type BecomeSellerValues = z.infer<typeof becomeSellerSchema>;
+export type ShopSettingsValues = z.infer<typeof shopSettingsSchema>;

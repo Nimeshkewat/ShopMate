@@ -8,7 +8,7 @@ export interface Shop {
   shopName: string;
   shopDescription: string;
   shopImage?: string;
-  shopImagePublicID?: string;
+  shopImagePublicId?: string;
   businessPhone: string;
   taxId: string;
   isApproved: boolean;

@@ -7,6 +7,7 @@ import {
   ListOrdered,
   LogOut,
   Package,
+  Settings,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
@@ -20,6 +21,7 @@ function SellerSidebar() {
     },
     { name: "Orders", path: "/seller/orders", icon: <ListOrdered /> },
     { name: "Products", path: "/seller/products", icon: <Package /> },
+    { name: "Shop Settings", path: "/seller/settings", icon: <Settings /> },
     { name: "Back to store", path: "/", icon: <ArrowLeft /> },
     { name: "Logout", path: "/", icon: <LogOut /> },
   ];
@@ -54,7 +56,6 @@ function SellerSidebar() {
                     : "text-muted-foreground hover:bg-muted hover:text-foreground",
                 )
               }
-              // className={`${item.name === "Logout" && "text-destructive bg-red-600 not-dark:text-white"} flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-lg transition-all duration-200 group text-sidebar-foreground ${item.name === "Logout" ? "hover:bg-red-700" : "hover:bg-sidebar-accent"} hover:text-sidebar-accent-foreground`}
             >
               <span className="text-xl group-hover:scale-110 transition-transform duration-200">
                 {item.icon}
