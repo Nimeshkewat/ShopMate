@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import electronics from "@/assets/electronic.webp";
+import book from "@/assets/book.webp";
+import sport from "@/assets/sports.webp";
+import fashion from "@/assets/fashion.webp";
 
 const HERO_SLIDES = [
   {
@@ -12,8 +16,7 @@ const HERO_SLIDES = [
     subtitle: "Discover the newest gadgets and devices",
     cta: "Shop Electronics",
     category: "Electronics",
-    gradient: "from-indigo-900/90 via-violet-900/70 to-background",
-    accentGradient: "from-indigo-500/20 to-violet-500/10",
+    image: electronics,
   },
   {
     id: 2,
@@ -22,18 +25,26 @@ const HERO_SLIDES = [
     subtitle: "Trending looks for every occasion",
     cta: "Shop Fashion",
     category: "Fashion",
-    gradient: "from-rose-900/90 via-pink-900/70 to-background",
-    accentGradient: "from-rose-500/20 to-pink-500/10",
+    image: fashion,
   },
   {
     id: 3,
     eyebrow: "Transform your space",
-    title: "Home & Garden",
-    subtitle: "Beautiful furniture and decor for every home",
+    title: "Books",
+    subtitle: "Find your next great read from a world of stories",
     cta: "Shop Home",
-    category: "Home & Garden",
-    gradient: "from-emerald-900/90 via-teal-900/70 to-background",
-    accentGradient: "from-emerald-500/20 to-teal-500/10",
+    category: "Books",
+    image: book,
+  },
+  {
+    id: 4,
+    eyebrow: "Fuel your passion",
+    title: "Sports",
+    subtitle:
+      "Gear up with top-tier equipment and apparel built for peak performance",
+    cta: "Shop Sports",
+    category: "Sports",
+    image: sport,
   },
 ];
 
@@ -41,23 +52,19 @@ const AUTOPLAY_MS = 5000;
 
 function HeroCarousel() {
   const [index, setIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
   const count = HERO_SLIDES.length;
 
   useEffect(() => {
-    if (paused) return;
     const id = setInterval(() => setIndex((i) => (i + 1) % count), AUTOPLAY_MS);
     return () => clearInterval(id);
-  }, [paused, count]);
+  }, [count]);
 
   const go = (direction: 1 | -1) =>
     setIndex((i) => (i + direction + count) % count);
 
   return (
     <section
-      className="relative h-[58vh] max-h-[640px] min-h-[380px] w-full overflow-hidden rounded-b-3xl"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
+      className="relative h-[58vh] max-h-160 min-h-95 w-full overflow-hidden rounded-b-3xl"
       aria-roledescription="carousel"
       aria-label="Featured categories"
     >
@@ -80,17 +87,13 @@ function HeroCarousel() {
             i === index ? "opacity-100" : "pointer-events-none opacity-0",
           )}
         >
-          {/* Gradient background */}
-          <div
-            className={cn("absolute inset-0 bg-gradient-to-br", slide.gradient)}
+          {/* Background image and contrast overlay */}
+          <img
+            src={slide.image}
+            alt={slide.title}
+            className="absolute inset-0 size-full object-cover"
           />
-          {/* Soft radial glow */}
-          <div
-            className={cn(
-              "absolute inset-0 bg-gradient-to-br opacity-60",
-              slide.accentGradient,
-            )}
-          />
+          <div className="absolute inset-0 bg-black/40" />
 
           <div className="relative z-20 flex size-full flex-col items-center justify-center px-8 text-center sm:px-16">
             <p className="rounded-full border border-primary/30 bg-primary/15 px-3 py-1 text-xs font-medium text-primary backdrop-blur-sm sm:text-sm">
@@ -118,8 +121,18 @@ function HeroCarousel() {
 
       {/* Arrow buttons */}
       {[
-        { dir: -1 as const, pos: "left-3 sm:left-5", label: "Previous slide", Icon: ChevronLeft },
-        { dir: 1 as const, pos: "right-3 sm:right-5", label: "Next slide", Icon: ChevronRight },
+        {
+          dir: -1 as const,
+          pos: "left-3 sm:left-5",
+          label: "Previous slide",
+          Icon: ChevronLeft,
+        },
+        {
+          dir: 1 as const,
+          pos: "right-3 sm:right-5",
+          label: "Next slide",
+          Icon: ChevronRight,
+        },
       ].map(({ dir, pos, label, Icon }) => (
         <Button
           key={label}
