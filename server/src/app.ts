@@ -25,8 +25,7 @@ const app = express();
 express.raw({ type: "application/json" });
 
 //* Middlewares
-const allowedOrigins = [process.env.FRONTEND_URL!, "http://localhost:5173"];
-app.use(cors({ origin: allowedOrigins, credentials: true }));
+app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 
 app.use(express.json({ limit: "5mb" }));
 app.use(cookieParser());
