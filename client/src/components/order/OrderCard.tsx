@@ -1,6 +1,16 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ImageOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import type { Order } from "@/types/order";
 import { formatPrice } from "@/utils/index";
 import OrderStatusBadge from "./OrderStatusBadge";
@@ -14,6 +24,8 @@ interface Props {
 const actionButton = "border-primary/20 bg-primary/15 hover:bg-primary/25";
 
 function OrderCard({ order, onTrack, onCancel, isCancelling }: Props) {
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+
   return (
     <article className="rounded-xl border border-primary/15 bg-primary/10 p-5 sm:p-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -27,7 +39,7 @@ function OrderCard({ order, onTrack, onCancel, isCancelling }: Props) {
         </div>
         <div className="flex items-center gap-4 sm:gap-5">
           <OrderStatusBadge status={order.orderStatus} />
-          <div className="text-right">
+          <div className="md:text-right">
             <p className="text-xs text-muted-foreground">Total</p>
             <p className="text-xl font-bold text-primary">
               {formatPrice(order.totalPrice)}
@@ -83,15 +95,50 @@ function OrderCard({ order, onTrack, onCancel, isCancelling }: Props) {
           Track Order
         </Button>
         {order.orderStatus === "Processing" && (
-          <Button
-            variant="outline"
-            size="sm"
-            className="ml-auto border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/20 hover:text-destructive"
-            disabled={isCancelling}
-            onClick={() => onCancel(order)}
+          <AlertDialog
+            open={cancelDialogOpen}
+            onOpenChange={setCancelDialogOpen}
           >
-            {isCancelling ? "Cancelling..." : "Cancel Order"}
-          </Button>
+            <AlertDialogTrigger
+              render={
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="ml-auto border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/20 hover:text-destructive"
+                  disabled={isCancelling}
+                />
+              }
+            >
+              {isCancelling ? "Cancelling..." : "Cancel Order"}
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Cancel this order?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This can't be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <Button
+                  variant="outline"
+                  onClick={() => setCancelDialogOpen(false)}
+                  disabled={isCancelling}
+                >
+                  Keep Order
+                </Button>
+                <Button
+                  variant="destructive"
+                  disabled={isCancelling}
+                  onClick={() => {
+                    setCancelDialogOpen(false);
+                    onCancel(order);
+                  }}
+                >
+                  Cancel Order
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         )}
       </div>
     </article>

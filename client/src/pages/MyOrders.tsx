@@ -24,7 +24,6 @@ function MyOrders() {
   const trackingOrder = orders.find((o) => o._id === trackingId) ?? null;
 
   const handleCancel = (order: Order) => {
-    if (!window.confirm("Cancel this order? This can't be undone.")) return;
     cancelOrder.mutate(order._id, {
       onSuccess: (res) => toast.success(res?.message || "Order cancelled"),
       onError: (error) => toast.error(getErrorMessage(error)),
