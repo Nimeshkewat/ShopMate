@@ -8,7 +8,7 @@ const REFRESH_URL = "/auth/refresh";
 const AUTH_URLS = ["/auth/login", "/auth/register", REFRESH_URL];
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_BASE_URL,
   withCredentials: true,
 });
 
