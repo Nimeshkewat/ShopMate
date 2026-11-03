@@ -1,7 +1,17 @@
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, ImageOff, MapPin } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { getErrorMessage } from "@/api/apiClient";
 import { useCancelOrder } from "@/hooks/order/useCancelOrder";
 import { useOrder } from "@/hooks/order/useOrder";
@@ -35,6 +45,7 @@ function OrderDetails() {
   const { id } = useParams<{ id: string }>();
   const { data, isLoading, isError } = useOrder(id ?? "");
   const cancelOrder = useCancelOrder();
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const order = data?.order;
 
   if (isLoading) return <DetailsSkeleton />;
@@ -71,7 +82,6 @@ function OrderDetails() {
       : "Payment pending";
 
   const handleCancel = () => {
-    if (!window.confirm("Cancel this order? This can't be undone.")) return;
     cancelOrder.mutate(order._id, {
       onSuccess: (res) => toast.success(res?.message || "Order cancelled"),
       onError: (error) => toast.error(getErrorMessage(error)),
@@ -177,14 +187,49 @@ function OrderDetails() {
 
           {order.orderStatus === "Processing" && (
             <div className="space-y-2">
-              <Button
-                variant="outline"
-                className="h-11 w-full border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/20 hover:text-destructive"
-                disabled={cancelOrder.isPending}
-                onClick={handleCancel}
+              <AlertDialog
+                open={cancelDialogOpen}
+                onOpenChange={setCancelDialogOpen}
               >
-                {cancelOrder.isPending ? "Cancelling..." : "Cancel Order"}
-              </Button>
+                <AlertDialogTrigger
+                  render={
+                    <Button
+                      variant="outline"
+                      className="h-11 w-full border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/20 hover:text-destructive"
+                      disabled={cancelOrder.isPending}
+                    />
+                  }
+                >
+                  {cancelOrder.isPending ? "Cancelling..." : "Cancel Order"}
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Cancel this order?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This can't be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <Button
+                      variant="outline"
+                      onClick={() => setCancelDialogOpen(false)}
+                      disabled={cancelOrder.isPending}
+                    >
+                      Keep Order
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      disabled={cancelOrder.isPending}
+                      onClick={() => {
+                        setCancelDialogOpen(false);
+                        handleCancel();
+                      }}
+                    >
+                      Cancel Order
+                    </Button>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
               {order.paidAt && (
                 <p className="text-xs text-muted-foreground">
                   Refunds for online payments are handled by our team after

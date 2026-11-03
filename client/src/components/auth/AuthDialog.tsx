@@ -56,8 +56,8 @@ function AuthDialog({ open, onOpenChange }: Props) {
       { username, email, password },
       {
         onSuccess: (data) => {
-          toast.success(data.message || "Account Created");
           onOpenChange(false);
+          toast.success(data.message || "Account Created");
         },
         onError: (error) => {
           toast.error(error.response?.data.message || "Internel Server Error");
@@ -77,9 +77,9 @@ function AuthDialog({ open, onOpenChange }: Props) {
       { email, password },
       {
         onSuccess: async (data) => {
-          await queryClient.invalidateQueries();
-          toast.success(data.message || "Logged In Successfully");
           onOpenChange(false);
+          toast.success(data.message || "Logged In Successfully");
+          await queryClient.invalidateQueries();
         },
         onError: (error) => {
           toast.error(error.response?.data.message || "Internel Server Error");
@@ -108,7 +108,9 @@ function AuthDialog({ open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="gap-5 border-border/60 bg-card p-6 shadow-xl sm:max-w-md [&>button]:right-4 [&>button]:top-4 [&>button]:rounded-lg [&>button]:bg-secondary [&>button]:p-1.5 [&>button]:text-muted-foreground">
         <DialogHeader>
-          <DialogTitle className="text-lg font-semibold">{copy[mode].title}</DialogTitle>
+          <DialogTitle className="text-lg font-semibold">
+            {copy[mode].title}
+          </DialogTitle>
           <DialogDescription
             className={
               mode === "forgot" ? "text-sm text-muted-foreground" : "sr-only"
