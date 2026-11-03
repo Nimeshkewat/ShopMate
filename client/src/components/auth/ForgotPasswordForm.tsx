@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail } from "lucide-react";
@@ -14,6 +13,7 @@ interface Props {
   onBackToLogin: () => void;
   isPending?: boolean;
   serverError?: string;
+  sentTo: string;
 }
 
 function ForgotPasswordForm({
@@ -21,8 +21,8 @@ function ForgotPasswordForm({
   onBackToLogin,
   isPending,
   serverError,
+  sentTo,
 }: Props) {
-  const [sentTo, setSentTo] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -34,8 +34,6 @@ function ForgotPasswordForm({
 
   const submit = ({ email }: ForgotPasswordValues) => {
     onSubmit(email);
-    // TODO: set this in your mutation's onSuccess instead
-    setSentTo(email);
   };
 
   if (sentTo) {

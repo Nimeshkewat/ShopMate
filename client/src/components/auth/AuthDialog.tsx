@@ -37,6 +37,7 @@ interface Props {
 
 function AuthDialog({ open, onOpenChange }: Props) {
   const [mode, setMode] = useState<Mode>("login");
+  const [sentTo, setSentTo] = useState("");
   const { mutate: signup, isPending: isSignupPending } = useSignup();
   const { mutate: login, isPending: isLoginPending } = useLogin();
   const { mutate: forgotPassword, isPending: isForgotPending } =
@@ -96,6 +97,7 @@ function AuthDialog({ open, onOpenChange }: Props) {
           toast.success(
             data.message || "Forgot password link sent to your email",
           );
+          setSentTo("success");
         },
         onError: (error) => {
           toast.error(error.response?.data.message || "Internal Server Error");
@@ -137,6 +139,7 @@ function AuthDialog({ open, onOpenChange }: Props) {
         )}
         {mode === "forgot" && (
           <ForgotPasswordForm
+            sentTo={sentTo}
             onSubmit={handleForgot}
             isPending={isForgotPending}
             onBackToLogin={() => setMode("login")}
