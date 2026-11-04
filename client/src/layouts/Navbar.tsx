@@ -76,7 +76,7 @@ export default function Navbar() {
             <Button
               variant="ghost"
               size="icon"
-              className="size-8 text-muted-foreground hover:text-foreground"
+              className="size-8 rounded-full text-muted-foreground hover:text-foreground"
               onClick={() =>
                 isAuthenticated ? setProfileOpen(true) : setAuthOpen(true)
               }
@@ -85,14 +85,17 @@ export default function Navbar() {
               {!isAuthenticated ? (
                 <User className="size-4" />
               ) : isLoading ? (
-                <span>
-                  <Spinner size="sm" />
-                </span>
+                <Spinner size="sm" />
               ) : (
-                <Avatar className="size-4 md:size-6">
-                  <AvatarImage src={profile?.user.avatar} />
-                  <AvatarFallback>
-                    {profile?.user.username.charAt(0)}
+                <Avatar className="size-7 shrink-0">
+                  <AvatarImage
+                    src={profile?.user.avatar}
+                    className="object-cover"
+                  />
+                  <AvatarFallback className="text-xs">
+                    {profile?.user.username?.charAt(0).toUpperCase() || (
+                      <User className="size-4" />
+                    )}
                   </AvatarFallback>
                 </Avatar>
               )}

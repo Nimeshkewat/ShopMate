@@ -38,8 +38,17 @@ export const resetPassword = async (
 ): Promise<AuthResponse> => {
   const { token, ...input } = payload;
   const resposne = await api.post<AuthResponse>(
-    `${BASE}/reset-password/${token}`,
-    input.newPassword,
+    `${BASE}/reset-password/${encodeURIComponent(token)}`,
+    { newPassword: input.newPassword },
+  );
+  return resposne.data;
+};
+
+export const validateResetPasswordToken = async (
+  token: string,
+): Promise<AuthResponse> => {
+  const resposne = await api.get<AuthResponse>(
+    `${BASE}/reset-password/${encodeURIComponent(token)}`,
   );
   return resposne.data;
 };

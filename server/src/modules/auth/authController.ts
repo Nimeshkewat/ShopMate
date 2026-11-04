@@ -195,3 +195,30 @@ export const resetPassword = async (req: Request, res: Response) => {
     .status(200)
     .json({ success: true, message: "Password Reset Successfully" });
 };
+
+export const validateResetPasswordToken = async (
+  req: Request,
+  res: Response
+) => {
+  const { token } = req.params;
+
+  if (!token || typeof token !== "string") {
+    throw new AppError("Invalid or missing reset token", 400);
+  }
+
+  const resetPasswordTokenHash = crypto
+    .createHash("sha256")
+    .update(token)
+    .digest("hex");
+
+  const user = await User.findOne({
+    resetPasswordToken: resetPasswordTokenHash,
+    resetPasswordTokenExpiresAt: { $gt: new Date() },
+  }).select("+resetPasswordToken");
+
+  if (!user) {
+    throw new AppError("Invalid or expired reset token", 404);
+  }
+
+  res.status(200).json({ success: true, message: "Reset token is valid" });
+};

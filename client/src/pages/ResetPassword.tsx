@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { CircleCheck } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { validateResetPasswordToken } from "@/api/authApi";
+import { getErrorMessage } from "@/api/apiClient";
 import { useResetPassword } from "@/hooks/auth/useResetPassword";
 import ResetPasswordForm from "../components/auth/ResetPasswordForm";
 import type { ResetPasswordValues } from "../schema/auth";
@@ -11,6 +14,14 @@ function ResetPassword() {
   const { token } = useParams<{ token: string }>();
   const [done, setDone] = useState(false);
   const resetPassword = useResetPassword();
+  const tokenValidation = useQuery({
+    queryKey: ["auth", "reset-password-token", token],
+    queryFn: () => {
+      if (!token) throw new Error("Reset token is required");
+      return validateResetPasswordToken(token);
+    },
+    enabled: Boolean(token),
+  });
 
   const handleSubmit = async (values: ResetPasswordValues) => {
     const res = await resetPassword.mutateAsync({
@@ -20,6 +31,20 @@ function ResetPassword() {
     toast.success(res.message || "Password reset successfully");
     setDone(true);
   };
+
+  if (!token || tokenValidation.isError) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (tokenValidation.isPending) {
+    return (
+      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
+        <p role="status" className="text-sm text-muted-foreground">
+          Checking reset link...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-md items-center px-4 py-10">
@@ -36,17 +61,6 @@ function ResetPassword() {
               <Link to="/">Back to Home</Link>
             </Button>
           </div>
-        ) : !token ? (
-          <div className="space-y-4 text-center">
-            <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">Invalid reset link</h1>
-            <p className="text-sm text-muted-foreground">
-              This link is missing its reset token. Request a new one from the
-              sign in dialog.
-            </p>
-            <Button variant="outline" className="h-10 w-full">
-              <Link to="/">Back to Home</Link>
-            </Button>
-          </div>
         ) : (
           <div className="space-y-5">
             <div>
@@ -58,6 +72,11 @@ function ResetPassword() {
             <ResetPasswordForm
               onSubmit={handleSubmit}
               isPending={resetPassword.isPending}
+              serverError={
+                resetPassword.error
+                  ? getErrorMessage(resetPassword.error)
+                  : undefined
+              }
             />
           </div>
         )}

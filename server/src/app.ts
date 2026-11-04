@@ -25,7 +25,12 @@ const app = express();
 express.raw({ type: "application/json" });
 
 //* Middlewares
-app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+app.use(
+  cors({
+    origin: [process.env.LOCAL_HOST!, process.env.FRONTEND_URL!],
+    credentials: true,
+  })
+);
 
 app.use(express.json({ limit: "5mb" }));
 app.use(cookieParser());

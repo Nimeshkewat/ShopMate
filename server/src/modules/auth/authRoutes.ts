@@ -13,6 +13,7 @@ import {
   refresh,
   register,
   resetPassword,
+  validateResetPasswordToken,
 } from "./authController.js";
 
 const router = express.Router();
@@ -22,6 +23,7 @@ router.post("/login", validate(loginSchema), login);
 router.post("/logout", logout);
 router.post("/refresh", refresh);
 router.post("/forgot-password", validate(forgotPasswordSchema), forgotPassword);
+router.get("/reset-password/:token", validateResetPasswordToken);
 router.post(
   "/reset-password/:token",
   validate(resetPasswordSchema),
