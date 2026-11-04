@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-labelledby="shopmate-mark-title">
+  <title id="shopmate-mark-title">ShopMate</title>
+  <defs>
+    <linearGradient id="parcel-indigo" x1="20" y1="20" x2="78" y2="82" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#3730a3"/>
+    </linearGradient>
+    <linearGradient id="parcel-mint" x1="49" y1="14" x2="82" y2="49" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6ee7b7"/>
+      <stop offset="1" stop-color="#10b981"/>
+    </linearGradient>
+  </defs>
+  <path d="M50 10 84 29v42L50 90 16 71V29L50 10Z" fill="url(#parcel-indigo)"/>
+  <path d="M50 10 84 29 50 49 16 29 50 10Z" fill="#818cf8"/>
+  <path d="m50 10 34 19-34 20V10Z" fill="url(#parcel-mint)"/>
+  <path d="M16 29 50 49v41L16 71V29Z" fill="#4f46e5"/>
+  <path d="m50 49 34-20v42L50 90V49Z" fill="#4338ca"/>
+  <path d="m16 29 34 20 34-20M50 49v41" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".55" stroke-width="2.5"/>
+  <path d="M65 39c-4-4-9-6-15-6-8 0-13 4-13 9 0 5 4 7 11 9l5 1c8 2 11 5 11 10 0 6-6 10-14 10-7 0-13-2-17-7" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="6.5"/>
+  <path d="m76 12 1.8 5.2L83 19l-5.2 1.8L76 26l-1.8-5.2L69 19l5.2-1.8L76 12Z" fill="#a7f3d0"/>
+</svg>

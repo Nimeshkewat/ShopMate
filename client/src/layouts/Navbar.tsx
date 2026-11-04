@@ -56,8 +56,14 @@ export default function Navbar() {
           {/* Center: Brand */}
           <Link
             to="/"
-            className="mr-6 md:mr-0 text-lg font-bold tracking-tight text-primary sm:text-xl"
+            className="mr-6 flex items-center gap-2 text-lg font-bold tracking-tight text-primary sm:text-xl md:mr-0"
           >
+            <img
+              src="/shopmate-mark.svg"
+              alt=""
+              aria-hidden="true"
+              className="size-8 shrink-0"
+            />
             ShopMate
           </Link>
 
