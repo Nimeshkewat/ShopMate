@@ -2,6 +2,14 @@ import { useState } from "react";
 import { MapPin, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { getErrorMessage } from "@/api/apiClient";
 import { useAddShippingInfo } from "@/hooks/shipping/useAddShippingInfo";
 import { useDeleteShippingInfo } from "@/hooks/shipping/useDeleteShippingInfo";
@@ -33,6 +41,7 @@ function ShippingStep({
   const addShipping = useAddShippingInfo();
   const deleteShipping = useDeleteShippingInfo();
   const [adding, setAdding] = useState(false);
+  const [addressToDelete, setAddressToDelete] = useState<string | null>(null);
 
   const hasSaved = addresses.length > 0;
   const showForm = adding || !hasSaved;
@@ -49,7 +58,6 @@ function ShippingStep({
   };
 
   const handleDelete = (id: string) => {
-    if (!window.confirm("Delete this address?")) return;
     deleteShipping.mutate(
       { id },
       {
@@ -62,7 +70,9 @@ function ShippingStep({
   return (
     <section className="rounded-xl bg-card p-5 shadow-sm ring-1 ring-border/60 sm:p-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-base font-semibold text-foreground">Shipping Information</h2>
+        <h2 className="text-base font-semibold text-foreground">
+          Shipping Information
+        </h2>
         {hasSaved && (
           <span className="text-xs text-muted-foreground">
             {addresses.length}/{MAX_ADDRESSES} saved
@@ -134,7 +144,7 @@ function ShippingStep({
                 address={address}
                 selected={address._id === selectedId}
                 onSelect={() => onSelect(address._id)}
-                onDelete={() => handleDelete(address._id)}
+                onDelete={() => setAddressToDelete(address._id)}
                 isDeleting={deleteShipping.isPending}
               />
             ))}
@@ -166,6 +176,42 @@ function ShippingStep({
           </Button>
         </div>
       )}
+
+      <AlertDialog
+        open={addressToDelete !== null}
+        onOpenChange={(open) => {
+          if (!open) setAddressToDelete(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this address?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setAddressToDelete(null)}
+            >
+              Keep Address
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={() => {
+                if (!addressToDelete) return;
+                handleDelete(addressToDelete);
+                setAddressToDelete(null);
+              }}
+            >
+              Delete Address
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </section>
   );
 }

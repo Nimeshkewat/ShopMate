@@ -7,7 +7,7 @@ export const addShippingInfo = async (req: Request, res: Response) => {
   const { id: userId } = req.user;
   const { fullname, state, city, country, address, phone, pincode } = req.body;
 
-  const addressCount = await Shipping.countDocuments();
+  const addressCount = await Shipping.countDocuments({ userId });
   if (addressCount >= 3) {
     throw new AppError(
       "You can save a maximum of 3 shipping addresses. Please delete an address to add a new one.",
