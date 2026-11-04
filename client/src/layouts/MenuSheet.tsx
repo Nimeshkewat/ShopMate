@@ -47,7 +47,9 @@ function MenuSheet({ open, onOpenChange }: Props) {
         <SheetHeader className="border-b border-border/60 p-5">
           <SheetTitle className="flex items-center gap-2.5 text-base font-semibold">
             <div className="grid size-6 place-items-center rounded-md bg-primary">
-              <span className="text-[10px] font-bold text-primary-foreground">S</span>
+              <span className="text-[10px] font-bold text-primary-foreground">
+                S
+              </span>
             </div>
             ShopMate
           </SheetTitle>

@@ -5,17 +5,17 @@ import type { RecentOrder } from "@/types/admin";
 
 function RecentOrdersCard({ orders }: { orders: RecentOrder[] }) {
   return (
-    <section className="rounded-2xl border bg-card p-5 shadow-sm lg:col-span-2">
+    <section className="rounded-xl bg-card p-5 shadow-sm ring-1 ring-border/60 lg:col-span-2">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h2 className="font-semibold">Recent Orders</h2>
-          <p className="text-sm text-muted-foreground">
+          <h2 className="text-base font-semibold text-foreground">Recent Orders</h2>
+          <p className="text-xs text-muted-foreground">
             The latest orders placed on the store
           </p>
         </div>
         <Link
           to="/admin/orders"
-          className="text-sm font-medium text-primary hover:underline"
+          className="text-xs font-semibold text-primary hover:underline"
         >
           View all
         </Link>
@@ -26,16 +26,16 @@ function RecentOrdersCard({ orders }: { orders: RecentOrder[] }) {
           No orders yet.
         </p>
       ) : (
-        <div className="mt-4 overflow-x-auto">
+        <div className="mt-4 overflow-x-auto rounded-lg ring-1 ring-border/60">
           <table className="w-full min-w-120 text-sm">
-            <thead className="bg-primary/10 text-left">
-              <tr>
+            <thead>
+              <tr className="border-b border-border/60 bg-secondary/40 text-left">
                 {["Order", "Customer", "Total", "Status", "Date"].map(
                   (heading) => (
                     <th
                       key={heading}
                       scope="col"
-                      className="px-4 py-3 font-semibold first:rounded-l-lg last:rounded-r-lg"
+                      className="px-4 py-2.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
                     >
                       {heading}
                     </th>
@@ -43,24 +43,24 @@ function RecentOrdersCard({ orders }: { orders: RecentOrder[] }) {
                 )}
               </tr>
             </thead>
-            <tbody className="divide-y">
+            <tbody className="divide-y divide-border/40">
               {orders.map((order) => (
-                <tr key={order._id}>
-                  <td className="px-4 py-3 font-mono text-xs" title={order._id}>
+                <tr key={order._id} className="transition-colors hover:bg-secondary/30">
+                  <td className="px-4 py-2.5 font-mono text-xs text-muted-foreground" title={order._id}>
                     #{order._id.slice(-8)}
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-2.5 font-medium text-foreground">
                     {order.userId.username ?? (
                       <span className="text-muted-foreground">—</span>
                     )}
                   </td>
-                  <td className="px-4 py-3 font-medium">
+                  <td className="px-4 py-2.5 font-semibold text-foreground tabular-nums">
                     {formatPrice(order.totalPrice)}
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-2.5">
                     <OrderStatusBadge status={order.orderStatus} />
                   </td>
-                  <td className="px-4 py-3 text-muted-foreground">
+                  <td className="px-4 py-2.5 text-xs text-muted-foreground tabular-nums">
                     {order.createdAt
                       ? new Date(order.createdAt).toLocaleDateString()
                       : "—"}

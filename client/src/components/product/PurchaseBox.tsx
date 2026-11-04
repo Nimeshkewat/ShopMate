@@ -20,7 +20,7 @@ interface Props {
 }
 
 const qtyButton =
-  "size-8 rounded-md border-primary/20 bg-primary/15 text-primary hover:bg-primary hover:text-primary-foreground";
+  "size-8 rounded-lg border-border/60 text-foreground hover:bg-secondary";
 
 export default function PurchaseBox({
   name,
@@ -48,9 +48,9 @@ export default function PurchaseBox({
   };
 
   return (
-    <div className="rounded-xl border border-primary/15 bg-primary/10 p-5">
+    <div className="rounded-xl bg-card p-5 shadow-sm ring-1 ring-border/60">
       <div className="flex items-center gap-3">
-        <span className="font-semibold">Quantity:</span>
+        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Quantity:</span>
         <Button
           variant="outline"
           size="icon"
@@ -59,9 +59,9 @@ export default function PurchaseBox({
           onClick={() => setQuantity((q) => q - 1)}
           aria-label="Decrease quantity"
         >
-          <Minus className="size-4" />
+          <Minus className="size-3.5" />
         </Button>
-        <span className="w-8 text-center font-medium" aria-live="polite">
+        <span className="w-8 text-center text-sm font-semibold tabular-nums" aria-live="polite">
           {quantity}
         </span>
         <Button
@@ -72,13 +72,13 @@ export default function PurchaseBox({
           onClick={() => setQuantity((q) => q + 1)}
           aria-label="Increase quantity"
         >
-          <Plus className="size-4" />
+          <Plus className="size-3.5" />
         </Button>
       </div>
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <Button
-          className="h-11 text-base"
+          className="h-11 text-sm font-semibold shadow-sm"
           disabled={outOfStock}
           loading={isPending}
           loadingText="Adding to Cart..."
@@ -88,7 +88,8 @@ export default function PurchaseBox({
           Add to Cart
         </Button>
         <Button
-          className="h-11 text-base"
+          variant="secondary"
+          className="h-11 text-sm font-semibold"
           disabled={outOfStock}
           loading={isPending}
           loadingText="Processing..."
@@ -99,24 +100,24 @@ export default function PurchaseBox({
         </Button>
       </div>
 
-      <div className="mt-4 flex items-center gap-5 text-sm text-muted-foreground">
+      <div className="mt-4 flex items-center gap-5 text-xs text-muted-foreground border-t border-border/60 pt-3">
         <button
           type="button"
           onClick={() => setWishlisted((w) => !w)}
           aria-pressed={wishlisted}
-          className="flex items-center gap-2 hover:text-foreground"
+          className="flex items-center gap-1.5 transition-colors hover:text-foreground"
         >
           <Heart
-            className={cn("size-4", wishlisted && "fill-red-500 text-red-500")}
+            className={cn("size-3.5", wishlisted && "fill-red-500 text-red-500")}
           />
           {wishlisted ? "In Wishlist" : "Add to Wishlist"}
         </button>
         <button
           type="button"
           onClick={handleShare}
-          className="flex items-center gap-2 hover:text-foreground"
+          className="flex items-center gap-1.5 transition-colors hover:text-foreground"
         >
-          <Share2 className="size-4" />
+          <Share2 className="size-3.5" />
           Share
         </button>
       </div>

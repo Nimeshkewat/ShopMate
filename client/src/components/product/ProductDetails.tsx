@@ -19,13 +19,13 @@ function DetailsSkeleton() {
         <span>Loading product details...</span>
       </div>
       <div className="grid animate-pulse gap-8 lg:grid-cols-2" aria-hidden>
-        <div className="aspect-4/3 rounded-xl bg-primary/15" />
+        <div className="aspect-4/3 rounded-xl bg-muted" />
         <div className="space-y-4">
-          <div className="h-6 w-24 rounded bg-primary/15" />
-          <div className="h-9 w-3/4 rounded bg-primary/15" />
-          <div className="h-5 w-1/3 rounded bg-primary/15" />
-          <div className="h-9 w-1/4 rounded bg-primary/15" />
-          <div className="h-40 rounded-xl bg-primary/15" />
+          <div className="h-6 w-24 rounded bg-muted" />
+          <div className="h-9 w-3/4 rounded bg-muted" />
+          <div className="h-5 w-1/3 rounded bg-muted" />
+          <div className="h-9 w-1/4 rounded bg-muted" />
+          <div className="h-40 rounded-xl bg-muted" />
         </div>
       </div>
     </div>
@@ -92,7 +92,7 @@ function ProductDetails() {
             )}
           </div>
 
-          <p className="text-3xl font-bold">
+          <p className="text-3xl text-primary font-bold">
             {CURRENCY}
             {product.price.toFixed(2)}
           </p>

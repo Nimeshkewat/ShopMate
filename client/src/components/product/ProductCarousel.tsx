@@ -13,7 +13,7 @@ interface Props {
 }
 
 const arrowClass =
-  "border-primary/20 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground";
+  "size-8 rounded-lg border-border/60 bg-card text-foreground shadow-sm hover:bg-secondary hover:text-foreground";
 
 const slideClass =
   "w-[72%] shrink-0 snap-start sm:w-[calc((100%-1.5rem)/2)] md:w-[calc((100%-3rem)/3)] lg:w-[calc((100%-4.5rem)/4)]";
@@ -34,13 +34,13 @@ export default function ProductCarousel({ title, products, isLoading }: Props) {
   };
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
-      <div className="mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <h2 className="text-2xl font-bold sm:text-3xl">{title}</h2>
-          {isLoading && <Spinner size="sm" className="text-primary" />}
+    <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
+      <div className="mb-5 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">{title}</h2>
+          {isLoading && <Spinner size="xs" className="text-primary" />}
         </div>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-1.5">
           <Button
             variant="outline"
             size="icon"
@@ -48,7 +48,7 @@ export default function ProductCarousel({ title, products, isLoading }: Props) {
             onClick={() => scroll(-1)}
             aria-label={`Previous ${title}`}
           >
-            <ChevronLeft className="size-5" />
+            <ChevronLeft className="size-4" />
           </Button>
           <Button
             variant="outline"
@@ -57,14 +57,14 @@ export default function ProductCarousel({ title, products, isLoading }: Props) {
             onClick={() => scroll(1)}
             aria-label={`Next ${title}`}
           >
-            <ChevronRight className="size-5" />
+            <ChevronRight className="size-4" />
           </Button>
         </div>
       </div>
 
       <div
         ref={trackRef}
-        className="-mx-1 flex snap-x snap-mandatory gap-6 overflow-x-auto px-1 pb-6 pt-1 scrollbar-none [&::-webkit-scrollbar]:hidden"
+        className="-mx-1 flex snap-x snap-mandatory gap-4 overflow-x-auto px-1 pb-4 pt-1 scrollbar-none [&::-webkit-scrollbar]:hidden"
       >
         {isLoading
           ? Array.from({ length: 4 }, (_, i) => (

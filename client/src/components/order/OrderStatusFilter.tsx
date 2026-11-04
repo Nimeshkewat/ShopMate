@@ -9,10 +9,10 @@ interface Props {
 
 function OrderStatusFilter({ value, onChange }: Props) {
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-xl border border-primary/15 bg-primary/10 p-4">
-      <span className="mr-1 flex items-center gap-2 text-sm font-medium">
-        <Filter className="size-4 text-primary" />
-        Filter by status:
+    <div className="flex flex-wrap items-center gap-2 rounded-xl bg-card p-4 shadow-sm ring-1 ring-border/60">
+      <span className="mr-1 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        <Filter className="size-3.5 text-primary" />
+        Filter:
       </span>
       {ORDER_FILTERS.map((filter) => (
         <button
@@ -21,10 +21,10 @@ function OrderStatusFilter({ value, onChange }: Props) {
           aria-pressed={value === filter}
           onClick={() => onChange(filter)}
           className={cn(
-            "rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors",
+            "rounded-lg px-3 py-1.5 text-xs font-medium transition-all",
             value === filter
-              ? "border-primary bg-primary text-primary-foreground"
-              : "border-primary/20 bg-primary/15 hover:bg-primary/25",
+              ? "bg-primary text-primary-foreground shadow-sm"
+              : "bg-secondary text-muted-foreground hover:bg-secondary/80 hover:text-foreground",
           )}
         >
           {filter}

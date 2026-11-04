@@ -12,12 +12,12 @@ export default function ProductGallery({ images, name }: Props) {
 
   return (
     <div>
-      <div className="aspect-4/3 overflow-hidden rounded-xl border border-primary/15 bg-primary/10">
+      <div className="aspect-4/3 overflow-hidden rounded-xl bg-card p-4 shadow-sm ring-1 ring-border/60">
         {images.length > 0 ? (
           <img
             src={images[active]}
             alt={name}
-            className="size-full object-contain p-4"
+            className="size-full object-contain"
           />
         ) : (
           <div className="grid size-full place-items-center text-muted-foreground">
@@ -27,7 +27,7 @@ export default function ProductGallery({ images, name }: Props) {
       </div>
 
       {images.length > 1 && (
-        <div className="mt-3 flex gap-3 overflow-x-auto pb-1">
+        <div className="mt-3 flex gap-2.5 overflow-x-auto pb-1">
           {images.map((src, i) => (
             <button
               key={src}
@@ -36,13 +36,13 @@ export default function ProductGallery({ images, name }: Props) {
               aria-label={`Show image ${i + 1}`}
               aria-current={i === active}
               className={cn(
-                "size-16 shrink-0 overflow-hidden rounded-lg border-2 bg-primary/10 transition",
+                "size-14 shrink-0 overflow-hidden rounded-lg bg-card p-1 ring-1 transition-all",
                 i === active
-                  ? "border-foreground"
-                  : "border-transparent opacity-70 hover:opacity-100",
+                  ? "ring-2 ring-primary shadow-sm"
+                  : "ring-border/60 opacity-70 hover:opacity-100",
               )}
             >
-              <img src={src} alt="" className="size-full object-cover" />
+              <img src={src} alt="" className="size-full object-contain" />
             </button>
           ))}
         </div>

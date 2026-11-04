@@ -11,8 +11,8 @@ import ShopImageUpload from "./product/ShopImageUpload";
 import { Textarea } from "../ui/textarea";
 
 const cardClass =
-  "space-y-5 rounded-xl border border-primary/15 bg-primary/10 p-5 sm:p-6";
-const inputClass = "h-10 bg-background/50";
+  "space-y-5 rounded-xl bg-card p-5 shadow-sm ring-1 ring-border/60 sm:p-6";
+const inputClass = "h-10 bg-background text-sm ring-1 ring-border/60 focus-visible:ring-primary";
 
 interface Props {
   onSubmit: (payload: BecomeSellerPayload) => Promise<unknown>;
@@ -40,7 +40,7 @@ function BecomeSellerForm({ onSubmit, isPending, serverError }: Props) {
   return (
     <form onSubmit={handleSubmit(submit)} noValidate className="space-y-6">
       <section className={cardClass}>
-        <h2 className="text-lg font-semibold">Shop details</h2>
+        <h2 className="text-base font-semibold text-foreground">Shop details</h2>
 
         <FormField label="Shop name *" error={errors.shopName?.message}>
           <Input
@@ -57,7 +57,7 @@ function BecomeSellerForm({ onSubmit, isPending, serverError }: Props) {
           <Textarea
             maxLength={50}
             aria-invalid={!!errors.shopName}
-            className={inputClass}
+            className="min-h-20 bg-background text-sm ring-1 ring-border/60 focus-visible:ring-primary"
             {...register("shopDescription")}
           />
         </FormField>
@@ -93,7 +93,7 @@ function BecomeSellerForm({ onSubmit, isPending, serverError }: Props) {
 
       <section className={cardClass}>
         <div>
-          <h2 className="text-lg font-semibold">Payout details</h2>
+          <h2 className="text-base font-semibold text-foreground">Payout details</h2>
           <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
             <Lock className="size-3.5" />
             Used only to pay out your earnings. Never shown publicly.
@@ -139,7 +139,7 @@ function BecomeSellerForm({ onSubmit, isPending, serverError }: Props) {
       {serverError && (
         <p
           role="alert"
-          className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive"
+          className="rounded-lg border border-destructive/20 bg-destructive/8 px-3 py-2 text-xs font-medium text-destructive"
         >
           {serverError}
         </p>
@@ -148,7 +148,7 @@ function BecomeSellerForm({ onSubmit, isPending, serverError }: Props) {
       <Button
         type="submit"
         disabled={isPending}
-        className="h-12 w-full text-base"
+        className="h-11 w-full text-sm font-semibold shadow-sm"
       >
         {isPending ? "Submitting..." : "Submit Application"}
       </Button>

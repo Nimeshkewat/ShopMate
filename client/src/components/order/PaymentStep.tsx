@@ -47,14 +47,14 @@ function PaymentStep({
   isAddressLoading,
 }: Props) {
   return (
-    <section className="space-y-5 rounded-xl border border-primary/15 bg-primary/10 p-5 sm:p-6">
-      <h2 className="text-xl font-semibold">Payment Method</h2>
+    <section className="space-y-5 rounded-xl bg-card p-5 shadow-sm ring-1 ring-border/60 sm:p-6">
+      <h2 className="text-base font-semibold text-foreground">Payment Method</h2>
 
       {address && (
-        <div className="flex items-start justify-between gap-3 rounded-lg border border-primary/15 bg-background/40 p-3 text-sm">
+        <div className="flex items-start justify-between gap-3 rounded-lg bg-secondary/50 p-3 ring-1 ring-border/50 text-xs">
           <div className="min-w-0">
-            <p className="text-xs text-muted-foreground">Delivering to</p>
-            <p className="font-medium">{address.fullname}</p>
+            <p className="text-[11px] uppercase tracking-wide text-muted-foreground">Delivering to</p>
+            <p className="mt-0.5 text-sm font-semibold text-foreground">{address.fullname}</p>
             <p className="truncate text-muted-foreground">
               {address.address}, {address.city}
             </p>
@@ -62,7 +62,7 @@ function PaymentStep({
           <button
             type="button"
             onClick={onChangeAddress}
-            className="shrink-0 text-primary hover:underline"
+            className="shrink-0 text-xs font-semibold text-primary hover:underline"
           >
             Change
           </button>
@@ -72,7 +72,7 @@ function PaymentStep({
       {!address && (
         <p
           role="alert"
-          className="flex items-center justify-between gap-3 rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive"
+          className="flex items-center justify-between gap-3 rounded-lg border border-destructive/20 bg-destructive/8 px-3 py-2 text-xs font-medium text-destructive"
         >
           {isAddressLoading
             ? "Loading your address..."
@@ -81,7 +81,7 @@ function PaymentStep({
             <button
               type="button"
               onClick={onChangeAddress}
-              className="shrink-0 font-medium underline"
+              className="shrink-0 underline"
             >
               Choose address
             </button>
@@ -89,7 +89,7 @@ function PaymentStep({
         </p>
       )}
 
-      <div role="radiogroup" aria-label="Payment method" className="space-y-3">
+      <div role="radiogroup" aria-label="Payment method" className="space-y-2.5">
         {options.map(({ value, label, description, icon: Icon }) => {
           const selected = paymentType === value;
           return (
@@ -100,16 +100,18 @@ function PaymentStep({
               aria-checked={selected}
               onClick={() => onPaymentTypeChange(value)}
               className={cn(
-                "flex w-full items-center gap-3 rounded-xl border p-4 text-left transition-colors",
+                "flex w-full items-center gap-3 rounded-xl p-3.5 text-left transition-all ring-1",
                 selected
-                  ? "border-primary bg-primary/10 ring-1 ring-primary"
-                  : "border-primary/15 hover:bg-primary/5",
+                  ? "bg-secondary/60 ring-primary shadow-sm"
+                  : "bg-card ring-border/60 hover:bg-secondary/30",
               )}
             >
-              <Icon className="size-5 shrink-0 text-primary" />
-              <span>
-                <span className="block font-medium">{label}</span>
-                <span className="block text-sm text-muted-foreground">
+              <div className="grid size-9 place-items-center rounded-lg bg-secondary text-primary shrink-0 ring-1 ring-border/40">
+                <Icon className="size-4" />
+              </div>
+              <span className="min-w-0 flex-1">
+                <span className="block text-sm font-semibold text-foreground">{label}</span>
+                <span className="block text-xs text-muted-foreground">
                   {description}
                 </span>
               </span>
@@ -119,7 +121,7 @@ function PaymentStep({
       </div>
 
       <Button
-        className="h-12 w-full text-base"
+        className="h-11 w-full text-sm font-semibold shadow-sm"
         onClick={onPlaceOrder}
         disabled={isPlacing || !address}
       >

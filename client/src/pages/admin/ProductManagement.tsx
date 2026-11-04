@@ -36,13 +36,13 @@ function ProductManagement() {
     <div className="space-y-6">
       <header className="flex flex-wrap items-center gap-3">
         <div>
-          <h1 className="text-2xl font-bold sm:text-3xl">Product Moderation</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="text-xl font-bold tracking-tight sm:text-2xl">Product Moderation</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             Review listings and remove products that break your rules.
           </p>
         </div>
         {!isLoading && total > 0 && (
-          <span className="rounded-full bg-primary/15 px-3 py-1 text-xs font-medium text-primary">
+          <span className="rounded-full bg-primary/12 px-3 py-1 text-xs font-medium text-primary">
             {total} {total === 1 ? "product" : "products"}
           </span>
         )}
@@ -50,11 +50,11 @@ function ProductManagement() {
 
       {isLoading ? (
         <div
-          className="animate-pulse space-y-2 rounded-2xl border bg-card p-4"
+          className="animate-pulse space-y-2 rounded-xl bg-card p-4 ring-1 ring-border/60"
           aria-hidden
         >
           {Array.from({ length: 6 }, (_, i) => (
-            <div key={i} className="h-14 rounded-lg bg-muted" />
+            <div key={i} className="h-12 rounded-lg bg-muted" />
           ))}
         </div>
       ) : isError ? (
@@ -72,7 +72,7 @@ function ProductManagement() {
           </button>
         </p>
       ) : products.length === 0 ? (
-        <p className="py-16 text-center text-muted-foreground">
+        <p className="py-16 text-center text-sm text-muted-foreground">
           No products have been listed yet.
         </p>
       ) : (

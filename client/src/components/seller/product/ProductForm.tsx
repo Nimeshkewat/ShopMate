@@ -12,9 +12,9 @@ import { productSchema, type ProductValues } from "@/schema/product";
 import FormField from "./FormField";
 
 const categoryNames = CATEGORIES.map((c) => c.name);
-const inputClass = "h-10 bg-background/50";
+const inputClass = "h-10 bg-background text-sm ring-1 ring-border/60 focus-visible:ring-primary";
 const cardClass =
-  "space-y-5 rounded-xl border border-primary/15 bg-primary/10 p-5 sm:p-6";
+  "space-y-4 rounded-xl bg-card p-5 shadow-sm ring-1 ring-border/60";
 
 export interface ProductFormProps {
   defaultValues?: Partial<ProductValues>;
@@ -57,99 +57,109 @@ function ProductForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(submit)} noValidate className="space-y-6">
+    <form onSubmit={handleSubmit(submit)} noValidate className="space-y-5">
+      {/* Basic info */}
       <section className={cardClass}>
-        <h2 className="text-lg font-semibold">Product details</h2>
+        <h2 className="text-sm font-semibold text-foreground">Basic details</h2>
 
-        <FormField label="Name *" error={errors.name?.message}>
+        <FormField label="Product title *" error={errors.name?.message}>
           <Input
-            maxLength={50}
+            maxLength={100}
             aria-invalid={!!errors.name}
             className={inputClass}
             {...register("name")}
           />
         </FormField>
 
-        <FormField label="Description *" error={errors.description?.message}>
+        <FormField
+          label="Description *"
+          error={errors.description?.message}
+        >
           <Textarea
-            maxLength={200}
-            rows={3}
+            maxLength={2000}
             aria-invalid={!!errors.description}
-            className="resize-none bg-background/50"
+            className="min-h-24 bg-background text-sm ring-1 ring-border/60 focus-visible:ring-primary"
             {...register("description")}
           />
         </FormField>
+      </section>
 
-        <div className="grid gap-5 sm:grid-cols-2">
+      {/* Pricing & inventory */}
+      <section className={cardClass}>
+        <h2 className="text-sm font-semibold text-foreground">Pricing & inventory</h2>
+
+        <div className="grid gap-4 sm:grid-cols-2">
           <FormField
             label={`Price (${CURRENCY}) *`}
             error={errors.price?.message}
           >
             <Input
               type="number"
-              min={0}
               step="0.01"
-              inputMode="decimal"
+              min="0"
               aria-invalid={!!errors.price}
               className={inputClass}
-              {...register("price")}
+              {...register("price", { valueAsNumber: true })}
             />
           </FormField>
 
-          <FormField label="Stock *" error={errors.stock?.message}>
+          <FormField label="Stock quantity *" error={errors.stock?.message}>
             <Input
               type="number"
-              min={0}
-              inputMode="numeric"
+              step="1"
+              min="0"
               aria-invalid={!!errors.stock}
               className={inputClass}
-              {...register("stock")}
+              {...register("stock", { valueAsNumber: true })}
             />
           </FormField>
         </div>
 
         <FormField label="Category *" error={errors.category?.message}>
           <select
-            aria-invalid={!!errors.category}
             className={cn(
               inputClass,
-              "w-full rounded-md border border-input bg-background/50 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50",
+              "w-full rounded-lg px-3 py-2 text-sm text-foreground",
             )}
+            aria-invalid={!!errors.category}
             {...register("category")}
           >
             <option value="">Select a category</option>
-            {categoryNames.map((c) => (
-              <option key={c} value={c}>
-                {c}
+            {categoryNames.map((name) => (
+              <option key={name} value={name}>
+                {name}
               </option>
             ))}
           </select>
         </FormField>
       </section>
 
+      {/* Images - only on create */}
       {!isEdit && (
         <section className={cardClass}>
-          <h2 className="text-lg font-semibold">Product images</h2>
-          <p className="text-xs text-muted-foreground">
-            Upload up to 4 images.
-          </p>
+          <div>
+            <h2 className="text-sm font-semibold text-foreground">Product images</h2>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              Add up to 5 images. First image is the main display.
+            </p>
+          </div>
 
           <input
             ref={fileInputRef}
             type="file"
             accept="image/*"
             multiple
-            className="sr-only"
             onChange={handleImages}
+            className="hidden"
           />
 
           <Button
             type="button"
             variant="outline"
             onClick={() => fileInputRef.current?.click()}
-            className="w-full"
+            className="w-full h-10 border-dashed border-border/70 text-xs"
           >
-            <Plus className="mr-2 size-4" />
+            <Plus className="mr-2 size-3.5" />
             {images.length
               ? `${images.length} image(s) selected`
               : "Choose images"}
@@ -162,7 +172,7 @@ function ProductForm({
                   key={i}
                   src={src}
                   alt={`Preview ${i + 1}`}
-                  className="aspect-square rounded-lg object-cover"
+                  className="aspect-square rounded-lg object-contain bg-secondary/40 p-1 ring-1 ring-border/50"
                 />
               ))}
             </div>
@@ -173,11 +183,11 @@ function ProductForm({
       <Button
         type="submit"
         disabled={isPending}
-        className="h-12 w-full text-base"
+        className="h-11 w-full text-sm font-semibold shadow-sm"
       >
         {isPending ? (
           <>
-            <Spinner size="sm" className="mr-2" />
+            <Spinner size="xs" className="mr-2" />
             {isEdit ? "Saving..." : "Creating..."}
           </>
         ) : isEdit ? (

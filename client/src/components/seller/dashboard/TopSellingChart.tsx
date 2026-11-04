@@ -11,8 +11,9 @@ import type { SellerDashboardStats } from "@/api/seller/sellerDashboardApi";
 import ChartTooltip from "./ChartToolTip";
 import SellerDashboardCard, { EmptyChart } from "./SellerDashboardCard";
 
-const COLORS = ["#0a7cff", "#10b981", "#f59e0b", "#8b5cf6", "#ef4444"];
-const tick = { fill: "currentColor", fontSize: 12 };
+// Harmonized token-aligned palette
+const COLORS = ["#6366f1", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899"];
+const tick = { fill: "currentColor", fontSize: 11 };
 
 function TopSellingChart({
   products,
@@ -22,7 +23,7 @@ function TopSellingChart({
   const data = products.slice(0, 5);
 
   return (
-    <SellerDashboardCard title="Top Selling Products">
+    <SellerDashboardCard title="Top Selling Products" description="Units sold per product">
       {data.length === 0 ? (
         <EmptyChart />
       ) : (
@@ -53,9 +54,9 @@ function TopSellingChart({
               />
               <Tooltip
                 content={<ChartTooltip />}
-                cursor={{ fill: "currentColor", opacity: 0.08 }}
+                cursor={{ fill: "currentColor", opacity: 0.05 }}
               />
-              <Bar dataKey="totalSold" name="Sold" radius={[0, 6, 6, 0]}>
+              <Bar dataKey="totalSold" name="Sold" radius={[0, 4, 4, 0]}>
                 {data.map((product, i) => (
                   <Cell
                     key={product.productId}

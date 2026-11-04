@@ -13,16 +13,6 @@ function ShopImageUpload({ file, onChange }: Props) {
   const [preview, setPreview] = useState<string>();
   const [error, setError] = useState<string>();
 
-  // useEffect(() => {
-  //   if (!file) {
-  //     setPreview(undefined);
-  //     return;
-  //   }
-  //   const url = URL.createObjectURL(file);
-  //   setPreview(url);
-  //   return () => URL.revokeObjectURL(url);
-  // }, [file]);
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
     e.target.value = ""; // lets the same file be picked again
@@ -38,17 +28,17 @@ function ShopImageUpload({ file, onChange }: Props) {
 
   return (
     <div className="space-y-1.5">
-      <span className="text-sm font-medium">Shop image (optional)</span>
+      <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Shop image (optional)</span>
       <div className="flex items-center gap-4">
         {preview ? (
           <img
             src={preview}
             alt="Shop preview"
-            className="size-20 rounded-xl object-cover"
+            className="size-16 rounded-xl object-cover ring-1 ring-border/50"
           />
         ) : (
-          <span className="grid size-20 place-items-center rounded-xl border border-dashed border-primary/30 bg-primary/10 text-muted-foreground">
-            <Store className="size-7" />
+          <span className="grid size-16 place-items-center rounded-xl border border-dashed border-border/80 bg-secondary/50 text-muted-foreground">
+            <Store className="size-6" />
           </span>
         )}
         <div className="flex flex-wrap gap-2">
@@ -63,6 +53,7 @@ function ShopImageUpload({ file, onChange }: Props) {
             type="button"
             variant="outline"
             size="sm"
+            className="h-8 text-xs"
             onClick={() => inputRef.current?.click()}
           >
             {file ? "Change image" : "Upload image"}
@@ -72,6 +63,7 @@ function ShopImageUpload({ file, onChange }: Props) {
               type="button"
               variant="ghost"
               size="sm"
+              className="h-8 text-xs text-muted-foreground hover:text-destructive"
               onClick={() => onChange(null)}
             >
               Remove
@@ -84,7 +76,7 @@ function ShopImageUpload({ file, onChange }: Props) {
           {error}
         </p>
       ) : (
-        <p className="text-xs text-muted-foreground">
+        <p className="text-[11px] text-muted-foreground">
           PNG or JPG, up to {MAX_SIZE_MB}MB. Shown on your shop page.
         </p>
       )}

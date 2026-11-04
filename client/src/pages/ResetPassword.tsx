@@ -23,34 +23,34 @@ function ResetPassword() {
 
   return (
     <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-md items-center px-4 py-10">
-      <div className="w-full rounded-2xl border border-primary/15 bg-primary/10 p-6 shadow-lg shadow-primary/5 backdrop-blur-xl sm:p-8">
+      <div className="w-full rounded-2xl bg-card p-6 shadow-xl ring-1 ring-border/60 sm:p-8">
         {done ? (
           <div className="space-y-4 text-center">
-            <CircleCheck className="mx-auto size-12 text-emerald-500" />
-            <h1 className="text-2xl font-bold">Password updated</h1>
+            <CircleCheck className="mx-auto size-12 text-emerald-600 dark:text-emerald-400" />
+            <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">Password updated</h1>
             <p className="text-sm text-muted-foreground">
               Your password has been reset. You can now sign in with your new
               password.
             </p>
-            <Button className="h-12 w-full text-base">
+            <Button className="h-10 w-full">
               <Link to="/">Back to Home</Link>
             </Button>
           </div>
         ) : !token ? (
           <div className="space-y-4 text-center">
-            <h1 className="text-2xl font-bold">Invalid reset link</h1>
+            <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">Invalid reset link</h1>
             <p className="text-sm text-muted-foreground">
               This link is missing its reset token. Request a new one from the
               sign in dialog.
             </p>
-            <Button variant="outline" className="h-12 w-full text-base">
+            <Button variant="outline" className="h-10 w-full">
               <Link to="/">Back to Home</Link>
             </Button>
           </div>
         ) : (
           <div className="space-y-5">
             <div>
-              <h1 className="text-2xl font-bold">Reset Password</h1>
+              <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">Reset Password</h1>
               <p className="mt-1 text-sm text-muted-foreground">
                 Choose a new password for your account.
               </p>

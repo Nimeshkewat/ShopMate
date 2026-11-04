@@ -11,7 +11,7 @@ interface Props {
 }
 
 const qtyButton =
-  "size-8 rounded-md border-primary/20 bg-primary/15 text-primary hover:bg-primary hover:text-primary-foreground";
+  "size-7 rounded-md border-border/60 text-foreground hover:bg-secondary";
 
 export default function CartItemRow({
   item,
@@ -19,28 +19,30 @@ export default function CartItemRow({
   onRemove,
 }: Props) {
   return (
-    <li className="flex flex-col gap-4 rounded-xl border border-primary/15 bg-primary/10 p-4 sm:flex-row sm:items-center">
+    <li className="flex flex-col gap-4 rounded-xl bg-card p-4 shadow-sm ring-1 ring-border/60 transition-all sm:flex-row sm:items-center">
       <Link
         to={`/product/${item.productId}`}
-        className="flex min-w-0 flex-1 items-center gap-4"
+        className="flex min-w-0 flex-1 items-center gap-4 group"
       >
-        <img
-          src={item.image}
-          alt={item.name}
-          className="size-20 shrink-0 rounded-lg object-cover"
-        />
+        <div className="size-20 shrink-0 overflow-hidden rounded-lg bg-secondary/50 p-1 ring-1 ring-border/40">
+          <img
+            src={item.image}
+            alt={item.name}
+            className="size-full object-contain"
+          />
+        </div>
         <div className="min-w-0">
-          <p className="line-clamp-2 font-medium hover:text-primary">
+          <p className="line-clamp-2 text-sm font-semibold text-foreground transition-colors group-hover:text-primary">
             {item.name}
           </p>
-          <p className="mt-1 font-semibold text-primary">
+          <p className="mt-1 text-sm font-bold text-primary">
             {formatPrice(item.price)}
           </p>
         </div>
       </Link>
 
       <div className="flex items-center justify-between gap-4 sm:justify-end">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <Button
             variant="outline"
             size="icon"
@@ -49,9 +51,9 @@ export default function CartItemRow({
             onClick={() => onQuantityChange(item.productId, item.quantity - 1)}
             aria-label="Decrease quantity"
           >
-            <Minus className="size-4" />
+            <Minus className="size-3.5" />
           </Button>
-          <span className="w-6 text-center font-medium">{item.quantity}</span>
+          <span className="w-6 text-center text-sm font-medium tabular-nums">{item.quantity}</span>
           <Button
             variant="outline"
             size="icon"
@@ -59,19 +61,19 @@ export default function CartItemRow({
             onClick={() => onQuantityChange(item.productId, item.quantity + 1)}
             aria-label="Increase quantity"
           >
-            <Plus className="size-4" />
+            <Plus className="size-3.5" />
           </Button>
           <Button
             variant="outline"
             size="icon"
-            className="size-8 rounded-md border-destructive/20 bg-destructive/10 text-destructive hover:bg-destructive hover:text-white"
+            className="ml-1 size-7 rounded-md border-destructive/30 bg-destructive/5 text-destructive hover:bg-destructive/15 hover:border-destructive/50"
             onClick={() => onRemove(item.productId)}
             aria-label={`Remove ${item.name}`}
           >
-            <Trash2 className="size-4" />
+            <Trash2 className="size-3.5" />
           </Button>
         </div>
-        <span className="min-w-20 text-right font-semibold">
+        <span className="min-w-20 text-right text-sm font-semibold tabular-nums text-foreground">
           {formatPrice(item.price * item.quantity)}
         </span>
       </div>

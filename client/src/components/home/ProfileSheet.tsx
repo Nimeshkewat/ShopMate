@@ -61,88 +61,88 @@ function ProfileSheet({ open, onOpenChange }: Props) {
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="right"
-        className="flex w-full flex-col gap-0 overflow-y-auto border-l border-white/20 bg-background/40 p-0 backdrop-blur-xl sm:max-w-sm [&>button]:right-5 [&>button]:top-5 [&>button]:rounded-lg [&>button]:bg-primary/15 [&>button]:p-1.5 [&>button]:text-primary"
+        className="flex w-full flex-col gap-0 overflow-y-auto border-l border-border/60 bg-card p-0 shadow-xl sm:max-w-sm [&>button]:right-4 [&>button]:top-4 [&>button]:rounded-lg [&>button]:bg-secondary [&>button]:p-1.5 [&>button]:text-muted-foreground"
       >
-        <SheetHeader className="border-b border-white/10 p-5">
-          <SheetTitle className="text-xl">Profile</SheetTitle>
-          <SheetDescription className="sr-only">
-            Manage your account
-          </SheetDescription>
-        </SheetHeader>
+          <SheetHeader className="border-b border-border/60 p-5">
+            <SheetTitle className="text-base font-semibold text-foreground">Profile</SheetTitle>
+            <SheetDescription className="sr-only">
+              Manage your account
+            </SheetDescription>
+          </SheetHeader>
 
-        {isLoading ? (
-          <div className="flex flex-1 flex-col items-center justify-center gap-3 p-8 text-muted-foreground">
-            <Spinner size="lg" className="text-primary" />
-            <p className="text-sm">Loading profile...</p>
-          </div>
-        ) : (
-          <div className="space-y-8 p-5">
-            <div className=" flex flex-col items-center text-center">
-              {avatarPreview || data?.user.avatar ? (
-                <div className="relative group">
-                  <img
-                    src={avatarPreview || data?.user.avatar}
-                    alt={data?.user.username}
-                    className="size-20 rounded-full object-cover"
-                  />
-                  {avatarPreview && (
-                    <X
-                      size={20}
-                      onClick={() => {
-                        setAvatarFile(null);
-                        setAvatarPreview("");
-                      }}
-                      className="absolute hidden inset-0 group-hover:bg-black/40 text-black/90 group-hover:inline cursor-pointer rounded-full w-full h-full"
-                    />
-                  )}
-                </div>
-              ) : (
-                <div className="grid size-20 place-items-center rounded-full bg-amber-400 text-3xl font-semibold text-amber-950">
-                  {data?.user.username.charAt(0).toUpperCase()}
-                </div>
-              )}
-              <p className="mt-3 text-lg font-semibold">
-                {data?.user.username}
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {data?.user.email}
-              </p>
+          {isLoading ? (
+            <div className="flex flex-1 flex-col items-center justify-center gap-3 p-8 text-muted-foreground">
+              <Spinner size="lg" className="text-primary" />
+              <p className="text-xs">Loading profile...</p>
             </div>
+          ) : (
+                <div className="space-y-6 p-5">
+                  <div className="flex flex-col items-center text-center">
+                    {avatarPreview || data?.user.avatar ? (
+                      <div className="relative group">
+                        <img
+                          src={avatarPreview || data?.user.avatar}
+                          alt={data?.user.username}
+                          className="size-16 rounded-full object-cover ring-2 ring-border"
+                        />
+                        {avatarPreview && (
+                          <X
+                            size={16}
+                            onClick={() => {
+                              setAvatarFile(null);
+                              setAvatarPreview("");
+                            }}
+                            className="absolute hidden inset-0 group-hover:bg-black/50 text-white group-hover:grid place-items-center cursor-pointer rounded-full size-full"
+                          />
+                        )}
+                      </div>
+                    ) : (
+                        <div className="grid size-16 place-items-center rounded-full bg-primary text-xl font-bold text-primary-foreground ring-2 ring-primary/20">
+                          {data?.user.username.charAt(0).toUpperCase()}
+                        </div>
+              )}
+                          <p className="mt-2 text-sm font-semibold text-foreground">
+                            {data?.user.username}
+                          </p>
+                            <p className="text-xs text-muted-foreground">
+                              {data?.user.email}
+                            </p>
+                          </div>
 
-            <ProfileForm
-              key={data?.user._id}
-              onHandle={handleFile}
-              avatarFile={avatarFile}
-            />
+                          <ProfileForm
+                            key={data?.user._id}
+                            onHandle={handleFile}
+                            avatarFile={avatarFile}
+                          />
 
-            <PasswordForm
-              onSubmit={async (values) => {
-                const res = await updatePassword.mutateAsync(values);
-                toast.success(res.message || "Password updated successfully");
-              }}
-              isPending={updatePassword.isPending}
-              serverError={
-                updatePassword.error
-                  ? getErrorMessage(updatePassword.error)
-                  : undefined
-              }
-            />
+                          <PasswordForm
+                            onSubmit={async (values) => {
+                              const res = await updatePassword.mutateAsync(values);
+                              toast.success(res.message || "Password updated successfully");
+                            }}
+                            isPending={updatePassword.isPending}
+                            serverError={
+                              updatePassword.error
+                                ? getErrorMessage(updatePassword.error)
+                                : undefined
+                            }
+                          />
 
-            <Button
-              variant="outline"
-              onClick={handleLogout}
-              loading={isLoggingOut}
-              loadingText="Logging out..."
-              className="h-11 w-full border-destructive/40 bg-destructive/10 text-destructive hover:bg-destructive/20 hover:text-destructive"
-            >
-              <LogOut className="size-4" />
-              Logout
-            </Button>
-          </div>
-        )}
-      </SheetContent>
-    </Sheet>
-  );
+                          <Button
+                            variant="outline"
+                            onClick={handleLogout}
+                            loading={isLoggingOut}
+                            loadingText="Logging out..."
+                            className="h-10 w-full border-destructive/30 bg-destructive/5 text-xs font-semibold text-destructive hover:bg-destructive/15 hover:border-destructive/50"
+                          >
+                            <LogOut className="size-3.5" />
+                            Logout
+                          </Button>
+                      </div>
+                    )}
+                  </SheetContent>
+                </Sheet>
+                );
 }
 
-export default ProfileSheet;
+                export default ProfileSheet;

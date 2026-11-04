@@ -14,6 +14,9 @@ import CartSheet from "@/components/cart/CartSheet";
 import SearchDialog from "@/components/product/SearchDialog";
 import ProfileSheet from "@/components/home/ProfileSheet";
 import MenuSheet from "./MenuSheet";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useProfile } from "@/hooks/user/useProfile";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -26,6 +29,7 @@ export default function Navbar() {
   const { data: cartData, isLoading: cartLoading } = useCart();
   const updateItem = useUpdateCartItem();
   const removeItem = useRemoveFromCart();
+  const { data: profile, isLoading } = useProfile();
 
   const items = isAuthenticated ? (cartData?.cart?.items ?? []) : [];
   const cartCount = items.reduce((n, i) => n + i.quantity, 0);
@@ -78,7 +82,20 @@ export default function Navbar() {
               }
               aria-label={isAuthenticated ? "Open profile" : "Sign in"}
             >
-              <User className="size-4" />
+              {!isAuthenticated ? (
+                <User className="size-4" />
+              ) : isLoading ? (
+                <span>
+                  <Spinner size="sm" />
+                </span>
+              ) : (
+                <Avatar className="size-4 md:size-6">
+                  <AvatarImage src={profile?.user.avatar} />
+                  <AvatarFallback>
+                    {profile?.user.username.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+              )}
             </Button>
             <Button
               variant="ghost"

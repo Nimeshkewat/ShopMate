@@ -60,9 +60,9 @@ function ShippingStep({
   };
 
   return (
-    <section className="rounded-xl border border-primary/15 bg-primary/10 p-5 sm:p-6">
+    <section className="rounded-xl bg-card p-5 shadow-sm ring-1 ring-border/60 sm:p-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Shipping Information</h2>
+        <h2 className="text-base font-semibold text-foreground">Shipping Information</h2>
         {hasSaved && (
           <span className="text-xs text-muted-foreground">
             {addresses.length}/{MAX_ADDRESSES} saved
@@ -73,13 +73,13 @@ function ShippingStep({
       {isError && (
         <p
           role="alert"
-          className="mt-4 flex items-center justify-between gap-3 rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive"
+          className="mt-4 flex items-center justify-between gap-3 rounded-lg border border-destructive/20 bg-destructive/8 px-3 py-2 text-xs font-medium text-destructive"
         >
           Couldn't load your saved addresses.
           <button
             type="button"
             onClick={onRetry}
-            className="shrink-0 font-medium underline"
+            className="shrink-0 underline"
           >
             Retry
           </button>
@@ -96,11 +96,11 @@ function ShippingStep({
             <Button
               type="button"
               variant="outline"
-              className="h-11 w-full justify-between"
+              className="h-10 w-full justify-between border-border/60 text-xs"
               onClick={() => setAdding(false)}
             >
               <span className="flex items-center gap-2">
-                <MapPin className="size-4" />
+                <MapPin className="size-3.5" />
                 Use a saved address
               </span>
               <span className="text-xs text-muted-foreground">
@@ -119,14 +119,14 @@ function ShippingStep({
         </div>
       ) : (
         <div className="mt-5 space-y-3">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-xs text-muted-foreground">
             Select where we should deliver your order.
           </p>
 
           <div
             role="radiogroup"
             aria-label="Saved addresses"
-            className="space-y-3"
+            className="space-y-2.5"
           >
             {addresses.map((address) => (
               <AddressCard
@@ -144,21 +144,21 @@ function ShippingStep({
             <Button
               type="button"
               variant="outline"
-              className="h-11 w-full border-dashed"
+              className="h-10 w-full border-dashed border-border/70 text-xs text-muted-foreground hover:text-foreground"
               onClick={() => setAdding(true)}
             >
-              <Plus className="size-4" />
+              <Plus className="size-3.5" />
               Add new address
             </Button>
           ) : (
-            <p className="text-xs text-muted-foreground">
+            <p className="text-[11px] text-muted-foreground">
               You can save up to {MAX_ADDRESSES} addresses. Delete one to add
               another.
             </p>
           )}
 
           <Button
-            className="h-11 w-full text-base"
+            className="h-11 w-full text-sm font-semibold shadow-sm"
             disabled={!selectedId}
             onClick={onContinue}
           >

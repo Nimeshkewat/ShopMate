@@ -12,7 +12,7 @@ import { formatCompact } from "@/utils/index";
 import ChartTooltip from "./ChartToolTip";
 import SellerDashboardCard, { EmptyChart } from "./SellerDashboardCard";
 
-const tick = { fill: "currentColor", fontSize: 12 };
+const tick = { fill: "currentColor", fontSize: 11 };
 
 function MonthlySalesChart({
   data,
@@ -20,7 +20,7 @@ function MonthlySalesChart({
   data: { month: string; sales: number }[];
 }) {
   return (
-    <SellerDashboardCard title="Monthly Sales">
+    <SellerDashboardCard title="Monthly Sales" description="Revenue generated per month">
       {data.length === 0 ? (
         <EmptyChart />
       ) : (
@@ -31,7 +31,7 @@ function MonthlySalesChart({
                 strokeDasharray="3 3"
                 vertical={false}
                 stroke="currentColor"
-                opacity={0.2}
+                opacity={0.15}
               />
               <XAxis
                 dataKey="month"
@@ -51,9 +51,10 @@ function MonthlySalesChart({
                 type="monotone"
                 dataKey="sales"
                 name="Sales"
-                stroke="#0a7cff"
-                strokeWidth={2}
-                dot={false}
+                stroke="#6366f1"
+                strokeWidth={2.5}
+                dot={{ r: 3, fill: "#6366f1" }}
+                activeDot={{ r: 5 }}
               />
             </LineChart>
           </ResponsiveContainer>

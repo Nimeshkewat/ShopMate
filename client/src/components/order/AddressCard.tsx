@@ -21,10 +21,10 @@ function AddressCard({
   return (
     <div
       className={cn(
-        "flex items-start gap-2 rounded-xl border p-4 transition-colors",
+        "flex items-start gap-3 rounded-xl p-4 transition-all ring-1",
         selected
-          ? "border-primary bg-primary/10 ring-1 ring-primary"
-          : "border-primary/15 hover:bg-primary/5",
+          ?"bg-secondary/60 ring-primary shadow-sm"
+          : "bg-card ring-border/60 hover:bg-secondary/30",
       )}
     >
       <button
@@ -36,33 +36,33 @@ function AddressCard({
       >
         <span
           className={cn(
-            "mt-1 grid size-4 shrink-0 place-items-center rounded-full border",
-            selected ? "border-primary bg-primary" : "border-muted-foreground",
+            "mt-0.5 grid size-4 shrink-0 place-items-center rounded-full border transition-colors",
+            selected ? "border-primary bg-primary" : "border-border/80 bg-background",
           )}
         >
           {selected && (
             <span className="size-1.5 rounded-full bg-primary-foreground" />
           )}
         </span>
-        <span className="min-w-0 space-y-0.5 text-sm">
-          <span className="block font-semibold">{address.fullname}</span>
-          <span className="block text-muted-foreground">{address.phone}</span>
-          <span className="block">{address.address}</span>
-          <span className="block text-muted-foreground">
-            {address.city}, {address.state} {address.pincode}, {address.country}
+          <span className="min-w-0 space-y-0.5 text-xs">
+            <span className="block text-sm font-semibold text-foreground">{address.fullname}</span>
+            <span className="block text-muted-foreground">{address.phone}</span>
+            <span className="block text-foreground">{address.address}</span>
+            <span className="block text-muted-foreground">
+              {address.city}, {address.state} {address.pincode}, {address.country}
+            </span>
           </span>
-        </span>
       </button>
       <Button
         type="button"
         variant="ghost"
         size="icon"
-        className="size-8 shrink-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
+        className="size-7 shrink-0 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
         onClick={onDelete}
         disabled={isDeleting}
         aria-label={`Delete address for ${address.fullname}`}
       >
-        <Trash2 className="size-4" />
+        <Trash2 className="size-3.5" />
       </Button>
     </div>
   );

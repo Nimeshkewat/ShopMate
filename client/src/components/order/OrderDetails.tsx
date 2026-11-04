@@ -21,7 +21,7 @@ import OrderSummary from "@/components/order/OrderSummary";
 import { formatPrice, type OrderTotals } from "@/utils/index";
 
 const cardClass =
-  "rounded-xl border border-primary/15 bg-primary/10 p-5 sm:p-6";
+  "rounded-xl bg-card p-5 shadow-sm ring-1 ring-border/60 sm:p-6";
 
 function DetailsSkeleton() {
   return (
@@ -29,13 +29,13 @@ function DetailsSkeleton() {
       className="mx-auto max-w-6xl animate-pulse space-y-6 px-4 py-6 sm:px-6 sm:py-10"
       aria-hidden
     >
-      <div className="h-8 w-80 max-w-full rounded bg-primary/15" />
+      <div className="h-8 w-80 max-w-full rounded bg-muted" />
       <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
         <div className="space-y-6">
-          <div className="h-56 rounded-xl bg-primary/15" />
-          <div className="h-48 rounded-xl bg-primary/15" />
+          <div className="h-56 rounded-xl bg-muted" />
+          <div className="h-48 rounded-xl bg-muted" />
         </div>
-        <div className="h-72 rounded-xl bg-primary/15" />
+        <div className="h-72 rounded-xl bg-muted" />
       </div>
     </div>
   );
@@ -53,9 +53,9 @@ function OrderDetails() {
   if (isError || !order) {
     return (
       <div className="mx-auto flex min-h-[60vh] max-w-6xl flex-col items-center justify-center gap-3 px-4 text-center">
-        <h1 className="text-2xl font-bold">Order not found</h1>
-        <p className="text-muted-foreground">This order doesn't exist.</p>
-        <Button>
+        <h1 className="text-xl font-bold">Order not found</h1>
+        <p className="text-sm text-muted-foreground">This order doesn't exist.</p>
+        <Button size="sm" >
           <Link to="/orders">Back to My Orders</Link>
         </Button>
       </div>
@@ -92,18 +92,18 @@ function OrderDetails() {
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-10">
       <Link
         to="/orders"
-        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+        className="inline-flex items-center gap-2 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
       >
-        <ArrowLeft className="size-4" />
+        <ArrowLeft className="size-3.5" />
         Back to My Orders
       </Link>
 
       <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <h1 className="break-all text-2xl font-bold sm:text-3xl">
+          <h1 className="break-all text-xl font-bold tracking-tight sm:text-2xl">
             Order #{order._id}
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="mt-1 text-xs text-muted-foreground">
             Placed on {new Date(order.createdAt).toLocaleDateString()}
           </p>
         </div>
@@ -113,8 +113,8 @@ function OrderDetails() {
       <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_340px]">
         <div className="space-y-6">
           <section className={cardClass}>
-            <h2 className="text-lg font-semibold">Items</h2>
-            <ul className="mt-4 divide-y divide-primary/15">
+            <h2 className="text-base font-semibold text-foreground">Items</h2>
+            <ul className="mt-4 divide-y divide-border/40">
               {order.orderItems.map((item) => (
                 <li
                   key={item.productId}
@@ -124,25 +124,25 @@ function OrderDetails() {
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="size-16 shrink-0 rounded-lg object-cover"
+                      className="size-14 shrink-0 rounded-lg bg-secondary/50 object-contain p-1 ring-1 ring-border/40"
                     />
                   ) : (
-                    <span className="grid size-16 shrink-0 place-items-center rounded-lg bg-primary/15 text-muted-foreground">
-                      <ImageOff className="size-6" />
+                    <span className="grid size-14 shrink-0 place-items-center rounded-lg bg-secondary text-muted-foreground ring-1 ring-border/40">
+                      <ImageOff className="size-5" />
                     </span>
                   )}
                   <div className="min-w-0 flex-1">
                     <Link
                       to={`/product/${item.productId}`}
-                      className="line-clamp-2 font-medium hover:text-primary"
+                      className="line-clamp-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
                     >
                       {item.name}
                     </Link>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="mt-0.5 text-xs text-muted-foreground">
                       {formatPrice(item.price)} × {item.quantity}
                     </p>
                   </div>
-                  <p className="font-semibold">
+                  <p className="text-sm font-semibold tabular-nums text-foreground">
                     {formatPrice(item.price * item.quantity)}
                   </p>
                 </li>
@@ -151,35 +151,35 @@ function OrderDetails() {
           </section>
 
           <section className={cardClass}>
-            <h2 className="mb-4 text-lg font-semibold">Order Status</h2>
+            <h2 className="mb-4 text-base font-semibold text-foreground">Order Status</h2>
             <OrderTimeline status={order.orderStatus} />
           </section>
         </div>
 
         <aside className="space-y-6">
           <OrderSummary totals={totals}>
-            <p className="border-t border-primary/15 pt-3 text-sm text-muted-foreground">
+            <p className="border-t border-border/60 pt-3 text-xs text-muted-foreground">
               {paymentText}
             </p>
           </OrderSummary>
 
           <section className={cardClass}>
-            <h2 className="flex items-center gap-2 text-lg font-semibold">
+            <h2 className="flex items-center gap-2 text-base font-semibold text-foreground">
               <MapPin className="size-4 text-primary" />
               Shipping Address
             </h2>
             {address ? (
-              <address className="mt-3 space-y-0.5 text-sm not-italic">
-                <p className="font-medium">{address.fullname}</p>
+              <address className="mt-3 space-y-0.5 text-xs not-italic">
+                <p className="font-semibold text-foreground">{address.fullname}</p>
                 <p className="text-muted-foreground">{address.phone}</p>
-                <p>{address.address}</p>
+                <p className="text-foreground">{address.address}</p>
                 <p className="text-muted-foreground">
                   {address.city}, {address.state} {address.pincode}
                 </p>
                 <p className="text-muted-foreground">{address.country}</p>
               </address>
             ) : (
-              <p className="mt-3 text-sm text-muted-foreground">
+              <p className="mt-3 text-xs text-muted-foreground">
                 Address no longer available.
               </p>
             )}
@@ -195,7 +195,7 @@ function OrderDetails() {
                   render={
                     <Button
                       variant="outline"
-                      className="h-11 w-full border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/20 hover:text-destructive"
+                      className="h-10 w-full border-destructive/30 bg-destructive/5 text-xs font-semibold text-destructive hover:bg-destructive/15 hover:border-destructive/50"
                       disabled={cancelOrder.isPending}
                     />
                   }
@@ -206,7 +206,7 @@ function OrderDetails() {
                   <AlertDialogHeader>
                     <AlertDialogTitle>Cancel this order?</AlertDialogTitle>
                     <AlertDialogDescription>
-                      This can't be undone.
+                      This action cannot be undone.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
@@ -231,7 +231,7 @@ function OrderDetails() {
                 </AlertDialogContent>
               </AlertDialog>
               {order.paidAt && (
-                <p className="text-xs text-muted-foreground">
+                <p className="text-[11px] text-muted-foreground">
                   Refunds for online payments are handled by our team after
                   cancellation.
                 </p>

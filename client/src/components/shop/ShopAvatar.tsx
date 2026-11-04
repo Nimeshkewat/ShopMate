@@ -12,16 +12,16 @@ function ShopAvatar({ image, name, className }: Props) {
     <img
       src={image}
       alt={name}
-      className={cn("size-16 shrink-0 rounded-xl object-cover", className)}
+      className={cn("size-14 shrink-0 rounded-xl object-cover ring-1 ring-border/50", className)}
     />
   ) : (
     <span
       className={cn(
-        "grid size-16 shrink-0 place-items-center rounded-xl bg-primary/15 text-primary",
+        "grid size-14 shrink-0 place-items-center rounded-xl bg-secondary text-primary ring-1 ring-border/50",
         className,
       )}
     >
-      <Store className="size-7" />
+      <Store className="size-6" />
     </span>
   );
 }

@@ -51,25 +51,23 @@ function Products() {
       filters={filters}
       onFiltersChange={setFilters}
       category={category}
-      onCategoryChange={(value) => setParam("category", value)}
+      onCategoryChange={(c) => setParam("category", c)}
       categories={categoryNames}
       onReset={reset}
     />
   );
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
-      <div className="lg:grid lg:grid-cols-[260px_1fr] lg:gap-6">
-        <aside className="hidden self-start lg:sticky lg:top-20 lg:block">
-          {filtersPanel}
-        </aside>
+    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-10">
+      <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
+        <aside className="hidden lg:block">{filtersPanel}</aside>
 
-        <div className="min-w-0">
-          <div className="flex gap-3">
+        <div className="space-y-6">
+          <div className="flex items-center gap-3">
             <Button
               variant="outline"
               size="icon"
-              className="size-10 shrink-0 lg:hidden"
+              className="size-10 shrink-0 border-border/60 lg:hidden"
               onClick={() => setFiltersOpen(true)}
               aria-label="Open filters"
             >
@@ -83,14 +81,14 @@ function Products() {
                 onChange={(e) => setParam("search", e.target.value)}
                 placeholder="Search products..."
                 aria-label="Search products"
-                className="h-10 bg-primary/10 pl-10"
+                className="h-10 bg-card pl-9 text-sm ring-1 ring-border/60 focus-visible:ring-primary"
               />
             </div>
 
             <Button
               variant="outline"
               onClick={() => setAiOpen(true)}
-              className="h-10 shrink-0 border-2 border-fuchsia-500/70 bg-background/40 hover:bg-fuchsia-500/10"
+              className="h-10 shrink-0 border-primary/30 bg-primary/8 text-primary hover:bg-primary/15"
             >
               <Sparkles className="size-4" />
               <span className="hidden sm:inline">AI Search</span>
@@ -118,7 +116,7 @@ function Products() {
       <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
         <SheetContent
           side="left"
-          className="w-80 gap-0 overflow-y-auto border-r border-white/20 bg-background/60 p-4 backdrop-blur-xl sm:max-w-xs [&>button]:right-4 [&>button]:top-4 [&>button]:rounded-lg [&>button]:bg-primary/15 [&>button]:p-1.5 [&>button]:text-primary"
+          className="w-80 gap-0 overflow-y-auto border-r border-border/60 bg-card p-4 shadow-xl sm:max-w-xs [&>button]:right-4 [&>button]:top-4 [&>button]:rounded-lg [&>button]:bg-secondary [&>button]:p-1.5 [&>button]:text-muted-foreground"
         >
           <SheetHeader className="sr-only">
             <SheetTitle>Filters</SheetTitle>

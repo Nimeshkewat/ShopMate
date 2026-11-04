@@ -14,8 +14,10 @@ const availabilityOptions: StockStatus[] = ["in", "limited", "out"];
 
 const optionClass = (active: boolean) =>
   cn(
-    "w-full rounded-lg px-3 py-2 text-left text-sm transition-colors hover:bg-primary/15",
-    active && "bg-primary/20 font-medium text-primary hover:bg-primary/20",
+    "w-full rounded-lg px-2.5 py-1.5 text-left text-xs transition-colors",
+    active
+      ? "bg-primary text-primary-foreground font-semibold shadow-sm"
+      : "text-muted-foreground hover:bg-secondary hover:text-foreground",
   );
 
 interface Props {
@@ -44,60 +46,58 @@ function ProductFilters({
     category !== null;
 
   return (
-    <div className="space-y-6 rounded-xl border border-primary/15 bg-primary/10 p-5">
+    <div className="space-y-6 rounded-xl bg-card p-5 shadow-sm ring-1 ring-border/60">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Filters</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Filters</h2>
         {hasActive && (
           <button
             type="button"
             onClick={onReset}
-            className="text-xs text-primary hover:underline"
+            className="text-xs font-semibold text-primary hover:underline"
           >
-            Clear all
+            Reset all
           </button>
         )}
       </div>
 
       <section>
-        <h3 className="mb-4 font-semibold">Price Range</h3>
-        <Slider
-          value={[filters.maxPrice]}
-          min={0}
-          max={MAX_PRICE}
-          step={50}
-          onValueChange={(value) => {
-            const newValue = Array.isArray(value) ? value[0] : value;
-            set({ maxPrice: newValue });
-          }}
-          aria-label="Maximum price"
-        />
-        <div className="mt-2 flex justify-between text-xs text-muted-foreground">
-          <span>{CURRENCY}0</span>
-          <span>
+        <div className="mb-3 flex items-center justify-between text-xs">
+          <span className="font-semibold text-foreground">Max Price</span>
+          <span className="font-bold text-primary tabular-nums">
             {CURRENCY}
             {filters.maxPrice}
           </span>
         </div>
+        <Slider
+          value={[filters.maxPrice]}
+          max={MAX_PRICE}
+          step={50}
+          onValueChange={(val) => {
+            const v = Array.isArray(val) ? val[0] : val;
+            set({ maxPrice: v });
+          }}
+        />
       </section>
 
       <section>
-        <h3 className="mb-2 font-semibold">Rating</h3>
+        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Customer Rating</h3>
         <ul className="space-y-1">
-          {ratingOptions.map((n) => (
-            <li key={n}>
+          {ratingOptions.map((rating) => (
+            <li key={rating}>
               <button
                 type="button"
-                aria-pressed={filters.minRating === n}
+                aria-pressed={filters.minRating === rating}
                 onClick={() =>
-                  set({ minRating: filters.minRating === n ? null : n })
+                  set({
+                    minRating: filters.minRating === rating ? null : rating,
+                  })
                 }
-                className={cn(
-                  optionClass(filters.minRating === n),
-                  "flex items-center gap-2",
-                )}
+                className={optionClass(filters.minRating === rating)}
               >
-                <RatingStars rating={n} />
-                <span className="text-xs text-muted-foreground">& up</span>
+                <span className="flex items-center gap-1.5">
+                  <RatingStars rating={rating} className="size-3" />
+                  <span>{rating}★ & above</span>
+                </span>
               </button>
             </li>
           ))}
@@ -105,7 +105,7 @@ function ProductFilters({
       </section>
 
       <section>
-        <h3 className="mb-2 font-semibold">Availability</h3>
+        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Availability</h3>
         <ul className="space-y-1">
           {availabilityOptions.map((status) => (
             <li key={status}>
@@ -128,8 +128,8 @@ function ProductFilters({
       </section>
 
       <section>
-        <h3 className="mb-2 font-semibold">Category</h3>
-        <ul className="space-y-1">
+        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Category</h3>
+        <ul className="space-y-1 max-h-48 overflow-y-auto pr-1">
           <li>
             <button
               type="button"

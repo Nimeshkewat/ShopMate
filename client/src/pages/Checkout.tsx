@@ -39,7 +39,7 @@ function Checkout() {
 
   if (cartLoading) {
     return (
-      <p className="mx-auto max-w-4xl px-4 py-10 text-muted-foreground sm:px-6">
+      <p className="mx-auto max-w-4xl px-4 py-10 text-xs text-muted-foreground sm:px-6">
         Loading checkout...
       </p>
     );
@@ -53,7 +53,7 @@ function Checkout() {
       <Button
         variant="outline"
         size="icon"
-        className="border-primary/20 bg-primary/10 text-primary"
+        className="size-8 rounded-lg border-border/60 text-foreground hover:bg-secondary"
         onClick={goBack}
         aria-label="Go back"
       >

@@ -21,59 +21,60 @@ interface Props {
   onCancel: (order: Order) => void;
   isCancelling?: boolean;
 }
-const actionButton = "border-primary/20 bg-primary/15 hover:bg-primary/25";
+
+const actionButton = "h-8 text-xs font-medium border-border/60 hover:bg-secondary";
 
 function OrderCard({ order, onTrack, onCancel, isCancelling }: Props) {
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
 
   return (
-    <article className="rounded-xl border border-primary/15 bg-primary/10 p-5 sm:p-6">
+    <article className="rounded-xl bg-card p-5 shadow-sm ring-1 ring-border/60 sm:p-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <h2 className="break-all font-semibold sm:text-lg">
+          <h2 className="break-all text-sm font-semibold text-foreground sm:text-base">
             Order #{order._id}
           </h2>
-          <p className="text-sm text-muted-foreground">
+          <p className="mt-0.5 text-xs text-muted-foreground">
             Placed on {new Date(order.createdAt).toLocaleDateString()}
           </p>
         </div>
         <div className="flex items-center gap-4 sm:gap-5">
           <OrderStatusBadge status={order.orderStatus} />
           <div className="md:text-right">
-            <p className="text-xs text-muted-foreground">Total</p>
-            <p className="text-xl font-bold text-primary">
+            <p className="text-[11px] uppercase tracking-wide text-muted-foreground">Total</p>
+            <p className="text-lg font-bold text-primary tabular-nums">
               {formatPrice(order.totalPrice)}
             </p>
           </div>
         </div>
       </div>
 
-      <ul className="mt-4 space-y-2 rounded-lg bg-background/40 p-3">
+      <ul className="mt-4 space-y-2 rounded-lg bg-secondary/40 p-3 ring-1 ring-border/40">
         {order.orderItems.map((item) => (
           <li key={item.productId} className="flex items-center gap-3">
             {item.image ? (
               <img
                 src={item.image}
                 alt={item.name}
-                className="size-12 shrink-0 rounded-lg object-cover"
+                className="size-11 shrink-0 rounded-lg bg-background object-contain p-1 ring-1 ring-border/40"
               />
             ) : (
-              <span className="grid size-12 shrink-0 place-items-center rounded-lg bg-primary/15 text-muted-foreground">
-                <ImageOff className="size-5" />
+              <span className="grid size-11 shrink-0 place-items-center rounded-lg bg-secondary text-muted-foreground ring-1 ring-border/40">
+                <ImageOff className="size-4" />
               </span>
             )}
             <div className="min-w-0 flex-1">
-              <p className="truncate font-medium">{item.name}</p>
-              <p className="text-sm text-muted-foreground">
-                Quantity: {item.quantity}
+              <p className="truncate text-xs font-medium text-foreground">{item.name}</p>
+              <p className="text-[11px] text-muted-foreground">
+                Qty: {item.quantity}
               </p>
             </div>
-            <div className="text-right text-sm">
-              <p className="font-medium">
+            <div className="text-right text-xs">
+              <p className="font-semibold text-foreground tabular-nums">
                 {formatPrice(item.price * item.quantity)}
               </p>
               {item.quantity > 1 && (
-                <p className="text-xs text-muted-foreground">
+                <p className="text-[10px] text-muted-foreground tabular-nums">
                   {formatPrice(item.price)} each
                 </p>
               )}
@@ -82,7 +83,7 @@ function OrderCard({ order, onTrack, onCancel, isCancelling }: Props) {
         ))}
       </ul>
 
-      <div className="mt-4 flex flex-wrap gap-3 border-t border-primary/15 pt-4">
+      <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border/60 pt-4">
         <Button variant="outline" size="sm" className={actionButton}>
           <Link to={`/orders/${order._id}`}>View Details</Link>
         </Button>
@@ -104,7 +105,7 @@ function OrderCard({ order, onTrack, onCancel, isCancelling }: Props) {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="ml-auto border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/20 hover:text-destructive"
+                  className="ml-auto h-8 text-xs border-destructive/30 bg-destructive/5 text-destructive hover:bg-destructive/15 hover:border-destructive/50"
                   disabled={isCancelling}
                 />
               }
@@ -115,7 +116,7 @@ function OrderCard({ order, onTrack, onCancel, isCancelling }: Props) {
               <AlertDialogHeader>
                 <AlertDialogTitle>Cancel this order?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This can't be undone.
+                  This action cannot be undone.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
