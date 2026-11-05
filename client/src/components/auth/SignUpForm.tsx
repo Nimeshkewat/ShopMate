@@ -76,6 +76,7 @@ function SignupForm({
         <button
           type="button"
           onClick={onSwitchToLogin}
+          disabled={isPending}
           className="font-medium text-primary hover:underline"
         >
           Sign in

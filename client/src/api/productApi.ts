@@ -2,6 +2,7 @@ import { api } from "./apiClient";
 import type {
   AISearchResponse,
   ProductDetailsResponse,
+  ProductPriceBoundsResponse,
   ProductQuery,
   ProductsResponse,
 } from "@/types/product";
@@ -73,3 +74,11 @@ export const fetchAiFilteredProducts = async (
   });
   return response.data;
 };
+
+export const fetchPriceBounds =
+  async (): Promise<ProductPriceBoundsResponse> => {
+    const response = await api.get<ProductPriceBoundsResponse>(
+      `${BASE}/price-bounds`,
+    );
+    return response.data;
+  };

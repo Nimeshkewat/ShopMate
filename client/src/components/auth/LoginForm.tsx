@@ -52,6 +52,7 @@ export default function LoginForm({
         <button
           type="button"
           onClick={onForgotPassword}
+          disabled={isPending}
           className="text-sm text-primary hover:underline"
         >
           Forgot password?
@@ -81,6 +82,7 @@ export default function LoginForm({
         <button
           type="button"
           onClick={onSwitchToSignup}
+          disabled={isPending}
           className="font-medium text-primary hover:underline"
         >
           Sign up

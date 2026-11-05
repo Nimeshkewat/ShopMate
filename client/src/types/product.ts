@@ -51,3 +51,8 @@ export interface AISearchResponse {
   message?: string;
   products: Product[];
 }
+
+export interface ProductPriceBoundsResponse {
+  minPrice: number;
+  maxPrice: number;
+}

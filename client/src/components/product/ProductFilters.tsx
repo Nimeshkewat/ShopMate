@@ -8,6 +8,7 @@ import {
 } from "../../utils/index";
 import RatingStars from "../review/RatingStars";
 import { CURRENCY } from "@/utils/constants";
+import { usePriceBounds } from "@/hooks/product/usePriceBounds";
 
 const ratingOptions = [4, 3, 2, 1];
 const availabilityOptions: StockStatus[] = ["in", "limited", "out"];
@@ -37,10 +38,14 @@ function ProductFilters({
   categories,
   onReset,
 }: Props) {
+  const { data: priceBounds } = usePriceBounds();
+  const minPrice = priceBounds?.minPrice ?? 0;
+  const maxPrice = priceBounds?.maxPrice ?? MAX_PRICE;
+  const sliderPrice = Math.min(maxPrice, Math.max(minPrice, filters.maxPrice));
   const set = (patch: Partial<ProductFilterValues>) =>
     onFiltersChange({ ...filters, ...patch });
   const hasActive =
-    filters.maxPrice !== MAX_PRICE ||
+    (filters.maxPrice !== MAX_PRICE && sliderPrice < maxPrice) ||
     filters.minRating !== null ||
     filters.availability !== null ||
     category !== null;
@@ -48,7 +53,9 @@ function ProductFilters({
   return (
     <div className="space-y-6 rounded-xl bg-card p-5 shadow-sm ring-1 ring-border/60">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Filters</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          Filters
+        </h2>
         {hasActive && (
           <button
             type="button"
@@ -65,12 +72,13 @@ function ProductFilters({
           <span className="font-semibold text-foreground">Max Price</span>
           <span className="font-bold text-primary tabular-nums">
             {CURRENCY}
-            {filters.maxPrice}
+            {sliderPrice}
           </span>
         </div>
         <Slider
-          value={[filters.maxPrice]}
-          max={MAX_PRICE}
+          value={[sliderPrice]}
+          min={minPrice}
+          max={maxPrice}
           step={50}
           onValueChange={(val) => {
             const v = Array.isArray(val) ? val[0] : val;
@@ -80,7 +88,9 @@ function ProductFilters({
       </section>
 
       <section>
-        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Customer Rating</h3>
+        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          Customer Rating
+        </h3>
         <ul className="space-y-1">
           {ratingOptions.map((rating) => (
             <li key={rating}>
@@ -105,7 +115,9 @@ function ProductFilters({
       </section>
 
       <section>
-        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Availability</h3>
+        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          Availability
+        </h3>
         <ul className="space-y-1">
           {availabilityOptions.map((status) => (
             <li key={status}>
@@ -128,7 +140,9 @@ function ProductFilters({
       </section>
 
       <section>
-        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Category</h3>
+        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          Category
+        </h3>
         <ul className="space-y-1 max-h-48 overflow-y-auto pr-1">
           <li>
             <button
