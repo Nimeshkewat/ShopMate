@@ -1,4 +1,5 @@
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { Star } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -9,30 +10,34 @@ import { useProductReviews } from "@/hooks/review/useProductReviews";
 import { cn } from "@/lib/utils";
 import RatingStars from "./RatingStars";
 
+interface ReviewFormValues {
+  rating: number;
+  comment: string;
+}
+
 export default function ReviewsTab({ productId }: { productId: string }) {
   const { data, isLoading } = useProductReviews(productId);
   const createReview = useCreateReview();
   const reviews = data?.reviews ?? [];
 
-  const [rating, setRating] = useState(0);
   const [hovered, setHovered] = useState(0);
-  const [comment, setComment] = useState("");
+  const { control, register, handleSubmit, reset } = useForm<ReviewFormValues>({
+    defaultValues: { rating: 0, comment: "" },
+  });
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (rating === 0) {
+  const submit = async (values: ReviewFormValues) => {
+    if (values.rating === 0) {
       toast.error("Please select a rating");
       return;
     }
     try {
       const res = await createReview.mutateAsync({
         productId,
-        rating,
-        comment: comment.trim(),
+        rating: values.rating,
+        comment: values.comment.trim(),
       });
       toast.success(res?.message || "Review submitted");
-      setRating(0);
-      setComment("");
+      reset();
     } catch {
       toast.error("You can only review a product you've purchased");
     }
@@ -40,42 +45,52 @@ export default function ReviewsTab({ productId }: { productId: string }) {
 
   return (
     <div className="space-y-8">
-      <form onSubmit={handleSubmit} className="space-y-4 rounded-xl bg-card p-5 shadow-sm ring-1 ring-border/60">
-        <h2 className="text-base font-semibold text-foreground">Leave a Review</h2>
+      <form
+        onSubmit={handleSubmit(submit)}
+        noValidate
+        className="space-y-4 rounded-xl bg-card p-5 shadow-sm ring-1 ring-border/60"
+      >
+        <h2 className="text-base font-semibold text-foreground">
+          Leave a Review
+        </h2>
 
         <div className="flex gap-1" onMouseLeave={() => setHovered(0)}>
-          {[1, 2, 3, 4, 5].map((n) => (
-            <button
-              key={n}
-              type="button"
-              onClick={() => setRating(n)}
-              onMouseEnter={() => setHovered(n)}
-              aria-label={`${n} star${n > 1 ? "s" : ""}`}
-              aria-pressed={rating === n}
-            >
-              <Star
-                className={cn(
-                  "size-6 transition-colors",
-                  n <= (hovered || rating)
-                    ? "fill-amber-400 text-amber-400"
-                    : "text-muted-foreground/30",
-                )}
-              />
-            </button>
-          ))}
+          <Controller
+            name="rating"
+            control={control}
+            render={({ field }) => (
+              <>
+                {[1, 2, 3, 4, 5].map((n) => (
+                  <button
+                    key={n}
+                    type="button"
+                    onClick={() => field.onChange(n)}
+                    onMouseEnter={() => setHovered(n)}
+                    aria-label={`${n} star${n > 1 ? "s" : ""}`}
+                    aria-pressed={field.value === n}
+                  >
+                    <Star
+                      className={cn(
+                        "size-6 transition-colors",
+                        n <= (hovered || field.value)
+                          ? "fill-amber-400 text-amber-400"
+                          : "text-muted-foreground/30",
+                      )}
+                    />
+                  </button>
+                ))}
+              </>
+            )}
+          />
         </div>
 
         <div>
           <Textarea
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
+            {...register("comment")}
             placeholder="Share your experience with this product"
             maxLength={300}
             className="min-h-24 bg-background text-sm ring-1 ring-border/60"
           />
-          <p className="mt-1 text-right text-[11px] text-muted-foreground">
-            {comment.length}/300
-          </p>
         </div>
 
         <Button
@@ -89,7 +104,9 @@ export default function ReviewsTab({ productId }: { productId: string }) {
       </form>
 
       <section className="space-y-4">
-        <h2 className="text-base font-semibold text-foreground">Customer Reviews</h2>
+        <h2 className="text-base font-semibold text-foreground">
+          Customer Reviews
+        </h2>
         {isLoading ? (
           <div className="flex items-center gap-2 py-4 text-xs text-muted-foreground">
             <Spinner size="xs" className="text-primary" />
@@ -119,7 +136,9 @@ export default function ReviewsTab({ productId }: { productId: string }) {
                 )}
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
-                    <p className="text-xs font-semibold text-foreground">{review.userId.username}</p>
+                    <p className="text-xs font-semibold text-foreground">
+                      {review.userId.username}
+                    </p>
                     <RatingStars rating={review.rating} className="size-3" />
                     <time
                       className="text-[11px] text-muted-foreground"

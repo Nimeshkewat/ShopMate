@@ -1,4 +1,5 @@
-import { useState, type SubmitEvent } from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
 import {
@@ -113,21 +114,32 @@ interface Props {
   onOpenChange: (open: boolean) => void;
 }
 
+interface SearchFormValues {
+  query: string;
+}
+
 export default function SearchDialog({ open, onOpenChange }: Props) {
   const [query, setQuery] = useState("");
+  const { register, handleSubmit, reset } = useForm<SearchFormValues>({
+    defaultValues: { query: "" },
+  });
+  const queryField = register("query");
   const navigate = useNavigate();
   const trimmed = query.trim();
   const debounced = useDebounce(trimmed, 300);
 
   const handleOpenChange = (next: boolean) => {
     onOpenChange(next);
-    if (!next) setQuery("");
+    if (!next) {
+      reset();
+      setQuery("");
+    }
   };
 
-  const handleSubmit = (e: SubmitEvent) => {
-    e.preventDefault();
-    if (!trimmed) return;
-    navigate(`/products?search=${encodeURIComponent(trimmed)}`);
+  const submit = (values: SearchFormValues) => {
+    const searchTerm = values.query.trim();
+    if (!searchTerm) return;
+    navigate(`/products?search=${encodeURIComponent(searchTerm)}`);
     handleOpenChange(false);
   };
 
@@ -135,17 +147,22 @@ export default function SearchDialog({ open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="top-6 translate-y-0 gap-4 border-border/60 bg-card p-5 shadow-xl sm:max-w-2xl sm:p-6 [&>button]:right-4 [&>button]:top-4 [&>button]:rounded-lg [&>button]:bg-secondary [&>button]:p-1.5 [&>button]:text-muted-foreground">
         <DialogHeader>
-          <DialogTitle className="text-lg font-semibold text-foreground">Search Products</DialogTitle>
+          <DialogTitle className="text-lg font-semibold text-foreground">
+            Search Products
+          </DialogTitle>
           <DialogDescription className="sr-only">
             Type to search the product catalog
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="relative">
+        <form onSubmit={handleSubmit(submit)} className="relative">
           <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            {...queryField}
+            onChange={(event) => {
+              queryField.onChange(event);
+              setQuery(event.target.value);
+            }}
             placeholder="Search for products..."
             className="h-11 bg-background pl-9 text-sm ring-1 ring-border/60 focus-visible:ring-primary"
             autoFocus

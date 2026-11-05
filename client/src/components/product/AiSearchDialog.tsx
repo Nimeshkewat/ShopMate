@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useForm } from "react-hook-form";
 import { Search, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +16,10 @@ const examples = [
   "Find all red t-shirts for me",
 ];
 
+interface SearchFormValues {
+  query: string;
+}
+
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -24,12 +28,12 @@ interface Props {
 }
 
 function AISearchDialog({ open, onOpenChange, onSearch, isPending }: Props) {
-  const [query, setQuery] = useState("");
+  const { register, handleSubmit, setValue } = useForm<SearchFormValues>({
+    defaultValues: { query: "" },
+  });
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const trimmed = query.trim();
-    if (!trimmed) return;
+  const submit = (values: SearchFormValues) => {
+    const trimmed = values.query.trim();
     onSearch(trimmed);
     onOpenChange(false);
   };
@@ -50,12 +54,13 @@ function AISearchDialog({ open, onOpenChange, onSearch, isPending }: Props) {
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(submit)} className="space-y-4">
           <div className="relative">
             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              {...register("query", {
+                validate: (value) => value.trim().length > 0,
+              })}
               placeholder="e.g., 'A wireless headphone for gaming with good bass'"
               className="h-12 pl-10"
               required
@@ -78,7 +83,7 @@ function AISearchDialog({ open, onOpenChange, onSearch, isPending }: Props) {
               <button
                 key={example}
                 type="button"
-                onClick={() => setQuery(example)}
+                onClick={() => setValue("query", example, { shouldDirty: true })}
                 className="rounded-full bg-muted px-3 py-1.5 text-xs transition-colors hover:bg-primary/20"
               >
                 {example}

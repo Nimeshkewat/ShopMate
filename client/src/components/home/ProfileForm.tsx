@@ -1,5 +1,4 @@
-import { useRef, useState, type ChangeEvent, type SubmitEvent } from "react";
-import { Upload } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useProfile } from "@/hooks/user/useProfile";
@@ -8,38 +7,44 @@ import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface ProfileFormProps {
-  onHandle: (e: ChangeEvent<HTMLInputElement>) => void;
   avatarFile: File | null;
+  onUpdateSuccess: () => void;
 }
 
-function ProfileForm({ onHandle, avatarFile }: ProfileFormProps) {
+interface ProfileFormValues {
+  username: string;
+  email: string;
+}
+
+function ProfileForm({ avatarFile, onUpdateSuccess }: ProfileFormProps) {
   const { data } = useProfile();
   const { mutate: updateProfile, isPending } = useUpdateProfile();
   const queryClient = useQueryClient();
 
-  const [username, setUsername] = useState(data?.user.username ?? "");
-  const [email, setEmail] = useState(data?.user.email ?? "");
-
-  //* snapshot of last saved values, used to detect real changes
-  const [originalData, setOriginalData] = useState({
-    username: data?.user.username || "",
-    hasOrignalAvatar: data?.user.avatar ? true : false,
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { isDirty },
+  } = useForm<ProfileFormValues>({
+    defaultValues: {
+      username: data?.user.username ?? "",
+      email: data?.user.email ?? "",
+    },
   });
 
-  const hasChanges = username !== originalData.username || avatarFile !== null;
-  const fileRef = useRef<HTMLInputElement>(null);
-
-  const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const hasChanges = isDirty || avatarFile !== null;
+  const submit = (values: ProfileFormValues) => {
     const formData = new FormData();
-    formData.append("username", username);
+    formData.append("username", values.username);
     if (avatarFile) {
       formData.append("avatar", avatarFile);
     }
     updateProfile(formData, {
       onSuccess: async (data) => {
         toast.success(data.message || "Profile Updated");
-        setOriginalData((prev) => ({ ...prev, username }));
+        reset(values);
+        onUpdateSuccess();
         await queryClient.invalidateQueries({ queryKey: ["profile"] });
       },
       onError: (error) => {
@@ -49,12 +54,11 @@ function ProfileForm({ onHandle, avatarFile }: ProfileFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3">
+    <form onSubmit={handleSubmit(submit)} className="space-y-3">
       <h3 className="text-lg font-semibold">Update Profile</h3>
 
       <Input
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        {...register("username", { required: true, maxLength: 50 })}
         placeholder="Full name"
         aria-label="Full name"
         maxLength={50}
@@ -63,32 +67,12 @@ function ProfileForm({ onHandle, avatarFile }: ProfileFormProps) {
       />
       <Input
         type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        {...register("email")}
         placeholder="Email address"
         aria-label="Email address"
-        required
         readOnly
         className="h-11 bg-background/50 text-muted-foreground"
       />
-
-      <input
-        ref={fileRef}
-        type="file"
-        accept="image/*"
-        onChange={onHandle}
-        className="hidden"
-      />
-      <button
-        type="button"
-        onClick={() => fileRef.current?.click()}
-        className="flex max-w-full items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
-      >
-        <Upload className="size-4 shrink-0" />
-        <span className="truncate">
-          {avatarFile ? avatarFile.name : "Upload Avatar"}
-        </span>
-      </button>
 
       <Button
         type="submit"

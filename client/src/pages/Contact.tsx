@@ -1,24 +1,23 @@
-import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+
+interface ContactFormValues {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
 
 export const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
+  const { register, handleSubmit } = useForm<ContactFormValues>({
+    defaultValues: {
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    },
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Submitted Contact Form Data:", formData);
-  };
+  const onSubmit = (_values: ContactFormValues) => {};
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center px-4 py-16 transition-colors duration-300">
@@ -33,11 +32,8 @@ export const Contact = () => {
           </p>
         </header>
 
-        {/* Responsive Content Columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start pt-4">
-          {/* Left Column: Direct Office Links / Info */}
           <div className="space-y-8 pr-0 md:pr-8">
-            {/* Email Field info */}
             <div className="flex items-start gap-4 group">
               <div className="w-10 h-10 rounded-full border border-border/80 flex items-center justify-center text-muted-foreground bg-card/30 group-hover:text-foreground transition-colors duration-200 shrink-0">
                 <svg
@@ -124,17 +120,13 @@ export const Contact = () => {
             </div>
           </div>
 
-          {/* Right Column: Encapsulated Input Form Panel */}
           <div className="bg-card/50 border border-border/80 rounded-xl p-6 md:p-8 shadow-md">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Row Grid: Name & Email */}
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <input
                     type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
+                    {...register("name", { required: true })}
                     placeholder="Your Name"
                     required
                     className="w-full bg-background border border-input rounded-md px-4 py-3 text-sm placeholder:text-muted-foreground/60 text-foreground focus:outline-none focus:ring-1 focus:ring-ring transition-all"
@@ -144,9 +136,7 @@ export const Contact = () => {
                 <div className="space-y-1">
                   <input
                     type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
+                    {...register("email", { required: true })}
                     placeholder="Your Email"
                     required
                     className="w-full bg-background border border-input rounded-md px-4 py-3 text-sm placeholder:text-muted-foreground/60 text-foreground focus:outline-none focus:ring-1 focus:ring-ring transition-all"
@@ -158,9 +148,7 @@ export const Contact = () => {
               <div className="space-y-1">
                 <input
                   type="text"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
+                  {...register("subject", { required: true })}
                   placeholder="Subject"
                   required
                   className="w-full bg-background border border-input rounded-md px-4 py-3 text-sm placeholder:text-muted-foreground/60 text-foreground focus:outline-none focus:ring-1 focus:ring-ring transition-all"
@@ -170,9 +158,7 @@ export const Contact = () => {
               {/* Message Box Row */}
               <div className="space-y-1">
                 <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
+                  {...register("message", { required: true })}
                   placeholder="Your Message"
                   rows={5}
                   required
