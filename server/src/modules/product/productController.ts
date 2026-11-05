@@ -95,3 +95,22 @@ export const fetchAiFilteredProducts = async (req: Request, res: Response) => {
     products,
   });
 };
+
+export const fetchPriceBounds = async (req: Request, res: Response) => {
+  const result = await Product.aggregate([
+    {
+      $group: {
+        _id: null,
+        minPrice: { $min: "$price" },
+        maxPrice: { $max: "$price" },
+      },
+    },
+  ]);
+
+  if (!result || result.length === 0) {
+    throw new AppError("No products found to calculate price bounds", 404);
+  }
+
+  const { minPrice, maxPrice } = result[0];
+  res.status(200).json({ minPrice, maxPrice });
+};
