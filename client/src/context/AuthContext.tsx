@@ -1,16 +1,19 @@
 import { useProfile } from "@/hooks/user/useProfile";
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 
 interface AuthContextValue {
   isAuthenticated: boolean;
+  authOpen: boolean;
+  setAuthOpen: (open: boolean) => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 function AuthProvider({ children }: { children: ReactNode }) {
+  const [authOpen, setAuthOpen] = useState(false);
   const { data, isError } = useProfile();
   const isAuthenticated = !isError && data?.success ? true : false;
-  const value = { isAuthenticated };
+  const value = { isAuthenticated, authOpen, setAuthOpen };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

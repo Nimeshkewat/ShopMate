@@ -4,6 +4,7 @@ import {
   Home,
   Info,
   LayoutDashboard,
+  LogIn,
   ListOrdered,
   Package,
   Phone,
@@ -11,6 +12,7 @@ import {
   Store,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/context/AuthContext";
 import {
   Sheet,
   SheetContent,
@@ -34,9 +36,11 @@ const links = [
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onSignIn: () => void;
 }
 
-function MenuSheet({ open, onOpenChange }: Props) {
+function MenuSheet({ open, onOpenChange, onSignIn }: Props) {
+  const { isAuthenticated } = useAuth();
   const { data, isError } = useProfile();
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -78,6 +82,19 @@ function MenuSheet({ open, onOpenChange }: Props) {
               {label}
             </NavLink>
           ))}
+          {!isAuthenticated && (
+            <button
+              type="button"
+              onClick={() => {
+                onOpenChange(false);
+                onSignIn();
+              }}
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-all duration-150 hover:bg-secondary hover:text-foreground"
+            >
+              <LogIn className="size-4 shrink-0" />
+              Sign in
+            </button>
+          )}
 
           {!isError && data?.success && data.user.role !== "admin" && (
             <NavLink

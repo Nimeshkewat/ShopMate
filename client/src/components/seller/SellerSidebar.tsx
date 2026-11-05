@@ -37,7 +37,7 @@ function SellerSidebar({ onNavigate }: Props) {
     logout(undefined, {
       onSuccess: (data) => {
         toast.success(data?.message || "Logged out successfully");
-        navigate("/");
+        navigate("/", { replace: true });
       },
       onError: (error) => toast.error(getErrorMessage(error)),
     });
@@ -82,6 +82,7 @@ function SellerSidebar({ onNavigate }: Props) {
         <Link
           to="/"
           onClick={onNavigate}
+          replace
           className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
         >
           Back to store

@@ -1,13 +1,29 @@
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, Navigate, useLocation, useParams } from "react-router-dom";
 import { CircleCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useOrder } from "@/hooks/order/useOrder";
 import type { PaymentType } from "@/types/order";
 
 function OrderSuccess() {
   const { id } = useParams();
   const { state } = useLocation();
+  const orderId = id ?? "";
+  const validId = /^[a-f\d]{24}$/i.test(orderId);
+  const { data, isLoading } = useOrder(validId ? orderId : "");
   const paymentType = (state as { paymentType?: PaymentType } | null)
     ?.paymentType;
+
+  if (!validId) return <Navigate to="/orders" replace />;
+  if (isLoading) {
+    return (
+      <p className="py-10 text-center text-muted-foreground">
+        Loading order...
+      </p>
+    );
+  }
+  if (!data?.order || data.order._id !== id) {
+    return <Navigate to="/orders" replace />;
+  }
 
   return (
     <div className="mx-auto flex min-h-[60vh] max-w-lg flex-col items-center justify-center px-4 py-10 text-center sm:px-6">
@@ -29,10 +45,14 @@ function OrderSuccess() {
       )}
       <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
         <Button className="h-11">
-          <Link to="/products">Continue Shopping</Link>
+          <Link to="/products" replace>
+            Continue Shopping
+          </Link>
         </Button>
         <Button variant="outline" className="h-11">
-          <Link to="/orders">View Orders</Link>
+          <Link to="/orders" replace>
+            View Orders
+          </Link>
         </Button>
       </div>
     </div>

@@ -54,6 +54,7 @@ export function usePlaceOrder() {
               toast.success("Payment successful");
               navigate(`/order-success/${order._id}`, {
                 state: { paymentType },
+                replace: true,
               });
             } catch (error) {
               toast.error(getErrorMessage(error));

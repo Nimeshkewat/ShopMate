@@ -22,9 +22,9 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
-  const [authOpen, setAuthOpen] = useState(false);
+  // const [authOpen, setAuthOpen] = useState(false);
+  const { isAuthenticated, authOpen, setAuthOpen } = useAuth();
   const [profileOpen, setProfileOpen] = useState(false);
-  const { isAuthenticated } = useAuth();
 
   const { data: cartData, isLoading: cartLoading } = useCart();
   const updateItem = useUpdateCartItem();
@@ -124,7 +124,11 @@ export default function Navbar() {
         </div>
       </header>
 
-      <MenuSheet open={menuOpen} onOpenChange={setMenuOpen} />
+      <MenuSheet
+        open={menuOpen}
+        onOpenChange={setMenuOpen}
+        onSignIn={() => setAuthOpen(true)}
+      />
       <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
       <CartSheet
         open={cartOpen}

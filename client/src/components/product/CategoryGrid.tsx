@@ -15,7 +15,9 @@ function CategoryGrid() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
       <div className="text-center">
-        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">Shop by Category</h2>
+        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+          Shop by Category
+        </h2>
         <p className="mt-2 text-sm text-muted-foreground">
           Discover our wide range of products across different categories
         </p>

@@ -39,7 +39,7 @@ function AdminSidebar({ onNavigate }: Props) {
     logout(undefined, {
       onSuccess: (data) => {
         toast.success(data?.message || "Logged out successfully");
-        navigate("/");
+        navigate("/", { replace: true });
       },
       onError: (error) => toast.error(getErrorMessage(error)),
     });
@@ -52,7 +52,9 @@ function AdminSidebar({ onNavigate }: Props) {
           <div className="grid size-7 place-items-center rounded-lg bg-primary">
             <span className="text-xs font-bold text-primary-foreground">A</span>
           </div>
-          <span className="text-sm font-semibold tracking-tight text-foreground">Admin Panel</span>
+          <span className="text-sm font-semibold tracking-tight text-foreground">
+            Admin Panel
+          </span>
         </div>
         <ThemeToggle />
       </div>
@@ -84,6 +86,7 @@ function AdminSidebar({ onNavigate }: Props) {
           to="/"
           onClick={onNavigate}
           className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+          replace
         >
           Back to store
         </Link>

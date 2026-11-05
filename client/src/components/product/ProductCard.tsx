@@ -7,9 +7,11 @@ import type { Product } from "../../types/product";
 import { getStockStatus, isNewProduct, stockBadge } from "../../utils/index";
 import RatingStars from "../review/RatingStars";
 import { CURRENCY } from "@/utils/constants";
+import { useAuth } from "@/context/AuthContext";
 
 export default function ProductCard({ product }: { product: Product }) {
   const { addToCart, isPending } = useAddToCartAction();
+  const { isAuthenticated, setAuthOpen } = useAuth();
   const stock = stockBadge[getStockStatus(product.stock)];
   const href = `/product/${product._id}`;
   const image = product.images[0]?.url;
@@ -53,7 +55,10 @@ export default function ProductCard({ product }: { product: Product }) {
         <button
           type="button"
           aria-label={`Add ${product.name} to cart`}
-          onClick={() => addToCart(product._id)}
+          onClick={() => {
+            if (!isAuthenticated) setAuthOpen(true);
+            addToCart(product._id);
+          }}
           disabled={isPending}
           className={cn(
             "absolute bottom-2 right-2 grid size-8 place-items-center rounded-lg bg-card/90 text-primary shadow-sm backdrop-blur ring-1 ring-border/60 transition-all hover:bg-primary hover:text-primary-foreground hover:ring-primary focus-visible:opacity-100 disabled:opacity-50 md:opacity-0 md:group-hover:opacity-100",

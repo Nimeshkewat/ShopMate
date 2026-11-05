@@ -10,6 +10,7 @@ import PurchaseBox from "./PurchaseBox";
 import RatingStars from "../review/RatingStars";
 import { getStockStatus, isNewProduct, stockBadge } from "@/utils/index";
 import { CURRENCY } from "@/utils/constants";
+import { useAuth } from "@/context/AuthContext";
 
 function DetailsSkeleton() {
   return (
@@ -34,6 +35,7 @@ function DetailsSkeleton() {
 
 function ProductDetails() {
   const { id } = useParams<{ id: string }>();
+  const { isAuthenticated, setAuthOpen } = useAuth();
   const navigate = useNavigate();
   const { data, isLoading, isError } = useProduct(id ?? "");
   const { addToCart, isPending } = useAddToCartAction();
@@ -114,12 +116,16 @@ function ProductDetails() {
             name={product.name}
             stock={product.stock}
             isPending={isPending}
-            onAddToCart={(quantity) => addToCart(product._id, quantity)}
-            onBuyNow={(quantity) =>
+            onAddToCart={(quantity) => {
+              if (!isAuthenticated) setAuthOpen(true);
+              addToCart(product._id, quantity);
+            }}
+            onBuyNow={(quantity) => {
+              if (!isAuthenticated) setAuthOpen(true);
               addToCart(product._id, quantity, {
                 onSuccess: () => navigate("/checkout"),
-              })
-            }
+              });
+            }}
           />
         </div>
       </div>
