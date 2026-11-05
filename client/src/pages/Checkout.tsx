@@ -49,7 +49,7 @@ function Checkout() {
   const goBack = () => (step === 2 ? setStep(1) : navigate("/cart"));
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-10">
+    <div className="mx-auto w-full min-w-0 max-w-4xl overflow-x-clip px-4 py-6 sm:px-6 sm:py-10">
       <Button
         variant="outline"
         size="icon"
@@ -64,33 +64,35 @@ function Checkout() {
         <CheckoutStepper step={step} />
       </div>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_320px]">
-        {step === 1 ? (
-          <ShippingStep
-            addresses={addresses}
-            isLoading={addressesLoading}
-            isError={addressesError}
-            onRetry={() => void refetchAddresses()}
-            selectedId={activeId}
-            onSelect={setSelectedId}
-            onContinue={() => setStep(2)}
-          />
-        ) : (
-          <PaymentStep
-            address={selectedAddress}
-            total={totals.total}
-            paymentType={paymentType}
-            onPaymentTypeChange={setPaymentType}
-            onChangeAddress={() => setStep(1)}
-            onPlaceOrder={() => {
-              if (activeId) void placeOrder(activeId, paymentType);
-            }}
-            isPlacing={isPlacing}
-            isAddressLoading={addressesLoading}
-          />
-        )}
+      <div className="mt-8 grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="min-w-0">
+          {step === 1 ? (
+            <ShippingStep
+              addresses={addresses}
+              isLoading={addressesLoading}
+              isError={addressesError}
+              onRetry={() => void refetchAddresses()}
+              selectedId={activeId}
+              onSelect={setSelectedId}
+              onContinue={() => setStep(2)}
+            />
+          ) : (
+            <PaymentStep
+              address={selectedAddress}
+              total={totals.total}
+              paymentType={paymentType}
+              onPaymentTypeChange={setPaymentType}
+              onChangeAddress={() => setStep(1)}
+              onPlaceOrder={() => {
+                if (activeId) void placeOrder(activeId, paymentType);
+              }}
+              isPlacing={isPlacing}
+              isAddressLoading={addressesLoading}
+            />
+          )}
+        </div>
 
-        <aside className="lg:sticky lg:top-24 lg:self-start">
+        <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
           <OrderSummary totals={totals} items={items} />
         </aside>
       </div>
