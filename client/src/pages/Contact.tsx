@@ -7,7 +7,7 @@ interface ContactFormValues {
   message: string;
 }
 
-export const Contact = () => {
+const Contact = () => {
   const { register, handleSubmit } = useForm<ContactFormValues>({
     defaultValues: {
       name: "",

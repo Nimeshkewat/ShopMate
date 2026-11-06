@@ -11,7 +11,7 @@ interface FaqItem {
   answer: string;
 }
 
-export const FAQ = () => {
+const FAQ = () => {
   const faqData: FaqItem[] = [
     {
       id: "item-1",

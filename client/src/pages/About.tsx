@@ -22,7 +22,7 @@ const FeatureCard = ({ icon, title, description }: FeatureCardProps) => {
   );
 };
 
-export const About = () => {
+const About = () => {
   const features = [
     {
       title: "Customer First",

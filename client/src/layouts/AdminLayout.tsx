@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/sheet";
 import { useProfile } from "@/hooks/user/useProfile";
 import AdminSidebar from "@/components/admin/AdminSidebar";
+import { Spinner } from "@/components/ui/spinner";
 
 const titles: Record<string, string> = {
   "/admin": "Dashboard",
@@ -56,12 +57,17 @@ function AdminLayout() {
               <Menu className="size-4" />
             </Button>
             {/* Breadcrumb */}
-            <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm">
+            <nav
+              aria-label="Breadcrumb"
+              className="flex items-center gap-1.5 text-sm"
+            >
               <span className="text-muted-foreground">
                 {user?.username ?? "Admin"}
               </span>
               <span className="text-border">/</span>
-              <span className="font-semibold text-foreground">{getTitle(pathname)}</span>
+              <span className="font-semibold text-foreground">
+                {getTitle(pathname)}
+              </span>
             </nav>
           </div>
 
@@ -81,7 +87,9 @@ function AdminLayout() {
 
         {/* Page content */}
         <main className="flex-1 px-4 pb-10 pt-6 sm:px-8">
-          <Outlet />
+          <Suspense fallback={<Spinner size="xl" />}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
 

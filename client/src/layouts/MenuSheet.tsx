@@ -10,6 +10,7 @@ import {
   Phone,
   ShoppingCart,
   Store,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
@@ -21,6 +22,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { useProfile } from "@/hooks/user/useProfile";
+import { useLogout } from "@/hooks/auth/useLogout";
 
 const links = [
   { to: "/", label: "Home", icon: Home },
@@ -41,6 +43,7 @@ interface Props {
 
 function MenuSheet({ open, onOpenChange, onSignIn }: Props) {
   const { isAuthenticated } = useAuth();
+  const { mutate: logout, isPending } = useLogout();
   const { data, isError } = useProfile();
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -82,19 +85,6 @@ function MenuSheet({ open, onOpenChange, onSignIn }: Props) {
               {label}
             </NavLink>
           ))}
-          {!isAuthenticated && (
-            <button
-              type="button"
-              onClick={() => {
-                onOpenChange(false);
-                onSignIn();
-              }}
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-all duration-150 hover:bg-secondary hover:text-foreground"
-            >
-              <LogIn className="size-4 shrink-0" />
-              Sign in
-            </button>
-          )}
 
           {!isError && data?.success && data.user.role !== "admin" && (
             <NavLink
@@ -140,6 +130,32 @@ function MenuSheet({ open, onOpenChange, onSignIn }: Props) {
               <LayoutDashboard className="size-4 shrink-0" />
               Admin Dashboard
             </NavLink>
+          )}
+          {!isAuthenticated ? (
+            <button
+              type="button"
+              onClick={() => {
+                onOpenChange(false);
+                onSignIn();
+              }}
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-all duration-150 hover:bg-secondary hover:text-foreground"
+            >
+              <LogIn className="size-4 shrink-0" />
+              Sign in
+            </button>
+          ) : (
+            <button
+              type="button"
+              disabled={isPending}
+              onClick={() => {
+                onOpenChange(false);
+                logout();
+              }}
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted-foreground transition-all duration-150 hover:bg-secondary hover:text-foreground"
+            >
+              <LogOut className="size-4 shrink-0" />
+              Logout
+            </button>
           )}
         </nav>
       </SheetContent>

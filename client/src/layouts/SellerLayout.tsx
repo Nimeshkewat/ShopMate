@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { Menu } from "lucide-react";
 import { Outlet, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/sheet";
 import { useProfile } from "@/hooks/user/useProfile";
 import SellerSidebar from "@/components/seller/SellerSidebar";
+import { Spinner } from "@/components/ui/spinner";
 
 const titles: Record<string, string> = {
   "/seller/dashboard": "Dashboard",
@@ -49,7 +50,10 @@ function SellerLayout() {
             >
               <Menu className="size-4" />
             </Button>
-            <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm">
+            <nav
+              aria-label="Breadcrumb"
+              className="flex items-center gap-1.5 text-sm"
+            >
               <span className="text-muted-foreground">
                 {user?.username ?? "Seller"}
               </span>
@@ -72,7 +76,9 @@ function SellerLayout() {
         </header>
 
         <main className="min-w-0 flex-1 overflow-x-hidden px-4 pb-10 pt-6 sm:px-8">
-          <Outlet />
+          <Suspense fallback={<Spinner size="xl" />}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
 

@@ -22,19 +22,16 @@ export function Spinner({
   ...props
 }: SpinnerProps) {
   return (
-    <span
-      role="status"
-      aria-live="polite"
-      className={cn("inline-flex items-center justify-center gap-2", className)}
-      {...props}
-    >
-      <Loader2
-        className={cn("animate-spin text-current", sizeClasses[size])}
-        aria-hidden="true"
-      />
-      {label && <span className="text-sm font-medium">{label}</span>}
-      <span className="sr-only">{label || "Loading..."}</span>
-    </span>
+    <div className="flex items-center justify-center h-screen">
+      <span role="status" aria-live="polite" className={className} {...props}>
+        <Loader2
+          className={cn("animate-spin text-current", sizeClasses[size])}
+          aria-hidden="true"
+        />
+        {label && <span className="text-sm font-medium">{label}</span>}
+        <span className="sr-only">{label || "Loading..."}</span>
+      </span>
+    </div>
   );
 }
 
