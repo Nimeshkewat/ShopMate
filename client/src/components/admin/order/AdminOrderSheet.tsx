@@ -159,7 +159,7 @@ function AdminOrderSheet({ orderId, onOpenChange }: Props) {
 
               <section>
                 <h3 className={sectionTitle}>Customer</h3>
-                {order.userId.username ? (
+                {order.userId?.username ? (
                   <p className="text-sm">
                     <span className="font-medium">{order.userId.username}</span>
                     <span className="block text-muted-foreground">
@@ -168,7 +168,7 @@ function AdminOrderSheet({ orderId, onOpenChange }: Props) {
                   </p>
                 ) : (
                   <p className="text-sm text-muted-foreground">
-                    Customer details aren't included in this response.
+                    Customer account is no longer available.
                   </p>
                 )}
               </section>

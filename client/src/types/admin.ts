@@ -96,7 +96,7 @@ export interface DeleteAdminProductResponse {
 //* Order Management
 export interface AdminOrder {
   _id: string;
-  userId: { username: string; email: string };
+  userId: { username: string; email: string } | null;
   shippingInfoId: ShippingInfo;
   orderItems: OrderItem[];
   price: number;

@@ -59,7 +59,11 @@ function Shops() {
               ))}
             </div>
             <div className="mt-8">
-              <AppPagination page={page} onPageChange={changePage} />
+              <AppPagination
+                pagination={data?.pagination}
+                page={page}
+                onPageChange={changePage}
+              />
             </div>
           </>
         )}

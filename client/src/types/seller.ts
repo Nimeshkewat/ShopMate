@@ -1,6 +1,7 @@
 import type { BecomeSellerValues } from "@/schema/seller";
 import type { Product } from "./product";
 import type { Order } from "./order";
+import type { PaginationMeta } from "./pagination";
 
 export interface Shop {
   _id: string;
@@ -82,6 +83,7 @@ export type NextOrderStatus = "Shipped" | "Delivered";
 export interface SellerOrdersResponse {
   success: boolean;
   sellerOrders: Order[];
+  pagination: PaginationMeta;
 }
 
 export interface UpdateOrderStatusPayload {

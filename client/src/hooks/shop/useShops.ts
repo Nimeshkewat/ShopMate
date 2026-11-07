@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useShops = (params?: PaginationParams) => {
   return useQuery({
-    queryKey: queryKeys.shops,
+    queryKey: [...queryKeys.shops, params],
     queryFn: () => fetchShops(params),
     staleTime: 5 * 60 * 1000,
   });

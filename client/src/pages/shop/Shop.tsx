@@ -18,7 +18,7 @@ function ShopContent({ id }: { id: string }) {
 
   const shop = data?.shop;
   const products = data?.products ?? [];
-  const total = data?.products.length ?? 0;
+  const total = data?.pagination.total ?? 0;
 
   const changePage = (next: number) => {
     setPage(next);
@@ -85,9 +85,16 @@ function ShopContent({ id }: { id: string }) {
             ))}
           </div>
         ) : products.length === 0 ? (
-          <p className="py-16 text-center text-xs text-muted-foreground">
-            This shop hasn't listed any products yet.
-          </p>
+          <>
+            <p className="py-16 text-center text-xs text-muted-foreground">
+              This shop hasn't listed any products yet.
+            </p>
+            <AppPagination
+              pagination={data?.pagination}
+              page={page}
+              onPageChange={changePage}
+            />
+          </>
         ) : (
           <>
             <div className="grid grid-cols-1 gap-5 min-[520px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -96,7 +103,11 @@ function ShopContent({ id }: { id: string }) {
               ))}
             </div>
             <div className="mt-8">
-              <AppPagination page={page} onPageChange={changePage} />
+              <AppPagination
+                pagination={data?.pagination}
+                page={page}
+                onPageChange={changePage}
+              />
             </div>
           </>
         )}

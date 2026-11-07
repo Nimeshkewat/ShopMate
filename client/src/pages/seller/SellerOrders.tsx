@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { getErrorMessage } from "@/api/apiClient";
 import { useSellerOrders } from "@/hooks/seller/useSellerOrders";
 import { useUpdateSellerOrderStatus } from "@/hooks/seller/useUpdateSellerOrderStatus";
+import AppPagination from "@/components/common/AppPagination";
 import type { Order } from "@/types/order";
 import OrderCardSkeleton from "@/components/order/OrderCardSkeleton";
 import { ORDER_FILTERS, type OrderFilter } from "@/utils/constants";
@@ -11,16 +12,22 @@ import { isApprovalError } from "@/components/seller/isApprovalError";
 import ApprovalPending from "@/components/seller/ApprovalPending";
 import SellerOrderCard from "@/components/seller/order/SellerOrderCard";
 
+const LIMIT = 10;
+
 function SellerOrders() {
-  const { data, isLoading, isError, error, refetch } = useSellerOrders();
-  const updateStatus = useUpdateSellerOrderStatus();
+  const [page, setPage] = useState(1);
   const [filter, setFilter] = useState<OrderFilter>("All");
+  const { data, isLoading, isError, error, refetch } = useSellerOrders({
+    page,
+    limit: LIMIT,
+    ...(filter === "All" ? {} : { status: filter }),
+  });
+  const updateStatus = useUpdateSellerOrderStatus();
 
   if (isApprovalError(error)) return <ApprovalPending />;
 
   const orders = data?.sellerOrders ?? [];
-  const visible =
-    filter === "All" ? orders : orders.filter((o) => o.orderStatus === filter);
+  const pagination = data?.pagination;
 
   const handleStatusChange = (order: Order, orderStatus: NextOrderStatus) =>
     updateStatus.mutate(
@@ -45,7 +52,10 @@ function SellerOrders() {
         <select
           aria-label="Filter orders by status"
           value={filter}
-          onChange={(e) => setFilter(e.target.value as OrderFilter)}
+          onChange={(e) => {
+            setFilter(e.target.value as OrderFilter);
+            setPage(1);
+          }}
           className="h-10 w-full rounded-md border bg-background px-3 text-sm sm:w-44"
         >
           {ORDER_FILTERS.map((f) => (
@@ -72,23 +82,31 @@ function SellerOrders() {
             Retry
           </button>
         </p>
-      ) : visible.length === 0 ? (
+      ) : orders.length === 0 ? (
         <p className="py-16 text-center text-muted-foreground">
-          {orders.length === 0
+          {filter === "All"
             ? "No orders yet. They'll show up here as customers buy your products."
             : `No ${filter.toLowerCase()} orders.`}
         </p>
       ) : (
-        visible.map((order) => (
-          <SellerOrderCard
-            key={order._id}
-            order={order}
-            onStatusChange={handleStatusChange}
-            isUpdating={
-              updateStatus.isPending && updateStatus.variables?.id === order._id
-            }
+        <>
+          {orders.map((order) => (
+            <SellerOrderCard
+              key={order._id}
+              order={order}
+              onStatusChange={handleStatusChange}
+              isUpdating={
+                updateStatus.isPending &&
+                updateStatus.variables?.id === order._id
+              }
+            />
+          ))}
+          <AppPagination
+            pagination={pagination}
+            page={page}
+            onPageChange={setPage}
           />
-        ))
+        </>
       )}
     </div>
   );

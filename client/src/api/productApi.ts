@@ -30,6 +30,9 @@ export const fetchProducts = async (
   } else if (query?.rating !== undefined && query.rating !== null) {
     params.rating = query.rating;
   }
+  if (query?.availability) {
+    params.availability = query.availability;
+  }
   if (query?.page) {
     params.page = query.page;
   }
@@ -40,22 +43,9 @@ export const fetchProducts = async (
   const response = await api.get<ProductsResponse>(BASE, {
     params,
   });
-  let products = response.data.products ?? [];
-
-  // If availability filter is specified, refine on client side as server does not filter availability directly
-  if (query?.availability) {
-    if (query.availability === "out") {
-      products = products.filter((p) => p.stock === 0);
-    } else if (query.availability === "limited") {
-      products = products.filter((p) => p.stock > 0 && p.stock <= 5);
-    } else if (query.availability === "in") {
-      products = products.filter((p) => p.stock > 5);
-    }
-  }
-
   return {
     ...response.data,
-    products,
+    products: response.data.products ?? [],
   };
 };
 

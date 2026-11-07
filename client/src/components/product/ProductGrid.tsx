@@ -1,11 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import type { Product } from "../../types/product";
+import AppPagination from "@/components/common/AppPagination";
+import type { PaginationMeta, Product } from "../../types/product";
 import ProductCard from "./ProductCard";
 import ProductCardSkeleton from "./ProductCardSkeleton";
 
 interface Props {
   products?: Product[];
+  pagination?: PaginationMeta;
+  page?: number;
+  onPageChange?: (page: number) => void;
   isLoading: boolean;
   isError: boolean;
   onReset: () => void;
@@ -13,6 +17,9 @@ interface Props {
 
 export default function ProductGrid({
   products = [],
+  pagination,
+  page,
+  onPageChange,
   isLoading,
   isError,
   onReset,
@@ -27,12 +34,21 @@ export default function ProductGrid({
 
   if (!isLoading && products.length === 0) {
     return (
-      <div className="mt-10 flex flex-col items-center gap-3 text-center">
-        <p className="font-medium">No products match your filters</p>
-        <Button variant="outline" onClick={onReset}>
-          Clear filters
-        </Button>
-      </div>
+      <>
+        <div className="mt-10 flex flex-col items-center gap-3 text-center">
+          <p className="font-medium">No products match your filters</p>
+          <Button variant="outline" onClick={onReset}>
+            Clear filters
+          </Button>
+        </div>
+        {pagination && onPageChange && (
+          <AppPagination
+            pagination={pagination}
+            page={page}
+            onPageChange={onPageChange}
+          />
+        )}
+      </>
     );
   }
 
@@ -45,7 +61,10 @@ export default function ProductGrid({
         </div>
       ) : (
         <p className="mt-4 text-sm text-muted-foreground">
-          {products.length} {products.length === 1 ? "product" : "products"}{" "}
+          {pagination?.total ?? products.length}{" "}
+          {(pagination?.total ?? products.length) === 1
+            ? "product"
+            : "products"}{" "}
           found
         </p>
       )}
@@ -56,6 +75,13 @@ export default function ProductGrid({
               <ProductCard key={product._id} product={product} />
             ))}
       </div>
+      {pagination && onPageChange && (
+        <AppPagination
+          pagination={pagination}
+          page={page}
+          onPageChange={onPageChange}
+        />
+      )}
     </>
   );
 }

@@ -65,7 +65,11 @@ function OrderManagement() {
             orders={orders}
             onView={(order) => setViewId(order._id)}
           />
-          <AppPagination page={page} onPageChange={setPage} />
+          <AppPagination
+            pagination={data?.pagination}
+            page={page}
+            onPageChange={setPage}
+          />
         </>
       )}
 

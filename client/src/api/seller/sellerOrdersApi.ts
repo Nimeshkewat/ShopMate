@@ -4,11 +4,16 @@ import type {
   UpdateOrderStatusPayload,
   UpdateOrderStatusResponse,
 } from "@/types/seller";
+import type { PaginationParams } from "@/types/pagination";
 
 const BASE = "/seller/orders";
 
-export const fetchSellerOrders = () =>
-  api.get<SellerOrdersResponse>(BASE).then((res) => res.data);
+export const fetchSellerOrders = (
+  params?: PaginationParams & { status?: string },
+) =>
+  api
+    .get<SellerOrdersResponse>(BASE, { params })
+    .then((res) => res.data);
 
 export const updateSellerOrderStatus = ({
   id,

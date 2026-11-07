@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const usePendingSellers = (params?: PaginationParams) => {
   return useQuery({
-    queryKey: queryKeys.adminPendingSellers,
+    queryKey: [...queryKeys.adminPendingSellers, params],
     queryFn: () => getPendingSellers(params),
   });
 };

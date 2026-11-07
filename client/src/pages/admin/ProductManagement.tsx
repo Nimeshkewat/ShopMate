@@ -78,7 +78,11 @@ function ProductManagement() {
       ) : (
         <>
           <AdminProductsTable products={products} onDelete={setTarget} />
-          <AppPagination page={page} onPageChange={setPage} />
+          <AppPagination
+            pagination={data?.pagination}
+            page={page}
+            onPageChange={setPage}
+          />
         </>
       )}
 

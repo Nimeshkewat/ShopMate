@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ImageOff, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import AppPagination from "@/components/common/AppPagination";
 import {
   Dialog,
   DialogContent,
@@ -21,8 +22,14 @@ import ProductForm from "@/components/seller/product/ProductForm";
 import ProductRow from "../../components/seller/product/ProductRow";
 import DeleteProductDialog from "../../components/seller/product/DeleteProductDialog";
 
+const LIMIT = 12;
+
 function SellerProducts() {
-  const { data, isLoading, isError } = useSellerProducts();
+  const [page, setPage] = useState(1);
+  const { data, isLoading, isError } = useSellerProducts({
+    page,
+    limit: LIMIT,
+  });
   const createProduct = useCreateProduct();
   const updateProduct = useUpdateProduct();
   const deleteProduct = useDeleteProduct();
@@ -32,6 +39,7 @@ function SellerProducts() {
   const [deleteTarget, setDeleteTarget] = useState<Product | null>(null);
 
   const products = data?.products ?? [];
+  const pagination = data?.pagination;
 
   const handleCreate = async (values: ProductValues, images: File[]) => {
     const res = await createProduct.mutateAsync({ ...values, images });
@@ -69,7 +77,7 @@ function SellerProducts() {
           {!isLoading && (
             <p className="mt-0.5 text-sm text-muted-foreground">
               {products.length} {products.length === 1 ? "product" : "products"}{" "}
-              listed
+              {pagination ? ` of ${pagination.total} listed` : " listed"}
             </p>
           )}
         </div>
@@ -114,6 +122,13 @@ function SellerProducts() {
             onDelete={setDeleteTarget}
           />
         ))}
+        {!isLoading && !isError && pagination && (
+          <AppPagination
+            pagination={pagination}
+            page={page}
+            onPageChange={setPage}
+          />
+        )}
       </div>
 
       {/* Add product dialog */}

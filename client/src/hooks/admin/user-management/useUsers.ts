@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useUsers = (params?: PaginationParams) => {
   return useQuery({
-    queryKey: queryKeys.adminUsers,
+    queryKey: [...queryKeys.adminUsers, params],
     queryFn: () => getUsers(params),
     staleTime: 5 * 60 * 1000,
   });

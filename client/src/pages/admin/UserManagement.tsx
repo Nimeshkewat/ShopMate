@@ -92,7 +92,11 @@ function UserManagement() {
             onView={(user) => setViewId(user._id)}
             onToggleBlock={setTarget}
           />
-          <AppPagination page={page} onPageChange={setPage} />
+          <AppPagination
+            pagination={data?.pagination}
+            page={page}
+            onPageChange={setPage}
+          />
         </>
       )}
 

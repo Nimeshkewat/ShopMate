@@ -10,7 +10,8 @@ import getAIRecommendation from "../../utils/aiRecommendation.js";
 import mongoose from "mongoose";
 
 export const fetchAllProducts = async (req: Request, res: Response) => {
-  const { search, category, price, rating, page, limit } = req.query;
+  const { search, category, price, rating, availability, page, limit } =
+    req.query;
 
   const result = paginationSchema.safeParse({ page, limit });
   if (!result.success) {
@@ -39,8 +40,20 @@ export const fetchAllProducts = async (req: Request, res: Response) => {
     query.rating = { $gte: Number(rating) };
   }
 
+  if (availability === "out") {
+    query.stock = 0;
+  } else if (availability === "limited") {
+    query.stock = { $gt: 0, $lte: 5 };
+  } else if (availability === "in") {
+    query.stock = { $gt: 5 };
+  }
+
   const [products, total] = await Promise.all([
-    Product.find(query).limit(l).skip(skip).sort().lean(),
+    Product.find(query)
+      .sort({ createdAt: -1, _id: -1 })
+      .limit(l)
+      .skip(skip)
+      .lean(),
     Product.countDocuments(query),
   ]);
 

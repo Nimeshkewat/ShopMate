@@ -69,7 +69,7 @@ export const getShopProducts = async (req: Request, res: Response) => {
       .skip(skip)
       .limit(l)
       .lean(),
-    Product.countDocuments({ sellerId: shopId }),
+    Product.countDocuments({ sellerId: shop.userId }),
   ]);
 
   res.status(200).json({

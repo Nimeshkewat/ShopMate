@@ -7,11 +7,16 @@ import type {
   UpdateProductPayload,
   UpdateProductResponse,
 } from "@/types/seller";
+import type { PaginationParams } from "@/types/pagination";
 
 const SELLER_PRODUCTS_URL = "/seller/products";
 
-export const fetchSellerProducts = async (): Promise<ProductsResponse> => {
-  const response = await api.get<ProductsResponse>(SELLER_PRODUCTS_URL);
+export const fetchSellerProducts = async (
+  params?: PaginationParams,
+): Promise<ProductsResponse> => {
+  const response = await api.get<ProductsResponse>(SELLER_PRODUCTS_URL, {
+    params,
+  });
   return response.data;
 };
 

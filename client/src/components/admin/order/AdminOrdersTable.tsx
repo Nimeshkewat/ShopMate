@@ -55,15 +55,19 @@ function AdminOrdersTable({ orders, onView }: Props) {
                   #{order._id.slice(-8)}
                 </td>
                 <td className="px-4 py-3">
-                  {order.userId.username ? (
+                  {order.userId?.username ? (
                     <>
-                      <p className="font-medium text-foreground">{order.userId.username}</p>
+                      <p className="font-medium text-foreground">
+                        {order.userId.username}
+                      </p>
                       <p className="text-xs text-muted-foreground">
                         {order.userId.email}
                       </p>
                     </>
                   ) : (
-                    <span className="text-muted-foreground">—</span>
+                    <span className="text-muted-foreground">
+                      Deleted customer
+                    </span>
                   )}
                 </td>
                 <td className="px-4 py-3 text-muted-foreground tabular-nums">

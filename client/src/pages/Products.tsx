@@ -35,6 +35,7 @@ function Products() {
         const next = new URLSearchParams(prev);
         if (value) next.set(key, value);
         else next.delete(key);
+        if (key !== "page") next.delete("page");
         return next;
       },
       { replace: true },
@@ -46,10 +47,15 @@ function Products() {
     setSearchParams(new URLSearchParams(), { replace: true });
   };
 
+  const changeFilters = (nextFilters: typeof filters) => {
+    setFilters(nextFilters);
+    setParam("page", null);
+  };
+
   const filtersPanel = (
     <ProductFilters
       filters={filters}
-      onFiltersChange={setFilters}
+      onFiltersChange={changeFilters}
       category={category}
       onCategoryChange={(c) => setParam("category", c)}
       categories={categoryNames}
@@ -102,11 +108,13 @@ function Products() {
               params={{
                 search: search || undefined,
                 category: category ?? undefined,
+                page: Number(searchParams.get("page") ?? 1),
                 maxPrice:
                   filters.maxPrice === MAX_PRICE ? undefined : filters.maxPrice,
                 minRating: filters.minRating ?? undefined,
                 availability: filters.availability ?? undefined,
               }}
+              onPageChange={(nextPage) => setParam("page", String(nextPage))}
               onReset={reset}
             />
           )}
