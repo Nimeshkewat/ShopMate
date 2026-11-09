@@ -82,11 +82,16 @@ export const fetchProductDetails = async (req: Request, res: Response) => {
 
 export const fetchAiFilteredProducts = async (req: Request, res: Response) => {
   const { prompt } = req.body;
-  if (!prompt) {
+  if (typeof prompt !== "string" || !prompt.trim()) {
     throw new AppError("Provide a valid prompt", 400);
   }
 
-  const filteredProducts = await Product.find({}).limit(50).lean();
+  const filteredProducts = await Product.find({})
+    .select(
+      "_id name description price category rating stock images sellerId createdAt"
+    )
+    .limit(50)
+    .lean();
   if (!filteredProducts.length) {
     return res.status(200).json({
       success: true,
@@ -95,13 +100,28 @@ export const fetchAiFilteredProducts = async (req: Request, res: Response) => {
     });
   }
 
-  const { success, products } = await getAIRecommendation(
-    prompt,
-    filteredProducts as any
+  const recommendedIds = await getAIRecommendation(
+    prompt.trim(),
+    filteredProducts.map((product) => ({
+      _id: product._id.toString(),
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      category: product.category,
+      rating: product.rating,
+      stock: product.stock,
+    }))
   );
+  const productsById = new Map(
+    filteredProducts.map((product) => [product._id.toString(), product])
+  );
+  const products = recommendedIds.flatMap((id) => {
+    const product = productsById.get(id);
+    return product ? [product] : [];
+  });
 
   res.status(200).json({
-    success,
+    success: true,
     message: products.length
       ? "AI Filtered Products"
       : "No products matched your preference.",

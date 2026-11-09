@@ -11,6 +11,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { CATEGORIES } from "@/utils/constants";
+import { useAISearch } from "@/hooks/product/useAISearch";
 import AIResults from "../components/product/AiResults";
 import AISearchDialog from "../components/product/AiSearchDialog";
 import CatalogResults from "../components/product/CatalogResults";
@@ -28,6 +29,13 @@ function Products() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [aiOpen, setAiOpen] = useState(false);
   const [aiQuery, setAiQuery] = useState("");
+  const aiSearch = useAISearch();
+
+  const searchWithAI = (query: string) => {
+    setAiQuery(query);
+    aiSearch.reset();
+    aiSearch.mutate(query);
+  };
 
   const setParam = (key: string, value: string | null) =>
     setSearchParams(
@@ -102,7 +110,13 @@ function Products() {
           </div>
 
           {aiQuery ? (
-            <AIResults query={aiQuery} onClear={() => setAiQuery("")} />
+            <AIResults
+              query={aiQuery}
+              data={aiSearch.data}
+              isLoading={aiSearch.isPending}
+              isError={aiSearch.isError}
+              onClear={() => setAiQuery("")}
+            />
           ) : (
             <CatalogResults
               params={{
@@ -137,7 +151,8 @@ function Products() {
       <AISearchDialog
         open={aiOpen}
         onOpenChange={setAiOpen}
-        onSearch={setAiQuery}
+        onSearch={searchWithAI}
+        isPending={aiSearch.isPending}
       />
     </div>
   );

@@ -1,15 +1,16 @@
 import { Sparkles, X } from "lucide-react";
-import { useAISearch } from "@/hooks/product/useAISearch";
+import type { AISearchResponse } from "@/types/product";
 import ProductGrid from "./ProductGrid";
 
 interface Props {
   query: string;
+  data?: AISearchResponse;
+  isLoading: boolean;
+  isError: boolean;
   onClear: () => void;
 }
 
-function AIResults({ query, onClear }: Props) {
-  const { data, isLoading, isError } = useAISearch(query);
-
+function AIResults({ query, data, isLoading, isError, onClear }: Props) {
   return (
     <>
       <div className="mt-4 flex items-center justify-between gap-3 rounded-lg border border-fuchsia-500/30 bg-fuchsia-500/10 px-3 py-2 text-sm">

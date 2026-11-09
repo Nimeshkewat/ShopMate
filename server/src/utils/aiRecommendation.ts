@@ -1,77 +1,68 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { type IProduct } from "../modules/product/productModel.js";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+const ai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY!,
+  httpOptions: {
+    timeout: 30_000,
+    retryOptions: { attempts: 1 },
+  },
+});
+
+export interface AIProductCandidate {
+  _id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  rating: number;
+  stock: number;
+}
 
 const getAIRecommendation = async (
   prompt: string,
-  filteredProducts: IProduct[]
-): Promise<{ success: boolean; products: IProduct[] }> => {
+  candidates: AIProductCandidate[]
+): Promise<string[]> => {
   const geminiPrompt = `
-  You are an expert personal shopping assistant. Below is a list of candidate products fetched from our database:
-  ${JSON.stringify(filteredProducts)}
+  Candidate products:
+  ${JSON.stringify(candidates)}
 
-  Based strictly on the following user search intent, filter down the candidates and return only the best matching products:
+  Return only the IDs of products that match this shopping request, ordered by relevance. Do not invent IDs:
   "${prompt}"
   `;
 
+  const startedAt = Date.now();
   try {
     const response = await ai.models.generateContent({
       model: "gemini-3.8-flash",
       contents: geminiPrompt,
       config: {
         systemInstruction:
-          "You are a precise inventory matching assistant. Filter the input JSON product list according to the user's intent. Do not fabricate new products. Maintain all original object key values (like _id, userId, urls) exactly as they are provided in the input.",
+          "You are a precise shopping assistant. Match the user's intent to the supplied inventory. Return only IDs from the candidate list as a JSON array, in relevance order. Do not invent products.",
         responseMimeType: "application/json",
         responseSchema: {
           type: Type.ARRAY,
-          items: {
-            type: Type.OBJECT,
-            properties: {
-              _id: { type: Type.STRING },
-              userId: { type: Type.STRING },
-              name: { type: Type.STRING },
-              description: { type: Type.STRING },
-              price: { type: Type.NUMBER },
-              category: { type: Type.STRING },
-              rating: { type: Type.NUMBER },
-              stock: { type: Type.NUMBER },
-              images: {
-                type: Type.ARRAY,
-                items: {
-                  type: Type.OBJECT,
-                  properties: {
-                    public_id: { type: Type.STRING },
-                    url: { type: Type.STRING },
-                  },
-                  required: ["public_id", "url"],
-                },
-              },
-              createdAt: { type: Type.STRING },
-              updatedAt: { type: Type.STRING },
-            },
-            required: ["_id", "name", "price", "category", "images"],
-          },
+          items: { type: Type.STRING },
         },
+        maxOutputTokens: 1024,
       },
     });
 
     if (!response.text) {
-      return { success: false, products: [] };
+      throw new Error("AI recommendation returned an empty response");
     }
 
-    const recommendedProducts: IProduct[] = JSON.parse(response.text);
+    const recommendedIds: unknown = JSON.parse(response.text);
+    if (
+      !Array.isArray(recommendedIds) ||
+      !recommendedIds.every((id): id is string => typeof id === "string")
+    ) {
+      throw new Error("AI recommendation returned an invalid response");
+    }
 
-    return {
-      success: true,
-      products: recommendedProducts,
-    };
-  } catch (error) {
-    console.error("Gemini Filter Error:", error);
-    return {
-      success: false,
-      products: filteredProducts,
-    };
+    const candidateIds = new Set(candidates.map(({ _id }) => _id));
+    return [...new Set(recommendedIds)].filter((id) => candidateIds.has(id));
+  } finally {
+    console.info(`[ai-search] Gemini request took ${Date.now() - startedAt}ms`);
   }
 };
 
