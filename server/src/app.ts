@@ -17,6 +17,7 @@ import adminRouter from "./modules/admin/adminRoutes.js";
 import sellerRouter from "./modules/seller/sellerRoutes.js";
 import shopRouter from "./modules/shop/shopRoutes.js";
 import shopSettingsRouter from "./modules/shop/settings/shopSettingsRoutes.js";
+import { globalLimiter } from "./middlewares/rateLimiters.js";
 
 //* Instance
 const app = express();
@@ -31,10 +32,11 @@ app.use(
     credentials: true,
   })
 );
+app.use(helmet());
+app.use(globalLimiter);
 
 app.use(express.json({ limit: "5mb" }));
 app.use(cookieParser());
-app.use(helmet());
 
 //* Routes
 app.use("/api/v1/auth", authRouter);
