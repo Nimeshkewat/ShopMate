@@ -38,6 +38,13 @@ function AppPagination({
     return null;
   }
 
+  const handlePageChange = (nextPage: number) => {
+    if (nextPage === currentPage) return;
+
+    scrollTo({ top: 0, behavior: "smooth" });
+    onPageChange(nextPage);
+  };
+
   const renderPageItems = () => {
     const items: ReactNode[] = [];
 
@@ -47,7 +54,7 @@ function AppPagination({
           <PaginationItem key={p}>
             <PaginationLink
               isActive={p === currentPage}
-              onClick={() => onPageChange(p)}
+              onClick={() => handlePageChange(p)}
               className="cursor-pointer"
             >
               {p}
@@ -61,7 +68,7 @@ function AppPagination({
         <PaginationItem key={1}>
           <PaginationLink
             isActive={currentPage === 1}
-            onClick={() => onPageChange(1)}
+            onClick={() => handlePageChange(1)}
             className="cursor-pointer"
           >
             1
@@ -87,7 +94,7 @@ function AppPagination({
           <PaginationItem key={p}>
             <PaginationLink
               isActive={p === currentPage}
-              onClick={() => onPageChange(p)}
+              onClick={() => handlePageChange(p)}
               className="cursor-pointer"
             >
               {p}
@@ -110,7 +117,7 @@ function AppPagination({
         <PaginationItem key={totalPages}>
           <PaginationLink
             isActive={totalPages === currentPage}
-            onClick={() => onPageChange(totalPages)}
+            onClick={() => handlePageChange(totalPages)}
             className="cursor-pointer"
           >
             {totalPages}
@@ -128,7 +135,7 @@ function AppPagination({
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
-              onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+              onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
               disabled={!hasPrevPage}
               className={
                 !hasPrevPage
@@ -143,7 +150,7 @@ function AppPagination({
           <PaginationItem>
             <PaginationNext
               onClick={() =>
-                onPageChange(Math.min(totalPages, currentPage + 1))
+                handlePageChange(Math.min(totalPages, currentPage + 1))
               }
               disabled={!hasNextPage}
               className={
