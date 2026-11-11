@@ -11,6 +11,7 @@ import {
   ShoppingCart,
   Store,
   LogOut,
+  Heart,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
@@ -32,6 +33,7 @@ const links = [
   { to: "/faq", label: "FAQ", icon: CircleHelp },
   { to: "/contact", label: "Contact", icon: Phone },
   { to: "/cart", label: "Cart", icon: ShoppingCart },
+  { to: "/wishlist", label: "Wishlist", icon: Heart },
   { to: "/orders", label: "My orders", icon: ListOrdered },
 ];
 

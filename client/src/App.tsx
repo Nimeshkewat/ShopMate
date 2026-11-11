@@ -33,6 +33,7 @@ const ProductDetails = lazy(
 const Shops = lazy(() => import("./pages/shop/Shops"));
 const Shop = lazy(() => import("./pages/shop/Shop"));
 const Cart = lazy(() => import("./pages/Cart"));
+const Wishlist = lazy(() => import("./pages/Wishlist"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const OrderSuccess = lazy(() => import("./pages/OrderSuccess"));
 const MyOrders = lazy(() => import("./pages/MyOrders"));
@@ -73,11 +74,16 @@ function App() {
         <Route path="about" element={<About />} />
         <Route path="faq" element={<FAQ />} />
         <Route path="contact" element={<Contact />} />
-        <Route path="privacy-policy" element={<PrivacyPolicy />} />
         <Route
-          path="terms-and-conditions"
-          element={<TermsAndConditions />}
+          path="wishlist"
+          element={
+            <PrivateRoute>
+              <Wishlist />
+            </PrivateRoute>
+          }
         />
+        <Route path="privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="terms-and-conditions" element={<TermsAndConditions />} />
 
         {/* Protected Storefront */}
         <Route

@@ -65,7 +65,7 @@ function Checkout() {
         className="mt-5 flex items-start gap-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-sm"
       >
         <Info
-          className="mt-0.5 size-4 shrink-0 text-primary"
+          className="mt-0.5 size-4 shrink-0 text-destructive"
           aria-hidden="true"
         />
         <p className="text-muted-foreground">

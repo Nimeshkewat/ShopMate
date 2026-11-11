@@ -113,6 +113,7 @@ function ProductDetails() {
 
           <PurchaseBox
             key={product._id}
+            productId={product._id}
             name={product.name}
             stock={product.stock}
             isPending={isPending}

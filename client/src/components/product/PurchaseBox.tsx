@@ -10,10 +10,17 @@ import {
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { getErrorMessage } from "@/api/apiClient";
+import { useAuth } from "@/context/AuthContext";
+import { useAddWishlist } from "@/hooks/wishlist/useAddWishlist";
+import { useRemoveWishlist } from "@/hooks/wishlist/useRemoveWishlist";
+import { useWishlist } from "@/hooks/wishlist/useWishlist";
+import type { ApiError } from "@/api/apiError";
 
 interface Props {
   name: string;
   stock: number;
+  productId: string;
   isPending?: boolean;
   onAddToCart: (quantity: number) => void;
   onBuyNow: (quantity: number) => void;
@@ -28,9 +35,17 @@ export default function PurchaseBox({
   isPending = false,
   onAddToCart,
   onBuyNow,
+  productId,
 }: Props) {
+  const { isAuthenticated, setAuthOpen } = useAuth();
+  const addWishlist = useAddWishlist();
+  const removeWishlist = useRemoveWishlist();
   const [quantity, setQuantity] = useState(1);
-  const [wishlisted, setWishlisted] = useState(false); // TODO: connect to your wishlist hook
+  const { data, isLoading: isWishlistLoading } = useWishlist();
+  const wishlisted =
+    data?.wishlist.products.some((product) => product._id === productId) ??
+    false;
+  const isWishlistPending = addWishlist.isPending || removeWishlist.isPending;
   const outOfStock = stock === 0;
 
   const handleShare = async () => {
@@ -47,10 +62,33 @@ export default function PurchaseBox({
     }
   };
 
+  const handleWishlistToggle = () => {
+    if (!isAuthenticated) {
+      setAuthOpen(true);
+      return;
+    }
+
+    const options = {
+      onSuccess: () =>
+        toast.success(
+          wishlisted ? "Removed from wishlist" : "Added to wishlist",
+        ),
+      onError: (error: ApiError) => toast.error(getErrorMessage(error)),
+    };
+
+    if (wishlisted) {
+      removeWishlist.mutate(productId, options);
+    } else {
+      addWishlist.mutate(productId, options);
+    }
+  };
+
   return (
     <div className="rounded-xl bg-card p-5 shadow-sm ring-1 ring-border/60">
       <div className="flex items-center gap-3">
-        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Quantity:</span>
+        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          Quantity:
+        </span>
         <Button
           variant="outline"
           size="icon"
@@ -61,7 +99,10 @@ export default function PurchaseBox({
         >
           <Minus className="size-3.5" />
         </Button>
-        <span className="w-8 text-center text-sm font-semibold tabular-nums" aria-live="polite">
+        <span
+          className="w-8 text-center text-sm font-semibold tabular-nums"
+          aria-live="polite"
+        >
           {quantity}
         </span>
         <Button
@@ -103,12 +144,16 @@ export default function PurchaseBox({
       <div className="mt-4 flex items-center gap-5 text-xs text-muted-foreground border-t border-border/60 pt-3">
         <button
           type="button"
-          onClick={() => setWishlisted((w) => !w)}
+          onClick={handleWishlistToggle}
+          disabled={isWishlistPending || (isAuthenticated && isWishlistLoading)}
           aria-pressed={wishlisted}
           className="flex items-center gap-1.5 transition-colors hover:text-foreground"
         >
           <Heart
-            className={cn("size-3.5", wishlisted && "fill-red-500 text-red-500")}
+            className={cn(
+              "size-3.5",
+              wishlisted && "fill-red-500 text-red-500",
+            )}
           />
           {wishlisted ? "In Wishlist" : "Add to Wishlist"}
         </button>

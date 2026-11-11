@@ -13,6 +13,7 @@ export const queryKeys = {
   shopProducts: (id: string) => ["shops", id, "products"] as const,
   profile: ["profile"] as const,
   cart: ["cart"] as const,
+  wishlist: ["wishlist"] as const,
   products: ["products"] as const,
   productBounds: ["products", "bounds"] as const,
   orders: ["orders"] as const,
