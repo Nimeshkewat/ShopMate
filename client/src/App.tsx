@@ -20,6 +20,8 @@ const Home = lazy(() => import("@/pages/Home"));
 const About = lazy(() => import("./pages/About"));
 const FAQ = lazy(() => import("./pages/FAQ"));
 const Contact = lazy(() => import("./pages/Contact"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const TermsAndConditions = lazy(() => import("./pages/TermsAndConditions"));
 const Unauthorized = lazy(() => import("./pages/Unauthorized"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -71,6 +73,11 @@ function App() {
         <Route path="about" element={<About />} />
         <Route path="faq" element={<FAQ />} />
         <Route path="contact" element={<Contact />} />
+        <Route path="privacy-policy" element={<PrivacyPolicy />} />
+        <Route
+          path="terms-and-conditions"
+          element={<TermsAndConditions />}
+        />
 
         {/* Protected Storefront */}
         <Route

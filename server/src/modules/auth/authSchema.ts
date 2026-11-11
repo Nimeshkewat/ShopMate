@@ -11,6 +11,9 @@ export const registerValidationSchema = z.object({
     .string()
     .nonempty("password is required")
     .min(8, "Password must be at least 8 characters"),
+  acceptedTerms: z.boolean().refine((accepted) => accepted, {
+    message: "You must agree to the Privacy Policy and Terms and Conditions",
+  }),
 });
 
 export const loginSchema = z.object({

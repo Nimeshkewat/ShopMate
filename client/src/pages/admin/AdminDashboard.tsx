@@ -30,7 +30,9 @@ function AdminDashboard() {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="text-xl font-bold tracking-tight sm:text-2xl">Dashboard</h1>
+        <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
+          Dashboard
+        </h1>
         <p className="mt-1 text-sm text-muted-foreground">
           An overview of your marketplace.
         </p>

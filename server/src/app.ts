@@ -13,6 +13,7 @@ import cartRouter from "./modules/cart/cartRoutes.js";
 import shippingRouter from "./modules/shipping/shippingRoutes.js";
 import orderRouter from "./modules/order/orderRoutes.js";
 import paymentRouter from "./modules/payment/paymentRoutes.js";
+import { razorpayWebhook } from "./modules/payment/paymentController.js";
 import adminRouter from "./modules/admin/adminRoutes.js";
 import sellerRouter from "./modules/seller/sellerRoutes.js";
 import shopRouter from "./modules/shop/shopRoutes.js";
@@ -21,9 +22,6 @@ import { globalLimiter } from "./middlewares/rateLimiters.js";
 
 //* Instance
 const app = express();
-
-//* Webhook
-express.raw({ type: "application/json" });
 
 //* Middlewares
 app.use(
@@ -34,6 +32,12 @@ app.use(
 );
 app.use(helmet());
 app.use(globalLimiter);
+
+app.post(
+  "/api/v1/payments/webhook",
+  express.raw({ type: "application/json" }),
+  razorpayWebhook
+);
 
 app.use(express.json({ limit: "5mb" }));
 app.use(cookieParser());

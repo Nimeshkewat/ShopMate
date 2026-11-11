@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { useLogin } from "@/hooks/auth/useLogin";
 import { useQueryClient } from "@tanstack/react-query";
 import { useForgotPassword } from "@/hooks/auth/useForgotPassword";
+import type { SignupValues, LoginValues } from "@/schema/auth";
 
 type Mode = "login" | "signup" | "forgot";
 
@@ -44,49 +45,29 @@ function AuthDialog({ open, onOpenChange }: Props) {
     useForgotPassword();
   const queryClient = useQueryClient();
 
-  const handleSignup = ({
-    username,
-    email,
-    password,
-  }: {
-    username: string;
-    email: string;
-    password: string;
-  }) => {
-    signup(
-      { username, email, password },
-      {
-        onSuccess: (data) => {
-          onOpenChange(false);
-          toast.success(data.message || "Account Created");
-        },
-        onError: (error) => {
-          toast.error(error.response?.data.message || "Internel Server Error");
-        },
+  const handleSignup = (values: SignupValues) => {
+    signup(values, {
+      onSuccess: (data) => {
+        onOpenChange(false);
+        toast.success(data.message || "Account Created");
       },
-    );
+      onError: (error) => {
+        toast.error(error.response?.data.message || "Internel Server Error");
+      },
+    });
   };
 
-  const handleLogin = ({
-    email,
-    password,
-  }: {
-    email: string;
-    password: string;
-  }) => {
-    login(
-      { email, password },
-      {
-        onSuccess: async (data) => {
-          onOpenChange(false);
-          toast.success(data.message || "Logged In Successfully");
-          await queryClient.invalidateQueries();
-        },
-        onError: (error) => {
-          toast.error(error.response?.data.message || "Internel Server Error");
-        },
+  const handleLogin = (values: LoginValues) => {
+    login(values, {
+      onSuccess: async (data) => {
+        onOpenChange(false);
+        toast.success(data.message || "Logged In Successfully");
+        await queryClient.invalidateQueries();
       },
-    );
+      onError: (error) => {
+        toast.error(error.response?.data.message || "Internel Server Error");
+      },
+    });
   };
 
   const handleForgot = (email: string) => {

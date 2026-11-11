@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Lock, Mail, User } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { signupSchema, type SignupValues } from "../../schema/auth";
 import AuthInput from "./AuthInput";
@@ -25,6 +26,7 @@ function SignupForm({
   } = useForm<SignupValues>({
     resolver: zodResolver(signupSchema),
     mode: "onTouched",
+    defaultValues: { acceptedTerms: false },
   });
 
   return (
@@ -52,6 +54,43 @@ function SignupForm({
         error={errors.password?.message}
         {...register("password")}
       />
+
+      <div>
+        <label className="flex items-start gap-2 text-sm text-muted-foreground">
+          <input
+            type="checkbox"
+            className="mt-1 accent-primary"
+            aria-invalid={Boolean(errors.acceptedTerms)}
+            {...register("acceptedTerms")}
+          />
+          <span>
+            I agree to the{" "}
+            <Link
+              to="/terms-and-conditions"
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-primary hover:underline"
+            >
+              Terms and Conditions
+            </Link>{" "}
+            and{" "}
+            <Link
+              to="/privacy-policy"
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-primary hover:underline"
+            >
+              Privacy Policy
+            </Link>
+            .
+          </span>
+        </label>
+        {errors.acceptedTerms && (
+          <p role="alert" className="mt-1 text-sm text-destructive">
+            {errors.acceptedTerms.message}
+          </p>
+        )}
+      </div>
 
       {serverError && (
         <p

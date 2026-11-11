@@ -17,7 +17,7 @@ import {
 } from "../../utils/sendMail.js";
 
 export const register = async (req: Request, res: Response) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, acceptedTerms } = req.body;
 
   const user = await User.findOne({ email });
   if (user) {
@@ -29,6 +29,7 @@ export const register = async (req: Request, res: Response) => {
     username,
     email,
     password: hashedPassword,
+    acceptedTerms,
   });
 
   res

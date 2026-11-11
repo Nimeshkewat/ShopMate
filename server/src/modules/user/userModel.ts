@@ -8,6 +8,8 @@ interface IUser extends Document {
   avatar: string;
   avatarPublicId: string;
   role: "user" | "seller" | "admin";
+  acceptedTerms: boolean;
+  termsAcceptedAt: Date | undefined;
   shopId?: mongoose.Types.ObjectId;
   resetPasswordToken: string;
   resetPasswordTokenExpiresAt?: Date | undefined;
@@ -31,6 +33,21 @@ const userSchema = new mongoose.Schema<IUser>(
     avatar: { type: String, default: "" },
     avatarPublicId: { type: String, default: "", select: false },
     role: { type: String, enum: ["user", "seller", "admin"], default: "user" },
+    acceptedTerms: {
+      type: Boolean,
+      required: [true, "You must accept the terms and conditions"],
+      validate: {
+        validator: (value) => value === true,
+        message: "Terms and conditions must be accepted",
+      },
+      select: false,
+    },
+    termsAcceptedAt: {
+      type: Date,
+      required: true,
+      default: Date.now,
+      select: false,
+    },
     shopId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Shop",

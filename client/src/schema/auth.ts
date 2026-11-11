@@ -21,6 +21,9 @@ export const signupSchema = z.object({
     .string()
     .min(8, "Password must be at least 8 characters")
     .max(64, "Password must be 64 characters or less"),
+  acceptedTerms: z.boolean().refine((accepted) => accepted, {
+    message: "You must agree to the Privacy Policy and Terms and Conditions",
+  }),
 });
 
 export const forgotPasswordSchema = z.object({ email });
