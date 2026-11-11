@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCartActions } from "@/hooks/cart/useCartActions";
 import { usePlaceOrder } from "@/hooks/order/usePlaceOrder";
@@ -59,6 +59,22 @@ function Checkout() {
       >
         <ArrowLeft className="size-4" />
       </Button>
+
+      <div
+        role="note"
+        className="mt-5 flex items-start gap-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-sm"
+      >
+        <Info
+          className="mt-0.5 size-4 shrink-0 text-primary"
+          aria-hidden="true"
+        />
+        <p className="text-muted-foreground">
+          <span className="font-semibold text-foreground">Portfolio demo:</span>{" "}
+          Online payments use Razorpay test mode. No real payment will be
+          charged, and orders are not fulfilled. Please don't enter real payment
+          details.
+        </p>
+      </div>
 
       <div className="mt-6">
         <CheckoutStepper step={step} />
