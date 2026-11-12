@@ -33,8 +33,6 @@ const links = [
   { to: "/faq", label: "FAQ", icon: CircleHelp },
   { to: "/contact", label: "Contact", icon: Phone },
   { to: "/cart", label: "Cart", icon: ShoppingCart },
-  { to: "/wishlist", label: "Wishlist", icon: Heart },
-  { to: "/orders", label: "My orders", icon: ListOrdered },
 ];
 
 interface Props {
@@ -114,6 +112,40 @@ function MenuSheet({ open, onOpenChange, onSignIn }: Props) {
               {data.user.role === "user"
                 ? "Become a seller"
                 : "Seller Dashboard"}
+            </NavLink>
+          )}
+          {!isError && data?.success && data.user.role === "admin" && (
+            <NavLink
+              to={"/wishlist"}
+              onClick={() => onOpenChange(false)}
+              className={({ isActive }) =>
+                cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
+                  isActive
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-secondary hover:text-foreground",
+                )
+              }
+            >
+              <Heart className="size-4 shrink-0" />
+              Wishlist
+            </NavLink>
+          )}
+          {!isError && data?.success && data.user.role === "admin" && (
+            <NavLink
+              to={"/orders"}
+              onClick={() => onOpenChange(false)}
+              className={({ isActive }) =>
+                cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
+                  isActive
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-secondary hover:text-foreground",
+                )
+              }
+            >
+              <ListOrdered className="size-4 shrink-0" />
+              My Orders
             </NavLink>
           )}
           {!isError && data?.success && data.user.role === "admin" && (

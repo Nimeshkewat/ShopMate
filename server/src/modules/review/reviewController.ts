@@ -31,13 +31,17 @@ export const createReview = async (req: Request, res: Response) => {
     throw new AppError("Please provide rating and comment", 400);
   }
 
-  const hasPurchased = await Order.findOne({
+  const hasDeliveredOrder = await Order.findOne({
     userId,
+    orderStatus: "Delivered",
     orderItems: { $elemMatch: { productId } },
   });
 
-  if (!hasPurchased) {
-    throw new AppError("You can only review products you have purchased", 403);
+  if (!hasDeliveredOrder) {
+    throw new AppError(
+      "You can only review a product after it has been delivered",
+      403
+    );
   }
 
   const review = await Review.create({

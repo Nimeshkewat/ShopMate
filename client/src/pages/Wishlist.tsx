@@ -51,7 +51,7 @@ function Wishlist() {
   const handleError = (error: unknown) => toast.error(getErrorMessage(error));
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-10">
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-10">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-3xl font-bold">My Wishlist</h1>

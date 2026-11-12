@@ -39,7 +39,7 @@ export default function ReviewsTab({ productId }: { productId: string }) {
       toast.success(res?.message || "Review submitted");
       reset();
     } catch {
-      toast.error("You can only review a product you've purchased");
+      toast.error("You can only review a product after it has been delivered");
     }
   };
 
