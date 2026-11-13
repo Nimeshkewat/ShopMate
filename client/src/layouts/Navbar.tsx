@@ -22,7 +22,6 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
-  // const [authOpen, setAuthOpen] = useState(false);
   const { isAuthenticated, authOpen, setAuthOpen } = useAuth();
   const [profileOpen, setProfileOpen] = useState(false);
 
