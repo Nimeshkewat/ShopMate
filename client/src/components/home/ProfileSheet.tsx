@@ -1,7 +1,15 @@
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { LogOut, Pencil, X } from "lucide-react";
+import { LogOut, Pencil, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import {
@@ -15,6 +23,7 @@ import { getErrorMessage } from "@/api/apiClient";
 import { useAuth } from "@/context/AuthContext";
 import { useLogout } from "@/hooks/auth/useLogout";
 import { useProfile } from "@/hooks/user/useProfile";
+import { useRemoveAvatar } from "@/hooks/user/useRemoveAvatar";
 import { useUpdatePassword } from "@/hooks/user/useUpdatePassword";
 import PasswordForm from "./PasswordForm";
 import ProfileForm from "./ProfileForm";
@@ -28,10 +37,14 @@ function ProfileSheet({ open, onOpenChange }: Props) {
   const { isAuthenticated } = useAuth();
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string>("");
+  const [isRemoveAvatarDialogOpen, setIsRemoveAvatarDialogOpen] =
+    useState(false);
   const avatarInputRef = useRef<HTMLInputElement>(null);
 
   const { data, isLoading } = useProfile();
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
+  const { mutate: removeAvatar, isPending: isRemovingAvatar } =
+    useRemoveAvatar();
   const updatePassword = useUpdatePassword();
   const queryClient = useQueryClient();
 
@@ -55,6 +68,19 @@ function ProfileSheet({ open, onOpenChange }: Props) {
   const handleRemovePreview = () => {
     setAvatarFile(null);
     setAvatarPreview("");
+  };
+
+  const handleRemoveAvatar = () => {
+    removeAvatar(undefined, {
+      onSuccess: async (response) => {
+        toast.success(response.message || "Profile picture removed");
+        setIsRemoveAvatarDialogOpen(false);
+        await queryClient.invalidateQueries({ queryKey: ["profile"] });
+      },
+      onError: (error) => {
+        toast.error(getErrorMessage(error));
+      },
+    });
   };
 
   const handleLogout = () => {
@@ -123,16 +149,32 @@ function ProfileSheet({ open, onOpenChange }: Props) {
                   <Pencil className="size-3.5" />
                 </button>
               </div>
-              {avatarPreview && (
+              {avatarPreview ? (
                 <button
                   type="button"
                   onClick={handleRemovePreview}
+                  aria-label="Cancel profile picture selection"
                   className="mt-1 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-destructive"
                 >
                   <X className="size-3.5" />
-                  Remove
+                  Cancel selection
                 </button>
-              )}
+              ) : data?.user.avatar ? (
+                <button
+                  type="button"
+                  onClick={() => setIsRemoveAvatarDialogOpen(true)}
+                  disabled={isRemovingAvatar}
+                  aria-label="Remove profile picture"
+                  className="mt-1 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-destructive disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isRemovingAvatar ? (
+                    <Spinner size="sm" />
+                  ) : (
+                    <Trash2 className="size-3.5" />
+                  )}
+                  Remove profile picture
+                </button>
+              ) : null}
               <p className="mt-2 text-sm font-semibold text-foreground">
                 {data?.user.username}
               </p>
@@ -173,6 +215,39 @@ function ProfileSheet({ open, onOpenChange }: Props) {
           </div>
         )}
       </SheetContent>
+      <AlertDialog
+        open={isRemoveAvatarDialogOpen}
+        onOpenChange={setIsRemoveAvatarDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove profile picture?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Your profile picture will be deleted and your default avatar will
+              be shown instead. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsRemoveAvatarDialogOpen(false)}
+              disabled={isRemovingAvatar}
+            >
+              Keep Picture
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={handleRemoveAvatar}
+              loading={isRemovingAvatar}
+              loadingText="Removing..."
+            >
+              Remove Picture
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Sheet>
   );
 }

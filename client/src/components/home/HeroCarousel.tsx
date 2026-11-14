@@ -91,6 +91,9 @@ function HeroCarousel() {
           <img
             src={slide.image}
             alt={slide.title}
+            loading={i === 0 ? "eager" : "lazy"}
+            fetchPriority={i === 0 ? "high" : "auto"}
+            decoding="async"
             className="absolute inset-0 size-full object-cover"
           />
           <div className="absolute inset-0 bg-black/40" />

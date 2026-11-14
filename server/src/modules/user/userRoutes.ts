@@ -2,6 +2,7 @@ import express from "express";
 import isAuthenticated from "../../middlewares/auth.js";
 import {
   profile,
+  removeAvatar,
   updatePassword,
   updateProfile,
   upgradeToSeller,
@@ -21,12 +22,22 @@ router.patch(
   "/",
   rateLimiter({
     windowMs: RATE_LIMIT_WINDOWS.fifteenMinutes,
-    limit: 2,
+    limit: 5,
     action: "profile update",
   }),
   isAuthenticated,
   upload.single("avatar"),
   updateProfile
+);
+router.delete(
+  "/avatar",
+  rateLimiter({
+    windowMs: RATE_LIMIT_WINDOWS.fifteenMinutes,
+    limit: 5,
+    action: "profile picture removal",
+  }),
+  isAuthenticated,
+  removeAvatar
 );
 router.patch(
   "/update-password",

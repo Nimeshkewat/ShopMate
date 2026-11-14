@@ -1,5 +1,6 @@
 import type {
   ProfileResponse,
+  RemoveAvatarResponse,
   UpdatePasswordResponse,
   UpdateProfileResponse,
 } from "@/types/user";
@@ -16,6 +17,11 @@ export const updateProfile = async (
   input: FormData,
 ): Promise<UpdateProfileResponse> => {
   const response = await api.patch<UpdateProfileResponse>(BASE, input);
+  return response.data;
+};
+
+export const removeAvatar = async (): Promise<RemoveAvatarResponse> => {
+  const response = await api.delete<RemoveAvatarResponse>(`${BASE}/avatar`);
   return response.data;
 };
 

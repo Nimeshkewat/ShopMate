@@ -25,6 +25,12 @@ export interface UpdateProfileResponse {
   user: User;
 }
 
+export interface RemoveAvatarResponse {
+  success: boolean;
+  message: string;
+  user: User;
+}
+
 export interface UpdatePasswordResponse {
   success: boolean;
   message: string;

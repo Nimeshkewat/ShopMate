@@ -52,6 +52,29 @@ export const updateProfile = async (req: Request, res: Response) => {
   res.status(200).json({ success: true, message: "Profile Updated", user });
 };
 
+export const removeAvatar = async (req: Request, res: Response) => {
+  const { id: userId } = req.user;
+  const user = await User.findById(userId).select("+avatarPublicId");
+  if (!user) {
+    throw new AppError("User not found", 404);
+  }
+
+  if (user.avatarPublicId) {
+    const result = await cloudinary.uploader.destroy(user.avatarPublicId);
+    if (result.result !== "ok" && result.result !== "not found") {
+      throw new AppError("Failed to remove profile picture", 502);
+    }
+  }
+
+  user.avatar = "";
+  user.avatarPublicId = "";
+  await user.save();
+
+  res
+    .status(200)
+    .json({ success: true, message: "Profile picture removed", user });
+};
+
 export const updatePassword = async (req: Request, res: Response) => {
   const { id: userId } = req.user;
   const { oldPassword, newPassword, confirmPassword } = req.body;
