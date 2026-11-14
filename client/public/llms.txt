@@ -1,0 +1,15 @@
+# ShopMate
+
+> ShopMate is a multi-vendor marketplace where shoppers discover products from approved shops and place orders online.
+
+ShopMate supports customer, seller, and admin accounts. Shoppers can browse products and shops, pay online or by cash on delivery, manage orders, and save shipping addresses. Sellers manage their shops, products, and orders after approval.
+
+## Public pages
+
+- [Home](https://shopmate-store.vercel.app/): Explore the marketplace.
+- [Products](https://shopmate-store.vercel.app/products): Browse products.
+- [Shops](https://shopmate-store.vercel.app/shops): Discover approved shops.
+- [About](https://shopmate-store.vercel.app/about): Learn about ShopMate.
+- [FAQ](https://shopmate-store.vercel.app/faq): Read frequently asked questions.
+- [Privacy Policy](https://shopmate-store.vercel.app/privacy-policy): Review the privacy policy.
+- [Terms and Conditions](https://shopmate-store.vercel.app/terms-and-conditions): Review the terms of use.
