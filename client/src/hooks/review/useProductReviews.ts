@@ -6,6 +6,6 @@ export const useProductReviews = (productId: string) => {
     queryKey: ["reviews", productId],
     queryFn: () => fetchProductReviews(productId),
     enabled: !!productId,
-    staleTime: 60 * 1000,
+    staleTime: 5 * 60 * 1000,
   });
 };
